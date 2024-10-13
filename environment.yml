@@ -1,0 +1,14 @@
+name: shape_descriptors
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - mdanalysis
+  - scikit-image
+  - pip
+  - pip:
+    - mdtraj
