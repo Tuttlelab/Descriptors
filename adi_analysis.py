@@ -21,8 +21,8 @@ from collections import defaultdict
 
 # Constants
 DEFAULT_MIN_PERSISTENCE = 5  # Minimum number of frames a contact must persist
-DEFAULT_RDF_RANGE = (0.0, 5.0)  # Range for RDF calculation in Angstroms
-DEFAULT_NBINS = 200  # Number of bins for RDF
+DEFAULT_RDF_RANGE = (4.0, 15.0)  # Range for RDF calculation in Angstroms
+DEFAULT_NBINS = 50  # Number of bins for RDF
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Aggregate Detection Index (ADI) Analysis')
@@ -58,6 +58,7 @@ def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, outp
     plt.ylabel('g(r)')
     plt.title('Radial Distribution Function')
     plt.savefig(os.path.join(output_dir, 'rdf_plot.png'))
+    plt.show()
     plt.close()
     
     # Identify the first minimum after the first peak
