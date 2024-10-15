@@ -152,6 +152,7 @@ def cross_sectional_profiling(relative_positions, principal_axis):
         if len(cross_section_positions) >= 3:
             # Project onto plane perpendicular to principal axis
             projections = cross_section_positions - np.outer(np.dot(cross_section_positions, principal_axis), principal_axis)
+            print(projections)
             hull = ConvexHull(projections)
             area = hull.area
             cross_section_areas.append(area)
@@ -279,6 +280,7 @@ def save_frame_results(frame_results, output_dir):
         f.write(','.join(headers) + '\n')
         for result in frame_results:
             if 'is_fiber' in result:
+                print(result)
                 f.write(f"{result['frame']},{result['aggregate_size']},"
                         f"{result['shape_ratio1']:.3f},{result['shape_ratio2']:.3f},"
                         f"{result['mean_angle']:.3f},{result['std_angle']:.3f},"

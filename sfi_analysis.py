@@ -38,6 +38,7 @@ def parse_arguments():
     parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
     parser.add_argument('-s', '--selection', default='resname PEP and backbone', help='Atom selection string for peptides')
     parser.add_argument('-o', '--output', default='sfi_results', help='Output directory for results')
+    parser.add_argument('-pl', '--peptide_length',  type=int, required=True, help='How many amino acids per peptide')
     parser.add_argument('--min_sheet_size', type=int, default=MIN_SHEET_SIZE, help='Minimum number of peptides to consider a sheet')
     args = parser.parse_args()
     return args
@@ -83,15 +84,29 @@ def fit_quadratic_surface(positions):
         # Curve fitting failed
         return np.inf
 
-def get_peptide_orientations(peptides):
+def get_peptide_orientations(peptides, peptide_length):
     """
     Calculate the orientation vectors (backbone vectors) for each peptide.
     Returns an array of orientation vectors.
     """
     orientations = []
     peptide_groups = peptides.groupby('residues')
+    backbones = peptides.select_atoms('name BB BAS')
+    peptide_groups = []
+    for i in range(0, len(backbones), peptide_length):
+        peptide_groups.append(backbones[i])
+        for j in range(i+1, i+peptide_length):
+            peptide_groups[-1] += backbones[j]
+    #peptide_length
+# =============================================================================
+#     print("peptide_groups", peptide_groups)
+#     print("len(peptide_groups):", len(peptide_groups))
+# =============================================================================
+
     for residue in peptide_groups:
-        backbone = residue.atoms.select_atoms('backbone')
+        backbone = residue.atoms.select_atoms('name BB BAS')
+        assert len(backbone) > 0
+        #print(backbone)
         if len(backbone.positions) >= 2:
             vector = backbone.positions[-1] - backbone.positions[0]
             norm = np.linalg.norm(vector)
@@ -123,13 +138,25 @@ def cluster_peptides(positions, orientations, spatial_weight, orientation_weight
     Returns an array of cluster labels.
     """
     spatial_dist = squareform(pdist(positions))
+    print("orientations:", orientations)
     angle_matrix = compute_angle_matrix(orientations)
     # Normalize matrices
     spatial_dist /= np.max(spatial_dist)
     angle_matrix /= np.max(angle_matrix)
     # Combine matrices
+    print("spatial_weight", spatial_weight)
+    print("spatial_dist", spatial_dist)
+    print("spatial_dist.shape", spatial_dist.shape)
+    print("orientation_weight", orientation_weight)
+    print("angle_matrix", angle_matrix)
+    print("angle_matrix.shape", angle_matrix.shape)
+    
+    spatial_dist = spatial_dist.reshape( ( -1 , angle_matrix.shape[0], angle_matrix.shape[0] ) )
+    spatial_dist = spatial_dist.mean(axis=0)
+    print("spatial_dist.shape", spatial_dist.shape)
+    
     distance_matrix = spatial_weight * spatial_dist + orientation_weight * angle_matrix
-    clustering = AgglomerativeClustering(n_clusters=None, affinity='precomputed', linkage='average', distance_threshold=clustering_threshold)
+    clustering = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=clustering_threshold)
     labels = clustering.fit_predict(distance_matrix)
     return labels
 
@@ -157,6 +184,7 @@ def main():
     print("Loading trajectory data...")
     u = mda.Universe(args.topology, args.trajectory)
     selection_string = args.selection
+    peptide_length = args.peptide_length
     peptides = u.select_atoms(selection_string)
     n_frames = len(u.trajectory)
     print(f"Total frames in trajectory: {n_frames}")
@@ -169,7 +197,7 @@ def main():
     print("Analyzing frames for sheet formation...")
     for frame_number, ts in enumerate(u.trajectory):
         positions = peptides.positions
-        orientations = get_peptide_orientations(peptides)
+        orientations = get_peptide_orientations(peptides, peptide_length)
         labels = cluster_peptides(positions, orientations, SPATIAL_WEIGHT, ORIENTATION_WEIGHT, CLUSTERING_THRESHOLD)
         unique_labels = set(labels)
         frame_sheets = {}
@@ -188,6 +216,8 @@ def main():
                     frame_sheets[sheet_id] = cluster_indices
                 else:
                     # Try quadratic surface fitting
+                    print("cluster_positions:")
+                    print(cluster_positions)
                     rmsd_quad = fit_quadratic_surface(cluster_positions)
                     if rmsd_quad < CURVATURE_THRESHOLD:
                         # Classify as a curved sheet

@@ -48,6 +48,7 @@ def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, outp
     """
     print("Calculating adaptive cutoff distance based on RDF...")
     peptides = universe.select_atoms(selection_string)
+    
     rdf_analysis = rdf.InterRDF(peptides, peptides, nbins=nbins, range=rdf_range)
     rdf_analysis.run()
     
