@@ -15,7 +15,7 @@ This toolkit provides Python scripts for analyzing peptide self-assembly simulat
 ### Using Conda
 
     conda env create -f environment.yml
-    conda activate peptide_analysis
+    conda activate descriptors
 
 ### Using pip
 
