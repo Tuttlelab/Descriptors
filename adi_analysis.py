@@ -35,6 +35,8 @@ def parse_arguments():
     parser.add_argument('--rdf_range', type=float, nargs=2, default=DEFAULT_RDF_RANGE,
                         help='Range for RDF calculation (start, end)')
     parser.add_argument('--nbins', type=int, default=DEFAULT_NBINS, help='Number of bins for RDF')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
+    parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
     args = parser.parse_args()
     return args
 
@@ -123,15 +125,27 @@ def main():
 
     # Analyze each frame
     print("Analyzing frames for aggregation...")
-    for frame_number, ts in enumerate(u.trajectory):
+    
+    # Determine the frame range, considering 'last' and 'skip' options
+    total_frames = len(u.trajectory)
+    if args.last is not None:
+        start_frame = max(0, total_frames - args.last)
+    else:
+        start_frame = 0
+    
+    for frame_number, ts in enumerate(u.trajectory[start_frame::args.skip]):
+        actual_frame_number = start_frame + frame_number * args.skip  # Track the actual frame number
+        print(f"Processing frame {actual_frame_number}...")  # Display the current frame being processed
+        
+        # Proceed with the frame processing
         current_clusters = identify_clusters(peptides, cutoff_distance)
         cluster_sizes = [len(cluster) for cluster in current_clusters]
-        cluster_size_distribution.append({'frame': frame_number, 'cluster_sizes': cluster_sizes})
+        cluster_size_distribution.append({'frame': actual_frame_number, 'cluster_sizes': cluster_sizes})
 
         # Record clusters for persistence analysis
         for cluster in current_clusters:
             cluster_id = frozenset(cluster)
-            cluster_records[cluster_id].append(frame_number)
+            cluster_records[cluster_id].append(actual_frame_number)
 
     # Apply persistence criteria
     persistent_aggregates = analyze_aggregate_persistence(cluster_records, args.persistence)
