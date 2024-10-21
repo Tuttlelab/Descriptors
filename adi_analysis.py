@@ -9,7 +9,7 @@ size distribution analysis, and spatial distribution insights.
 
 """
 
-import os
+import os, sys
 import argparse
 import numpy as np
 import MDAnalysis as mda
@@ -36,7 +36,7 @@ def parse_arguments():
                         help='Range for RDF calculation (start, end)')
     parser.add_argument('--nbins', type=int, default=DEFAULT_NBINS, help='Number of bins for RDF')
     parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
-    parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
+    parser.add_argument('--first', type=int, default=0, help='Only analyze the first N frames (default is all frames)')
     parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
     args = parser.parse_args()
     return args
@@ -51,6 +51,8 @@ def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, outp
     """
     print("Calculating adaptive cutoff distance based on RDF...")
     peptides = universe.select_atoms(selection_string)
+    
+    print(len(peptides))
     
     rdf_analysis = rdf.InterRDF(peptides, peptides, nbins=nbins, range=rdf_range)
     rdf_analysis.run()
@@ -111,10 +113,28 @@ def main():
     # Load the trajectory
     print("Loading trajectory data...")
     u = mda.Universe(args.topology, args.trajectory)
+    
+    if args.last is None:
+        args.last = len(u.trajectory)
+        
+    print("Cropping the trajectory")
+    indices = np.linspace(args.first, args.last-1, int(len(u.trajectory)/args.skip)).astype(np.int64)
+    print(indices)
+    # Create a new Universe with the selected frames
+    new_u = mda.Universe(args.topology)
+    # Set the new trajectory
+    print(dir(u.trajectory[indices].trajectory))
+    new_u.trajectory = u.trajectory[indices].trajectory
+    del u
+    u = new_u
+    
     selection_string = args.selection
     peptides = u.select_atoms(selection_string)
     n_frames = len(u.trajectory)
     print(f"Total frames in trajectory: {n_frames}")
+    
+
+    
 
     # Calculate adaptive cutoff distance
     cutoff_distance = calculate_adaptive_cutoff(u, selection_string, args.rdf_range, args.nbins, args.output)
