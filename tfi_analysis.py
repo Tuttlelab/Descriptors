@@ -38,6 +38,9 @@ def parse_arguments():
     parser.add_argument('-s', '--selection', default='all', help='Atom selection string for peptides')
     parser.add_argument('-o', '--output', default='tfi_results', help='Output directory for results')
     parser.add_argument('--min_tube_size', type=int, default=MIN_TUBE_SIZE, help='Minimum number of atoms to consider a tube')
+    parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
+    parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
     args = parser.parse_args()
     return args
 
@@ -239,6 +242,16 @@ def main():
     selection_string = args.selection
     n_frames = len(u.trajectory)
     print(f"Total frames in trajectory: {n_frames}")
+    start_frame = 0  # Default start is the first frame
+    end_frame = n_frames  # Default end is the total number of frames
+
+    if args.last is not None:
+        start_frame = max(0, n_frames - args.last)  # Analyze only the last N frames
+
+    if args.first is not None:
+        end_frame = min(n_frames, args.first)  # Limit the analysis to the first N frames
+
+    print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
     
     # Initialize variables for analysis
     tube_records = defaultdict(list)  # {tube_id: [frame_numbers]}
@@ -247,16 +260,18 @@ def main():
     
     # Analyze each frame
     print("Analyzing frames for tube formation...")
-    for frame_number, ts in enumerate(u.trajectory):
-        print(f"Processing frame {frame_number+1}/{n_frames}...")
+    for frame_number, ts in enumerate(u.trajectory[start_frame:end_frame:args.skip]):
+        actual_frame_number = start_frame + frame_number * args.skip  # Track the actual frame number
+        print(f"Processing frame {actual_frame_number + 1}/{n_frames}...")
+        
         aggregates = identify_aggregates(u, selection_string)
         for aggregate in aggregates:
             aggregate_atoms = u.atoms[aggregate]
-            results = analyze_aggregate(aggregate_atoms, frame_number, args)
+            results = analyze_aggregate(aggregate_atoms, actual_frame_number, args)
             if results.get('is_tube'):
                 tube_id = f"tube_{tube_id_counter}"
                 tube_id_counter += 1
-                tube_records[tube_id].append(frame_number)
+                tube_records[tube_id].append(actual_frame_number)
             frame_results.append(results)
     
     # Time-resolved analysis

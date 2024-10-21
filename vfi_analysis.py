@@ -41,6 +41,9 @@ def parse_arguments():
     parser.add_argument('-o', '--output', default='vfi_results', help='Output directory for results')
     parser.add_argument('--min_vesicle_size', type=int, default=MIN_VESICLE_SIZE,
                         help='Minimum number of atoms to consider an aggregate as a vesicle')
+    parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
+    parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
     args = parser.parse_args()
     return args
 
@@ -192,6 +195,16 @@ def main():
     selection_string = args.selection
     n_frames = len(u.trajectory)
     print(f"Total frames in trajectory: {n_frames}")
+    start_frame = 0  # Default start is the first frame
+    end_frame = n_frames  # Default end is the total number of frames
+
+    if args.last is not None:
+        start_frame = max(0, n_frames - args.last)  # Start from the frame such that we only analyze 'last' N frames
+
+    if args.first is not None:
+        end_frame = min(n_frames, args.first)  # Limit the analysis to 'first' N frames
+
+    print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
 
     # Initialize variables for analysis
     vesicle_records = defaultdict(list)  # {vesicle_id: [frame_numbers]}
@@ -200,16 +213,18 @@ def main():
 
     # Analyze each frame
     print("Analyzing frames for vesicle formation...")
-    for frame_number, ts in enumerate(u.trajectory):
-        print(f"Processing frame {frame_number+1}/{n_frames}...")
+    for frame_number, ts in enumerate(u.trajectory[start_frame:end_frame:args.skip]):
+        actual_frame_number = start_frame + frame_number * args.skip  # Track the actual frame number
+        print(f"Processing frame {actual_frame_number + 1}/{n_frames}...")  # Display the current frame being processed
+
         aggregates = identify_aggregates(u, selection_string)
         for aggregate in aggregates:
             aggregate_atoms = u.atoms[aggregate]
-            results = analyze_aggregate(aggregate_atoms, frame_number, args)
+            results = analyze_aggregate(aggregate_atoms, actual_frame_number, args)
             if results['is_vesicle']:
                 vesicle_id = f"vesicle_{vesicle_id_counter}"
                 vesicle_id_counter += 1
-                vesicle_records[vesicle_id].append(frame_number)
+                vesicle_records[vesicle_id].append(actual_frame_number)
             frame_results.append(results)
 
     # Time-resolved analysis

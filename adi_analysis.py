@@ -36,6 +36,7 @@ def parse_arguments():
                         help='Range for RDF calculation (start, end)')
     parser.add_argument('--nbins', type=int, default=DEFAULT_NBINS, help='Number of bins for RDF')
     parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
+    parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
     parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
     args = parser.parse_args()
     return args
@@ -125,7 +126,7 @@ def main():
 
     # Analyze each frame
     print("Analyzing frames for aggregation...")
-    
+
     # Determine the frame range, considering 'last' and 'skip' options
     total_frames = len(u.trajectory)
     if args.last is not None:
@@ -133,9 +134,14 @@ def main():
     else:
         start_frame = 0
     
-    for frame_number, ts in enumerate(u.trajectory[start_frame::args.skip]):
-        actual_frame_number = start_frame + frame_number * args.skip  # Track the actual frame number
-        print(f"Processing frame {actual_frame_number}...")  # Display the current frame being processed
+    if args.first is not None:
+        end_frame = min(total_frames, args.first)
+    else:
+        end_frame = total_frames
+
+    for frame_number, ts in enumerate(u.trajectory[start_frame:end_frame:args.skip]):
+        actual_frame_number = start_frame + frame_number * args.skip
+        print(f"Processing frame {actual_frame_number}...")
         
         # Proceed with the frame processing
         current_clusters = identify_clusters(peptides, cutoff_distance)

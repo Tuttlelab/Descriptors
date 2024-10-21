@@ -40,6 +40,9 @@ def parse_arguments():
     parser.add_argument('-o', '--output', default='sfi_results', help='Output directory for results')
     parser.add_argument('-pl', '--peptide_length',  type=int, required=True, help='How many amino acids per peptide')
     parser.add_argument('--min_sheet_size', type=int, default=MIN_SHEET_SIZE, help='Minimum number of peptides to consider a sheet')
+    parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
+    parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
     args = parser.parse_args()
     return args
 
@@ -186,8 +189,17 @@ def main():
     selection_string = args.selection
     peptide_length = args.peptide_length
     peptides = u.select_atoms(selection_string)
-    n_frames = len(u.trajectory)
-    print(f"Total frames in trajectory: {n_frames}")
+    total_frames = len(u.trajectory)
+    start_frame = 0
+    end_frame = total_frames
+
+    if args.last is not None:
+        start_frame = max(0, total_frames - args.last)  # Start from the frame such that we only analyze 'last' N frames
+
+    if args.first is not None:
+        end_frame = min(total_frames, args.first)  # Limit the analysis to 'first' N frames
+
+    print(f"Analyzing frames from {start_frame} to {end_frame} (total {total_frames}), skipping every {args.skip} frames")
 
     # Initialize variables for analysis
     sheet_records = defaultdict(dict)  # {frame_number: {sheet_id: peptide_indices}}
@@ -195,7 +207,9 @@ def main():
 
     # Analyze each frame
     print("Analyzing frames for sheet formation...")
-    for frame_number, ts in enumerate(u.trajectory):
+    for frame_number, ts in enumerate(u.trajectory[start_frame:end_frame:args.skip]):
+        actual_frame_number = start_frame + frame_number * args.skip
+        print(f"Processing frame {actual_frame_number}/{total_frames}...")
         positions = peptides.positions
         orientations = get_peptide_orientations(peptides, peptide_length)
         labels = cluster_peptides(positions, orientations, SPATIAL_WEIGHT, ORIENTATION_WEIGHT, CLUSTERING_THRESHOLD)

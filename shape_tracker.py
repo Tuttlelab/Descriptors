@@ -34,6 +34,9 @@ def parse_arguments():
     parser.add_argument('-tfi', '--tfi_results', help='Path to TFI results directory')
     parser.add_argument('-ffi', '--ffi_results', help='Path to FFI results directory')
     parser.add_argument('-o', '--output', default='tracker_results', help='Output directory for tracker results')
+    parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
+    parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
     args = parser.parse_args()
     return args
 
@@ -155,16 +158,29 @@ def main():
     total_frames = max(all_frames) + 1
     print(f"Total frames in simulation: {total_frames}")
 
-    # Process each frame
+    # Determine the frame range, considering 'first', 'last', and 'skip' options
+    start_frame = 0  # Default start is the first frame
+    end_frame = total_frames  # Default end is the total number of frames
+
+    if args.last is not None:
+        start_frame = max(0, total_frames - args.last)  # Analyze only the last N frames
+
+    if args.first is not None:
+        end_frame = min(total_frames, args.first)  # Limit the analysis to the first N frames
+
+    print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
+
+    # Process the selected frames, applying first, last, and skip
     print("Processing frames for structure tracking...")
-    for frame_number in range(total_frames):
+    for frame_number in range(start_frame, end_frame, args.skip):
         print(f"Processing frame {frame_number+1}/{total_frames}...")
+        
         # Get structures from each descriptor in the current frame
-        adi_structures = adi_results[adi_results['Frame'] == frame_number]
-        sfi_structures = sfi_results[sfi_results['Frame'] == frame_number]
-        vfi_structures = vfi_results[vfi_results['Frame'] == frame_number]
-        tfi_structures = tfi_results[tfi_results['Frame'] == frame_number]
-        ffi_structures = ffi_results[ffi_results['Frame'] == frame_number]
+        adi_structures = adi_results[adi_results['Frame'] == frame_number] if adi_results is not None else None
+        sfi_structures = sfi_results[sfi_results['Frame'] == frame_number] if sfi_results is not None else None
+        vfi_structures = vfi_results[vfi_results['Frame'] == frame_number] if vfi_results is not None else None
+        tfi_structures = tfi_results[tfi_results['Frame'] == frame_number] if tfi_results is not None else None
+        ffi_structures = ffi_results[ffi_results['Frame'] == frame_number] if ffi_results is not None else None
 
         # Match and track structures
         match_structures(structure_tracks, adi_structures, frame_number, 'Aggregate')
