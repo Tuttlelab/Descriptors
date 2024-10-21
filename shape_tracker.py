@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-tracking.py
+shape_tracker.py
 
 This script tracks the shape changes in peptide simulations by integrating the outputs from
 the five descriptors:
@@ -28,12 +28,12 @@ OVERLAP_THRESHOLD = 0.5  # Threshold for peptide overlap when matching structure
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Tracking Shape Changes in Peptide Simulations')
-    parser.add_argument('-adi', '--adi_results', required=True, help='Path to ADI results directory')
-    parser.add_argument('-sfi', '--sfi_results', required=True, help='Path to SFI results directory')
-    parser.add_argument('-vfi', '--vfi_results', required=True, help='Path to VFI results directory')
-    parser.add_argument('-tfi', '--tfi_results', required=True, help='Path to TFI results directory')
-    parser.add_argument('-ffi', '--ffi_results', required=True, help='Path to FFI results directory')
-    parser.add_argument('-o', '--output', default='tracking_results', help='Output directory for tracking results')
+    parser.add_argument('-adi', '--adi_results', help='Path to ADI results directory')
+    parser.add_argument('-sfi', '--sfi_results', help='Path to SFI results directory')
+    parser.add_argument('-vfi', '--vfi_results', help='Path to VFI results directory')
+    parser.add_argument('-tfi', '--tfi_results', help='Path to TFI results directory')
+    parser.add_argument('-ffi', '--ffi_results', help='Path to FFI results directory')
+    parser.add_argument('-o', '--output', default='tracker_results', help='Output directory for tracker results')
     args = parser.parse_args()
     return args
 
@@ -45,9 +45,13 @@ def load_descriptor_results(descriptor_results_dir, descriptor_name):
     """
     Load results from a descriptor's results directory.
     """
+    if descriptor_results_dir is None or not os.path.isdir(descriptor_results_dir):
+        print(f"Skipping {descriptor_name}: directory not provided or doesn't exist.")
+        return None
     frame_results_file = os.path.join(descriptor_results_dir, f'{descriptor_name}_frame_results.csv')
     if not os.path.isfile(frame_results_file):
-        raise FileNotFoundError(f"Frame results file not found for {descriptor_name}: {frame_results_file}")
+        print(f"Skipping {descriptor_name}: file {frame_results_file} not found.")
+        return None
     frame_results = pd.read_csv(frame_results_file)
     return frame_results
 
@@ -55,9 +59,11 @@ def match_structures(tracks, current_structures, frame_number, structure_type):
     """
     Match structures across frames based on peptide composition overlap.
     """
+    if current_structures is None or current_structures.empty:
+        return
     # For each current structure
     for _, curr_structure in current_structures.iterrows():
-        curr_peptides = set(eval(curr_structure['Peptides']))  # Assuming 'Peptides' column contains list of peptide indices
+        curr_peptides = set(eval(curr_structure['Peptides']))
         matched = False
         # Attempt to match with existing tracks
         for track_id, track in tracks.items():
@@ -137,12 +143,15 @@ def main():
     structure_tracks = {}
 
     # Get total number of frames
-    all_frames = set(adi_results['Frame']).union(
-        sfi_results['Frame'],
-        vfi_results['Frame'],
-        tfi_results['Frame'],
-        ffi_results['Frame']
-    )
+    all_frames = set()
+    for results in [adi_results, sfi_results, vfi_results, tfi_results, ffi_results]:
+        if results is not None:
+            all_frames.update(results['Frame'])
+    
+    if not all_frames:
+        print("No frames found. Exiting.")
+        return
+    
     total_frames = max(all_frames) + 1
     print(f"Total frames in simulation: {total_frames}")
 

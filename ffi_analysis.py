@@ -105,7 +105,7 @@ def get_peptide_orientations(cluster_atoms):
     orientations = []
     peptide_groups = cluster_atoms.groupby('residues')
     for residue in peptide_groups:
-        backbone = residue.atoms.select_atoms('backbone')
+        backbone = residue.atoms.select_atoms('backbone') #BB?
         if len(backbone.positions) >= 2:
             vector = backbone.positions[-1] - backbone.positions[0]
             norm = np.linalg.norm(vector)
@@ -279,7 +279,7 @@ def save_frame_results(frame_results, output_dir):
                    'StdCrossSectionArea', 'IsFiber']
         f.write(','.join(headers) + '\n')
         for result in frame_results:
-            if 'is_fiber' in result:
+            if result.get('is_fiber')==True:
                 print(result)
                 f.write(f"{result['frame']},{result['aggregate_size']},"
                         f"{result['shape_ratio1']:.3f},{result['shape_ratio2']:.3f},"

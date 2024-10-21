@@ -9,7 +9,7 @@ This toolkit provides Python scripts for analyzing peptide self-assembly simulat
     vfi_analysis.py: Vesicle Formation Index (VFI)
     tfi_analysis.py: Tube Formation Index (TFI)
     ffi_analysis.py: Fiber Formation Index (FFI)
-    tracking.py: Tracks structural changes over time
+    shape_tracker.py: Tracks structural changes over time
 
 ## Installation
 ### Using Conda

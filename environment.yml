@@ -1,4 +1,4 @@
-name: shape_descriptors
+name: descriptors
 channels:
   - conda-forge
 dependencies:
