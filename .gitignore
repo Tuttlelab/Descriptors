@@ -21,3 +21,10 @@ out.gro
 .temp_protein_slice.xtc_offsets.npz
 temp_protein_slice.gro
 temp_protein_slice.xtc
+centered_protein_slice.gro
+centered_protein_slice.xtc
+.centered_protein_slice.xtc_offsets.lock
+.centered_protein_slice.xtc_offsets.npz
+python_job.sh
+slurm*
+sfi_results/
