@@ -10,16 +10,21 @@ size distribution analysis, and spatial distribution insights.
 """
 
 import os
-import tempfile
 import argparse
 import numpy as np
 import MDAnalysis as mda
 from MDAnalysis.analysis import rdf
+from MDAnalysis.transformations import unwrap, center_in_box
 from scipy.spatial.distance import cdist
 import networkx as nx
 import matplotlib.pyplot as plt
 from collections import defaultdict
 from datetime import datetime
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 # Constants
 DEFAULT_MIN_PERSISTENCE = 5  # Minimum number of frames a contact must persist
@@ -63,11 +68,19 @@ def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection=
     indices = list(range(first, last, skip))
 
     # Create fixed temporary filenames
-    temp_gro = "temp_protein_slice.gro"
-    temp_xtc = "temp_protein_slice.xtc"
+    temp_gro = "centered_protein_slice.gro"
+    temp_xtc = "centered_protein_slice.xtc"
 
     with mda.Writer(temp_gro, protein.n_atoms) as W:
         W.write(protein)
+
+    # Apply centering transformation
+    print("Centering and wrapping protein in the box...")
+    transformations = [
+        center_in_box(protein, wrap=True)    # Center selected protein group and wrap the box
+    ]
+    u.trajectory.add_transformations(*transformations)
+
     with mda.Writer(temp_xtc, protein.n_atoms) as W:
         for ts in u.trajectory[indices]:
             W.write(protein)
@@ -215,6 +228,10 @@ def main():
     plot_persistent_aggregates(persistent_aggregates, args.output)
 
     print("ADI analysis completed successfully.")
+
+    # Clean up the fixed temporary files after the analysis
+    os.remove("centered_protein_slice.gro")
+    os.remove("centered_protein_slice.xtc")
 
 def save_cluster_size_distribution(cluster_size_distribution, output_dir):
     """
