@@ -21,15 +21,22 @@ from scipy.spatial.distance import cdist
 from scipy.signal import argrelextrema
 from collections import defaultdict
 import matplotlib.pyplot as plt
+import logging
+from datetime import datetime
 
 # Constants
-RADIAL_THRESHOLD = 2.0            # Å, threshold for radial standard deviation
-ANGULAR_UNIFORMITY_THRESHOLD = 0.5  # Threshold for angular uniformity metric
-ASPHERICITY_THRESHOLD = 0.7       # Threshold for asphericity in gyration tensor analysis
-RATIO_THRESHOLD = 0.3             # Threshold for eigenvalue ratio in shape analysis
-MIN_TUBE_SIZE = 50                # Minimum number of atoms to consider an aggregate as a tube
-SEGMENT_LENGTH = 20               # Number of atoms in each segment
-STEP_SIZE = 10                    # Step size for overlapping segments
+RADIAL_THRESHOLD = 2.0             # Å, threshold for radial standard deviation
+ANGULAR_UNIFORMITY_THRESHOLD = 0.5 # Threshold for angular uniformity metric
+ASPHERICITY_THRESHOLD = 0.7        # Threshold for asphericity in gyration tensor analysis
+RATIO_THRESHOLD = 0.3              # Threshold for eigenvalue ratio in shape analysis
+MIN_TUBE_SIZE = 50                 # Minimum number of atoms to consider an aggregate as a tube
+SEGMENT_LENGTH = 20                # Number of atoms in each segment
+STEP_SIZE = 10                     # Step size for overlapping segments
+
+# Set up logging
+timestamp = datetime.now().strftime("%m%d_%H%M")
+log_filename = f"tfi_{timestamp}.log"
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, format='%(message)s')
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Tube Formation Index (TFI) Analysis')
@@ -49,9 +56,6 @@ def ensure_output_directory(output_dir):
         os.makedirs(output_dir)
 
 def identify_aggregates(universe, selection_string):
-    """
-    Identify aggregates (clusters) in the system using a distance cutoff.
-    """
     selection = universe.select_atoms(selection_string)
     positions = selection.positions
     distance_matrix = cdist(positions, positions)
@@ -64,9 +68,6 @@ def identify_aggregates(universe, selection_string):
     return aggregates.values()
 
 def connected_components(adjacency_matrix):
-    """
-    Find connected components in an adjacency matrix.
-    """
     n_nodes = adjacency_matrix.shape[0]
     visited = np.zeros(n_nodes, dtype=bool)
     labels = np.zeros(n_nodes, dtype=int) - 1
@@ -85,38 +86,24 @@ def connected_components(adjacency_matrix):
     return labels, label
 
 def perform_cylindrical_analysis(positions):
-    """
-    Perform cylindrical harmonic analysis on the given positions.
-    Returns metrics indicating tube-like structures.
-    """
-    # Perform PCA to find principal axis
     positions_mean = positions.mean(axis=0)
     centered_positions = positions - positions_mean
     covariance_matrix = np.cov(centered_positions.T)
     eigenvalues, eigenvectors = np.linalg.eigh(covariance_matrix)
-    principal_axis = eigenvectors[:, -1]  # Largest eigenvalue
-    
-    # Project positions onto plane perpendicular to principal axis
+    principal_axis = eigenvectors[:, -1]
+
     projections = centered_positions - np.outer(np.dot(centered_positions, principal_axis), principal_axis)
-    
-    # Convert to cylindrical coordinates
+
     r = np.linalg.norm(projections, axis=1)
     theta = np.arctan2(projections[:, 1], projections[:, 0])
     z = np.dot(centered_positions, principal_axis)
-    
-    # Analyze radial distribution
+
     radial_std = np.std(r)
-    
-    # Analyze angular uniformity
     angular_uniformity = compute_angular_uniformity(theta)
-    
+
     return radial_std, angular_uniformity, r, theta, z, principal_axis
 
 def compute_angular_uniformity(theta):
-    """
-    Compute a metric for angular uniformity.
-    Returns a value between 0 (non-uniform) and 1 (uniform).
-    """
     histogram, _ = np.histogram(theta, bins=36, range=(-np.pi, np.pi))
     histogram_normalized = histogram / np.sum(histogram)
     uniformity = -np.sum(histogram_normalized * np.log(histogram_normalized + 1e-8))
@@ -125,11 +112,6 @@ def compute_angular_uniformity(theta):
     return angular_uniformity
 
 def segment_based_analysis(positions, segment_length, step_size):
-    """
-    Divide positions into segments and perform cylindrical analysis on each segment.
-    Returns the proportion of segments classified as tube-like.
-    """
-    # Order positions along the principal axis
     positions_mean = positions.mean(axis=0)
     centered_positions = positions - positions_mean
     covariance_matrix = np.cov(centered_positions.T)
@@ -138,34 +120,28 @@ def segment_based_analysis(positions, segment_length, step_size):
     z = np.dot(centered_positions, principal_axis)
     ordered_indices = np.argsort(z)
     positions_ordered = positions[ordered_indices]
-    
+
     num_segments = 0
     tube_like_segments = 0
-    
+
     for start in range(0, len(positions_ordered) - segment_length + 1, step_size):
         segment_positions = positions_ordered[start:start + segment_length]
         radial_std, angular_uniformity, _, _, _, _ = perform_cylindrical_analysis(segment_positions)
         if radial_std < RADIAL_THRESHOLD and angular_uniformity > ANGULAR_UNIFORMITY_THRESHOLD:
             tube_like_segments += 1
         num_segments += 1
-    
+
     if num_segments == 0:
         return 0
     return tube_like_segments / num_segments
 
 def compute_radial_density(r, num_bins=50):
-    """
-    Compute radial density profile.
-    """
     max_radius = r.max()
     bins = np.linspace(0, max_radius, num_bins)
     density, bin_edges = np.histogram(r, bins=bins, density=True)
     return density, bin_edges
 
 def is_hollow_tube(density, bin_edges):
-    """
-    Determine if the tube is hollow based on radial density profile.
-    """
     density_smooth = np.convolve(density, np.ones(5)/5, mode='same')
     maxima = argrelextrema(density_smooth, np.greater)[0]
     minima = argrelextrema(density_smooth, np.less)[0]
@@ -177,9 +153,6 @@ def is_hollow_tube(density, bin_edges):
     return False
 
 def compute_shape_anisotropy(positions):
-    """
-    Compute asphericity and eigenvalue ratios using the gyration tensor.
-    """
     relative_positions = positions - positions.mean(axis=0)
     gyration_tensor = np.dot(relative_positions.T, relative_positions) / len(relative_positions)
     eigenvalues, _ = np.linalg.eigh(gyration_tensor)
@@ -189,29 +162,26 @@ def compute_shape_anisotropy(positions):
     return asphericity, ratio
 
 def analyze_aggregate(aggregate_atoms, frame_number, args):
-    """
-    Analyze a single aggregate for tube properties.
-    """
     results = {}
     positions = aggregate_atoms.positions
     if len(positions) < args.min_tube_size:
         results['is_tube'] = False
+        logging.debug(f"Frame {frame_number}: Aggregate too small to be a tube (size={len(positions)}).")
         return results
-    
-    # Segment-based analysis
+
     tube_segment_ratio = segment_based_analysis(positions, SEGMENT_LENGTH, STEP_SIZE)
-    
-    # Perform cylindrical analysis on entire aggregate
+    logging.debug(f"Frame {frame_number}: Tube segment ratio={tube_segment_ratio:.3f}")
+
     radial_std, angular_uniformity, r, theta, z, principal_axis = perform_cylindrical_analysis(positions)
-    
-    # Radial density profile
+    logging.debug(f"Frame {frame_number}: radial_std={radial_std:.3f}, angular_uniformity={angular_uniformity:.3f}")
+
     density, bin_edges = compute_radial_density(r)
     hollow = is_hollow_tube(density, bin_edges)
-    
-    # Shape anisotropy
+    logging.debug(f"Frame {frame_number}: hollow={hollow}")
+
     asphericity, ratio = compute_shape_anisotropy(positions)
-    
-    # Classification criteria
+    logging.debug(f"Frame {frame_number}: asphericity={asphericity:.3f}, eigenvalue_ratio={ratio:.3f}")
+
     is_tube = (
         tube_segment_ratio >= 0.5 and
         radial_std < RADIAL_THRESHOLD and
@@ -220,7 +190,9 @@ def analyze_aggregate(aggregate_atoms, frame_number, args):
         asphericity > ASPHERICITY_THRESHOLD and
         ratio < RATIO_THRESHOLD
     )
-    
+
+    logging.debug(f"Frame {frame_number}: Is tube={is_tube}")
+
     results['frame'] = frame_number
     results['aggregate_size'] = len(positions)
     results['radial_std'] = radial_std
@@ -235,7 +207,7 @@ def analyze_aggregate(aggregate_atoms, frame_number, args):
 def main():
     args = parse_arguments()
     ensure_output_directory(args.output)
-    
+
     # Load the trajectory
     print("Loading trajectory data...")
     u = mda.Universe(args.topology, args.trajectory)
@@ -252,34 +224,35 @@ def main():
         end_frame = min(n_frames, args.first)  # Limit the analysis to the first N frames
 
     print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
-    
+
     # Initialize variables for analysis
     tube_records = defaultdict(list)  # {tube_id: [frame_numbers]}
     tube_id_counter = 0
     frame_results = []
-    
+
     # Analyze each frame
     print("Analyzing frames for tube formation...")
     for frame_number, ts in enumerate(u.trajectory[start_frame:end_frame:args.skip]):
         actual_frame_number = start_frame + frame_number * args.skip  # Track the actual frame number
-        print(f"Processing frame {actual_frame_number + 1}/{n_frames}...")
-        
+        print(f"Processing frame {actual_frame_number + 1}/{n_frames}...")  # Debug print for each processed frame
+        logging.debug(f"Processing frame {actual_frame_number + 1}/{n_frames}...")
+
         aggregates = identify_aggregates(u, selection_string)
         for aggregate in aggregates:
-            aggregate_atoms = u.atoms[aggregate]
+            aggregate_atoms = u.select_atoms(selection_string)[aggregate]
             results = analyze_aggregate(aggregate_atoms, actual_frame_number, args)
             if results.get('is_tube'):
                 tube_id = f"tube_{tube_id_counter}"
                 tube_id_counter += 1
                 tube_records[tube_id].append(actual_frame_number)
             frame_results.append(results)
-    
+
     # Time-resolved analysis
     tube_lifetimes = analyze_tube_lifetimes(tube_records)
     save_tube_lifetimes(tube_lifetimes, args.output)
     save_frame_results(frame_results, args.output)
     plot_tube_lifetimes(tube_lifetimes, args.output)
-    
+
     print("TFI analysis completed successfully.")
 
 def analyze_tube_lifetimes(tube_records):

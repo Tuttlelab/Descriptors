@@ -7,8 +7,6 @@ eq.xtc
 .eq.xtc_offsets.npz
 .protein_slice.xtc_offsets.lock
 .protein_slice.xtc_offsets.npz
-eq2ff1200.xtc
-npt2ff1200.gro
 protein_slice.gro
 protein_slice.xtc
 adi_results/
@@ -28,3 +26,11 @@ centered_protein_slice.xtc
 python_job.sh
 slurm*
 sfi_results/
+ffi_results/
+tfi_results/
+vfi_results/
+*.log
+temp*
+cluster_circles.py
+eq*
+.eq*
