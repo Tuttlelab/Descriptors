@@ -23,7 +23,8 @@ from skimage.measure import label
 from skimage.morphology import ball
 from collections import defaultdict
 import matplotlib.pyplot as plt
-import multiprocessing as mp
+import logging
+from datetime import datetime
 
 # Constants
 DENSITY_BINS = 100
@@ -51,6 +52,13 @@ def ensure_output_directory(output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
+def setup_logging(output_dir):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_filename = os.path.join(output_dir, f"vfi_{timestamp}.log")
+    logging.basicConfig(filename=log_filename, level=logging.DEBUG,
+                        format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.info("VFI Analysis started.")
+
 def identify_aggregates(universe, selection_string):
     """
     Identify aggregates (clusters) in the system using a distance cutoff.
@@ -60,16 +68,36 @@ def identify_aggregates(universe, selection_string):
     distance_matrix = np.linalg.norm(positions[:, np.newaxis, :] - positions[np.newaxis, :, :], axis=-1)
     adjacency_matrix = distance_matrix < 6.0  # Distance cutoff in Å
     np.fill_diagonal(adjacency_matrix, 0)
-    labels, num_labels = label(adjacency_matrix)
+    labels, num_labels = connected_components(adjacency_matrix)
     aggregates = defaultdict(list)
     for idx, label_id in enumerate(labels):
         aggregates[label_id].append(selection.atoms[idx].index)
     return aggregates.values()
 
+def connected_components(adjacency_matrix):
+    """
+    Custom connected components finder for the adjacency matrix.
+    Returns labels indicating component membership.
+    """
+    n_nodes = adjacency_matrix.shape[0]
+    visited = np.zeros(n_nodes, dtype=bool)
+    labels = np.full(n_nodes, -1, dtype=int)
+    label_id = 0
+
+    for node in range(n_nodes):
+        if not visited[node]:
+            stack = [node]
+            while stack:
+                current = stack.pop()
+                if not visited[current]:
+                    visited[current] = True
+                    labels[current] = label_id
+                    neighbors = np.where(adjacency_matrix[current])[0]
+                    stack.extend(neighbors)
+            label_id += 1
+    return labels, label_id
+
 def compute_radial_density(positions, com, num_bins):
-    """
-    Compute radial density profile of an aggregate.
-    """
     distances = np.linalg.norm(positions - com, axis=1)
     max_distance = distances.max()
     bins = np.linspace(0, max_distance, num_bins)
@@ -77,17 +105,11 @@ def compute_radial_density(positions, com, num_bins):
     return density, bin_edges
 
 def is_hollow(density, bin_edges):
-    """
-    Determine if the aggregate is hollow based on the radial density profile.
-    """
-    # Smooth the density profile
-    density_smooth = np.convolve(density, np.ones(5)/5, mode='same')
-    # Find local minima and maxima
     from scipy.signal import argrelextrema
+    density_smooth = np.convolve(density, np.ones(5)/5, mode='same')
     maxima = argrelextrema(density_smooth, np.greater)[0]
     minima = argrelextrema(density_smooth, np.less)[0]
     if len(maxima) > 0 and len(minima) > 0:
-        # Check if there is a significant density drop indicating a hollow core
         shell_peak = density_smooth[maxima[0]]
         core_min = density_smooth[minima[0]]
         if core_min < shell_peak * 0.5:
@@ -95,78 +117,68 @@ def is_hollow(density, bin_edges):
     return False
 
 def compute_sphericity(positions):
-    """
-    Compute sphericity of an aggregate using convex hull.
-    """
     if len(positions) < 4:
-        return 0  # Cannot form a convex hull
+        return 0
     hull = ConvexHull(positions)
     surface_area = hull.area
     volume = hull.volume
     sphericity = (np.pi**(1/3)) * (6 * volume)**(2/3) / surface_area
     return sphericity
 
-def compute_hollowness_ratio(positions, voxel_size=1.0):
+
+def compute_hollowness_ratio(positions, voxel_size=2.0):
     """
     Quantify hollowness using voxelization and flood fill algorithm.
     """
-    # Voxel grid dimensions
+    # Define voxel grid dimensions
     min_coords = positions.min(axis=0) - voxel_size
     max_coords = positions.max(axis=0) + voxel_size
     grid_shape = np.ceil((max_coords - min_coords) / voxel_size).astype(int)
+    print(f"Grid shape for hollowness calculation: {grid_shape}")  # Debugging output
     grid = np.zeros(grid_shape, dtype=bool)
 
     # Map positions to grid indices
     indices = np.floor((positions - min_coords) / voxel_size).astype(int)
     grid[indices[:, 0], indices[:, 1], indices[:, 2]] = True
 
-    # Fill internal voids
-    filled_grid = binary_fill_holes(grid)
+    # Try to fill internal voids
+    try:
+        filled_grid = binary_fill_holes(grid)
+        if filled_grid is None:
+            print("Warning: binary_fill_holes returned None. Defaulting hollowness_ratio to 0.")
+            return 0  # Default hollowness ratio if filling fails
 
-    # Compute volumes
-    aggregate_volume = grid.sum()
-    total_volume = filled_grid.sum()
-    void_volume = total_volume - aggregate_volume
+        # Compute volumes
+        aggregate_volume = int(grid.sum())
+        total_volume = int(filled_grid.sum())
+        void_volume = total_volume - aggregate_volume
 
-    hollowness_ratio = void_volume / total_volume
-    return hollowness_ratio
+        hollowness_ratio = void_volume / total_volume if total_volume > 0 else 0
+        return hollowness_ratio
+    except MemoryError:
+        print("Memory error during hollowness calculation. Consider adjusting voxel size or analyzing fewer frames.")
+        return 0  # Return 0 as the default if memory error occurs
 
 def compute_shape_descriptors(positions, com):
-    """
-    Compute asphericity and acylindricity using gyration tensor.
-    """
     relative_positions = positions - com
     gyration_tensor = np.dot(relative_positions.T, relative_positions) / len(relative_positions)
     eigenvalues, _ = np.linalg.eigh(gyration_tensor)
     lambda_avg = eigenvalues.mean()
-
     asphericity = ((eigenvalues - lambda_avg)**2).sum() / (2 * lambda_avg**2)
     acylindricity = ((eigenvalues[1] - eigenvalues[0])**2 + (eigenvalues[2] - eigenvalues[1])**2 +
                      (eigenvalues[0] - eigenvalues[2])**2) / (2 * lambda_avg**2)
     return asphericity, acylindricity
 
 def analyze_aggregate(aggregate_atoms, frame_number, args):
-    """
-    Analyze a single aggregate for vesicle properties.
-    """
     results = {}
     positions = aggregate_atoms.positions
     com = positions.mean(axis=0)
-
-    # Radial density profile
     density, bin_edges = compute_radial_density(positions, com, DENSITY_BINS)
     hollow = is_hollow(density, bin_edges)
-
-    # Sphericity
     sphericity = compute_sphericity(positions)
-
-    # Hollowness ratio
     hollowness_ratio = compute_hollowness_ratio(positions)
-
-    # Shape descriptors
     asphericity, acylindricity = compute_shape_descriptors(positions, com)
 
-    # Classification criteria
     is_vesicle = (
         len(positions) >= args.min_vesicle_size and
         sphericity >= SPHERICITY_THRESHOLD and
@@ -175,6 +187,9 @@ def analyze_aggregate(aggregate_atoms, frame_number, args):
         asphericity <= ASPHERICITY_THRESHOLD and
         acylindricity <= ACYLINDRICITY_THRESHOLD
     )
+
+    logging.debug(f"Frame {frame_number}: sphericity={sphericity:.3f}, hollowness_ratio={hollowness_ratio:.3f}, "
+                  f"asphericity={asphericity:.3f}, acylindricity={acylindricity:.3f}, is_vesicle={is_vesicle}")
 
     results['frame'] = frame_number
     results['aggregate_size'] = len(positions)
@@ -188,38 +203,34 @@ def analyze_aggregate(aggregate_atoms, frame_number, args):
 def main():
     args = parse_arguments()
     ensure_output_directory(args.output)
+    setup_logging(args.output)
 
-    # Load the trajectory
-    print("Loading trajectory data...")
     u = mda.Universe(args.topology, args.trajectory)
     selection_string = args.selection
     n_frames = len(u.trajectory)
     print(f"Total frames in trajectory: {n_frames}")
-    start_frame = 0  # Default start is the first frame
-    end_frame = n_frames  # Default end is the total number of frames
+    start_frame, end_frame = 0, n_frames
 
     if args.last is not None:
-        start_frame = max(0, n_frames - args.last)  # Start from the frame such that we only analyze 'last' N frames
-
+        start_frame = max(0, n_frames - args.last)
     if args.first is not None:
-        end_frame = min(n_frames, args.first)  # Limit the analysis to 'first' N frames
+        end_frame = min(n_frames, args.first)
 
     print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
 
-    # Initialize variables for analysis
-    vesicle_records = defaultdict(list)  # {vesicle_id: [frame_numbers]}
+    vesicle_records = defaultdict(list)
     vesicle_id_counter = 0
     frame_results = []
 
-    # Analyze each frame
     print("Analyzing frames for vesicle formation...")
     for frame_number, ts in enumerate(u.trajectory[start_frame:end_frame:args.skip]):
-        actual_frame_number = start_frame + frame_number * args.skip  # Track the actual frame number
-        print(f"Processing frame {actual_frame_number + 1}/{n_frames}...")  # Display the current frame being processed
+        actual_frame_number = start_frame + frame_number * args.skip
+        logging.info(f"Processing frame {actual_frame_number + 1}/{n_frames}")
+        print(f"Processing frame {actual_frame_number + 1}/{n_frames}")
 
         aggregates = identify_aggregates(u, selection_string)
         for aggregate in aggregates:
-            aggregate_atoms = u.atoms[aggregate]
+            aggregate_atoms = u.select_atoms(selection_string)[aggregate]
             results = analyze_aggregate(aggregate_atoms, actual_frame_number, args)
             if results['is_vesicle']:
                 vesicle_id = f"vesicle_{vesicle_id_counter}"
@@ -227,7 +238,6 @@ def main():
                 vesicle_records[vesicle_id].append(actual_frame_number)
             frame_results.append(results)
 
-    # Time-resolved analysis
     vesicle_lifetimes = analyze_vesicle_lifetimes(vesicle_records)
     save_vesicle_lifetimes(vesicle_lifetimes, args.output)
     save_frame_results(frame_results, args.output)
