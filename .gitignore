@@ -34,3 +34,6 @@ temp*
 cluster_circles.py
 eq*
 .eq*
+.vscode
+f9.png
+.traj*
