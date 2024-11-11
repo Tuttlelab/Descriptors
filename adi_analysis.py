@@ -224,7 +224,7 @@ def main():
     save_persistent_aggregates(persistent_aggregates, args.output)
 
     # Generate plots
-    plot_cluster_size_distribution(cluster_size_distribution, args.output)
+    plot_cluster_size_distribution(cluster_size_distribution, args.output)  # Updated function call
     plot_persistent_aggregates(persistent_aggregates, args.output)
 
     print("ADI analysis completed successfully.")
@@ -261,20 +261,50 @@ def save_persistent_aggregates(persistent_aggregates, output_dir):
 
 def plot_cluster_size_distribution(cluster_size_distribution, output_dir):
     """
-    Plot the cluster size distribution over time.
+    Plot the number of clusters per frame with circle sizes proportional to the average cluster size.
     """
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import os
+    from datetime import datetime
+
+    # Extract frame numbers, number of clusters, and average cluster sizes
     frames = [entry['frame'] for entry in cluster_size_distribution]
-    max_cluster_sizes = [max(entry['cluster_sizes']) if entry['cluster_sizes'] else 0 for entry in cluster_size_distribution]
-    plt.figure()
-    plt.plot(frames, max_cluster_sizes, label='Max Cluster Size')
-    plt.xlabel('Frame')
-    plt.ylabel('Cluster Size')
-    plt.title('Cluster Size Distribution Over Time')
-    plt.legend()
+    num_clusters = [len(entry['cluster_sizes']) for entry in cluster_size_distribution]
+    avg_cluster_sizes = [np.mean(entry['cluster_sizes']) if entry['cluster_sizes'] else 0 for entry in cluster_size_distribution]
+
+    # Scale the sizes of the scatter points for better visibility
+    sizes_scaled = np.array(avg_cluster_sizes) * 100  # Adjust scaling factor as needed
+
+    # Create the bubble plot
+    plt.figure(figsize=(10, 6))
+    scatter = plt.scatter(frames, num_clusters, s=sizes_scaled, alpha=0.6, c=num_clusters, cmap='viridis', edgecolors='w', linewidth=0.5)
+
+    # Add color bar to indicate the number of clusters
+    plt.colorbar(scatter, label='Number of Clusters')
+
+    # Enhance plot aesthetics
+    plt.xlabel("Frame Number")
+    plt.ylabel("Number of Clusters")
+    plt.title("Number of Clusters per Frame with Average Cluster Size")
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.tight_layout()
+
+    # Save the plot with a timestamped filename
     timestamp = datetime.now().strftime("%m%d_%H%M")
-    plt.savefig(os.path.join(output_dir, f'cluster_size_distribution_{timestamp}.png'))
+    plot_filename = os.path.join(output_dir, f'number_of_clusters_per_frame_{timestamp}.png')
+    plt.savefig(plot_filename)
     plt.close()
-    print("Cluster size distribution plot saved.")
+    print(f"Number of clusters per frame plot saved to {plot_filename}")
+
+    # Save cluster size distribution data to a CSV file
+    csv_filename = os.path.join(output_dir, f'cluster_size_distribution_{timestamp}.csv')
+    with open(csv_filename, 'w') as f:
+        f.write('Frame,ClusterSizes\n')
+        for entry in cluster_size_distribution:
+            sizes = ';'.join(map(str, entry['cluster_sizes']))
+            f.write(f"{entry['frame']},{sizes}\n")
+    print(f"Cluster size distribution data saved to {csv_filename}")
 
 def plot_persistent_aggregates(persistent_aggregates, output_dir):
     """

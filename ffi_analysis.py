@@ -339,6 +339,7 @@ def analyze_aggregate(aggregate_atoms, frame_number, args):
     results['mean_cross_section_area'] = mean_cross_section_area
     results['std_cross_section_area'] = std_cross_section_area
     results['is_fiber'] = is_fiber  # Store as boolean
+    results['positions'] = positions  # Add positions to results
 
     return results
 
@@ -381,16 +382,17 @@ def save_frame_results(frame_results, output_dir):
                    'MeanAngle', 'StdAngle', 'FOP', 'MeanCrossSectionArea',
                    'StdCrossSectionArea', 'IsFiber']
         f.write(','.join(headers) + '\n')
-        for result in frame_results:
-            is_fiber = result.get('is_fiber', False)
-            # Validate is_fiber is boolean
-            if not isinstance(is_fiber, bool):
-                is_fiber = bool(is_fiber)
-            f.write(f"{result.get('frame', '')},{result.get('aggregate_size', '')},"
-                    f"{result.get('shape_ratio1', '')},{result.get('shape_ratio2', '')},"
-                    f"{result.get('mean_angle', '')},{result.get('std_angle', '')},"
-                    f"{result.get('fop', '')},{result.get('mean_cross_section_area', '')},"
-                    f"{result.get('std_cross_section_area', '')},{int(is_fiber)}\n")
+        for frame_result in frame_results:
+            for result in frame_result:
+                is_fiber = result.get('is_fiber', False)
+                # Validate is_fiber is boolean
+                if not isinstance(is_fiber, bool):
+                    is_fiber = bool(is_fiber)
+                f.write(f"{result.get('frame', '')},{result.get('aggregate_size', '')},"
+                        f"{result.get('shape_ratio1', '')},{result.get('shape_ratio2', '')},"
+                        f"{result.get('mean_angle', '')},{result.get('std_angle', '')},"
+                        f"{result.get('fop', '')},{result.get('mean_cross_section_area', '')},"
+                        f"{result.get('std_cross_section_area', '')},{int(is_fiber)}\n")
     print(f"Per-frame results saved to {output_file}")
 
 def plot_fiber_lifetimes(fiber_lifetimes, output_dir):
@@ -438,20 +440,71 @@ def plot_number_of_fibers_per_frame(frame_results, output_dir):
     plt.close()
     print(f"Number of fibers per frame plot saved to {plot_filename}")
 
+def track_fibers_across_frames(fiber_records, frame_results, distance_threshold=5.0):
+    """
+    Track fibers across frames by comparing their properties.
+    """
+    tracked_fibers = defaultdict(list)
+    fiber_id_counter = 0
+
+    for frame_number, frame_result in enumerate(frame_results):
+        current_fibers = [result for result in frame_result if result.get('is_fiber', False)]
+
+        if frame_number == 0:
+            # Initialize tracking for the first frame
+            for fiber in current_fibers:
+                tracked_fibers[fiber_id_counter].append((frame_number, fiber))
+                fiber_id_counter += 1
+        else:
+            # Track fibers in subsequent frames
+            previous_fibers = [tracked_fibers[fiber_id][-1][1] for fiber_id in tracked_fibers]
+            for fiber in current_fibers:
+                matched = False
+                for prev_fiber in previous_fibers:
+                    if np.linalg.norm(fiber['positions'].mean(axis=0) - prev_fiber['positions'].mean(axis=0)) < distance_threshold:
+                        fiber_id = [fid for fid in tracked_fibers if tracked_fibers[fid][-1][1] == prev_fiber][0]
+                        tracked_fibers[fiber_id].append((frame_number, fiber))
+                        matched = True
+                        break
+                if not matched:
+                    tracked_fibers[fiber_id_counter].append((frame_number, fiber))
+                    fiber_id_counter += 1
+
+    return tracked_fibers
+
+def plot_tracked_fibers(tracked_fibers, output_dir):
+    """
+    Plot the tracked fibers over time.
+    """
+    plt.figure(figsize=(10, 6))
+
+    for fiber_id, fiber_data in tracked_fibers.items():
+        frames = [data[0] for data in fiber_data]
+        sizes = [data[1]['aggregate_size'] for data in fiber_data]
+        plt.plot(frames, sizes, marker='o', linestyle='-', label=f'Fiber {fiber_id}')
+
+    plt.xlabel('Frame')
+    plt.ylabel('Fiber Size')
+    plt.title('Tracked Fibers Over Time')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.tight_layout()
+
+    # Save the plot with a timestamped filename
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+    plot_filename = os.path.join(output_dir, f'tracked_fibers_{timestamp}.png')
+    plt.savefig(plot_filename)
+    plt.close()
+    print(f"Tracked fibers plot saved to {plot_filename}")
+
 def main():
     args = parse_arguments()
     ensure_output_directory(args.output)
 
     # Load and crop trajectory
     print("Loading and processing trajectory...")
-    u = load_and_crop_trajectory(
-        args.topology,
-        args.trajectory,
-        args.first,
-        args.last,
-        args.skip,
-        args.selection
-    )
+    u = load_and_crop_trajectory(args.topology, args.trajectory, args.first, args.last, args.skip, args.selection)
+    print(f"Total frames in cropped trajectory: {len(u.trajectory)}")
 
     bb_selection = 'protein and name BB'
     n_frames = len(u.trajectory)
@@ -473,33 +526,41 @@ def main():
 
         aggregates = identify_aggregates(u, bb_selection, args.distance_cutoff)
         logging.debug(f"Number of aggregates found: {len(aggregates)}")
+        frame_result = []
         for aggregate in aggregates:
             aggregate_atoms = u.select_atoms('index ' + ' '.join(map(str, aggregate)))
             results = analyze_aggregate(aggregate_atoms, frame_number, args)
+            frame_result.append(results)
             if results.get('is_fiber'):
                 fiber_id = f"fiber_{fiber_id_counter}"
-                fiber_id_counter +=1
+                fiber_id_counter += 1
                 fiber_records[fiber_id].append(frame_number)
                 logging.debug(f"Frame {frame_number}: Aggregate classified as fiber (ID: {fiber_id})")
             else:
                 logging.debug(f"Frame {frame_number}: Aggregate not classified as fiber.")
-            frame_results.append(results)
+        frame_results.append(frame_result)
 
-    total_fibers = sum(1 for result in frame_results if result.get('is_fiber', False))
+    total_fibers = sum(1 for frame_result in frame_results for result in frame_result if result.get('is_fiber', False))
     print(f"Total fibers detected: {total_fibers}")
+
+    # Track fibers across frames
+    tracked_fibers = track_fibers_across_frames(fiber_records, frame_results)
 
     # Save and plot results
     fiber_lifetimes = analyze_fiber_lifetimes(fiber_records)
     save_fiber_lifetimes(fiber_lifetimes, args.output)
     save_frame_results(frame_results, args.output)
     plot_fiber_lifetimes(fiber_lifetimes, args.output)
-    plot_number_of_fibers_per_frame(frame_results, args.output)
+    plot_tracked_fibers(tracked_fibers, args.output)
 
     print("FFI analysis completed successfully.")
 
     # Clean up temporary files
-    os.remove("temp_protein_slice.gro")
-    os.remove("temp_protein_slice.xtc")
+    try:
+        os.remove("temp_protein_slice.gro")
+        os.remove("temp_protein_slice.xtc")
+    except OSError as e:
+        print(f"Error removing temporary files: {e}")
 
 if __name__ == '__main__':
     main()
