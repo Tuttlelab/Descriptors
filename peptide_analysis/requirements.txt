@@ -1,0 +1,8 @@
+numpy
+scipy
+pandas
+matplotlib
+MDAnalysis
+scikit-learn
+seaborn
+networkx
