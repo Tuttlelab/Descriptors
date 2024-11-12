@@ -16,6 +16,7 @@ Functions:
 """
 
 import os
+import tempfile
 import argparse
 import MDAnalysis as mda
 from MDAnalysis.transformations import center_in_box, unwrap
@@ -33,15 +34,15 @@ def ensure_output_directory(output_dir):
 
 def load_trajectory(topology, trajectory, selection):
     """
-    Load the topology and trajectory files using MDAnalysis, and select atoms based on the selection string.
+    Load the topology and trajectory files using MDAnalysis, and select beads based on the selection string.
 
     Args:
         topology (str): Path to the topology file (e.g., .gro, .pdb).
         trajectory (str): Path to the trajectory file (e.g., .xtc, .trr).
-        selection (str): Atom selection string.
+        selection (str): Bead selection string.
 
     Returns:
-        tuple: A tuple containing the MDAnalysis Universe and the selected AtomGroup.
+        tuple: A tuple containing the MDAnalysis Universe and the selected BeadGroup.
     """
     u = mda.Universe(topology, trajectory)
     atoms = u.select_atoms(selection)
@@ -49,69 +50,54 @@ def load_trajectory(topology, trajectory, selection):
         raise ValueError(f"Selection '{selection}' returned no atoms.")
     return u, atoms
 
-def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection="protein", transformations=None):
+def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection):
     """
-    Load and crop the trajectory based on specified frame range and selection.
-
-    Args:
-        topology (str): Path to the topology file (e.g., .gro, .pdb).
-        trajectory (str): Path to the trajectory file (e.g., .xtc, .trr).
-        first (int): First frame to include in the analysis.
-        last (int): Last frame to include in the analysis.
-        skip (int): Frame skipping interval.
-        selection (str): Atom selection string.
-        transformations (list): List of transformations to apply to the trajectory.
-
-    Returns:
-        MDAnalysis.Universe: The Universe containing the cropped trajectory and selected atoms.
+    Load and optionally crop the trajectory.
+    Returns a Universe object.
     """
+    # Load the trajectory
     u = mda.Universe(topology, trajectory)
-
-    # Define total number of frames
     total_frames = len(u.trajectory)
-    if last is None or last > total_frames:
-        last = total_frames
-    if first < 0 or first >= total_frames:
-        raise ValueError(f"Invalid first frame: {first}.")
 
-    # Ensure that 'last' is greater than 'first'
-    if last <= first:
-        raise ValueError(f"'last' frame must be greater than 'first' frame. Got first={first}, last={last}.")
+    # Apply frame selection if 'first', 'last', or 'skip' is specified
+    if first is not None or last is not None or skip is not None:
+        # Determine frames to include
+        start = first if first is not None else 0
+        stop = last if last is not None else total_frames
+        step = skip if skip is not None else 1
 
-    # Select the specified atoms
-    atoms = u.select_atoms(selection)
-    if len(atoms) == 0:
-        raise ValueError(f"Selection '{selection}' returned no atoms.")
+        # Create temporary files for the trajectory and topology
+        temp_topol_file = tempfile.NamedTemporaryFile(suffix='.gro', delete=False)
+        temp_traj_file = tempfile.NamedTemporaryFile(suffix='.xtc', delete=False)
 
-    indices = list(range(first, last, skip))
+        # Copy the original topology file to the temporary file
+        with open(topology, 'rb') as src, open(temp_topol_file.name, 'wb') as dst:
+            dst.write(src.read())
 
-    # Create temporary filenames
-    temp_top = "temp_topology.gro"
-    temp_traj = "temp_trajectory.xtc"
+        # Save the selected frames to the temporary trajectory file
+        if u.atoms is None:
+            raise ValueError("No atoms found in the trajectory.")
+        with mda.Writer(temp_traj_file.name, n_atoms=u.atoms.n_atoms) as W:
+            for ts in u.trajectory[start:stop:step]:
+                W.write(u.atoms)
 
-    # Apply transformations if any
-    if transformations:
-        u.trajectory.add_transformations(*transformations)
+        # Create a new Universe with the cropped trajectory
+        u_cropped = mda.Universe(temp_topol_file.name, temp_traj_file.name)
 
-    # Write the selected atoms to a temporary trajectory
-    with mda.Writer(temp_top, atoms.n_atoms) as W:
-        W.write(atoms)
+        # Store temp file names to delete them later
+        temp_files = [temp_topol_file.name, temp_traj_file.name]
 
-    with mda.Writer(temp_traj, atoms.n_atoms) as W:
-        for ts in u.trajectory[indices]:
-            W.write(atoms)
-
-    # Reload the cropped trajectory
-    cropped_u = mda.Universe(temp_top, temp_traj)
-    return cropped_u
+        return u_cropped, temp_files
+    else:
+        return u, []
 
 def center_and_wrap_trajectory(universe, selection_string):
     """
-    Center the selected group in the simulation box and wrap all atoms to handle PBC issues.
+    Center the selected group in the simulation box and wrap all beads to handle PBC issues.
 
     Args:
         universe (MDAnalysis.Universe): The MDAnalysis Universe object.
-        selection_string (str): Atom selection string for centering.
+        selection_string (str): Bead selection string for centering.
 
     Returns:
         None
@@ -136,11 +122,11 @@ def parse_common_arguments():
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('-t', '--topology', required=True, help='Topology file (e.g., .gro, .pdb)')
     parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
-    parser.add_argument('-s', '--selection', default='protein', help='Atom selection string')
-    parser.add_argument('-o', '--output', default='results', help='Output directory for results')
+    parser.add_argument('-s', '--selection', default='protein', help='Bead selection string')
+    parser.add_argument('-o', '--output', default='results', help='Output directory for results') # TODO: Review this line later for the output directory
     parser.add_argument('--first', type=int, default=0, help='First frame to analyze (default is 0)')
     parser.add_argument('--last', type=int, default=None, help='Last frame to analyze (default is all frames)')
-    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)') # TODO: Change all skip to step / stride
     return parser
 
 def parse_arguments(description, additional_args=None):

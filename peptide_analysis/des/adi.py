@@ -23,7 +23,17 @@ import numpy as np
 import argparse
 import logging
 import os
+import sys
 from collections import defaultdict
+from tqdm import tqdm
+
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+from Bio import BiopythonDeprecationWarning
+warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import utility functions from the util package
 from util.io import (
@@ -32,7 +42,8 @@ from util.io import (
     parse_arguments,
 )
 from util.clustering import (
-    identify_aggregates,
+    identify_aggregates_with_cutoff,
+    calculate_adaptive_cutoff,
 )
 from util.data import (
     save_cluster_size_distribution,
@@ -47,6 +58,12 @@ from util.logging import (
     get_logger,
 )
 
+# Constants
+DEFAULT_CUTOFF = 6.0  # Distance cutoff for clustering in Angstroms
+DEFAULT_MIN_PERSISTENCE = 5  # Minimum number of frames a contact must persist
+DEFAULT_RDF_RANGE = (4.0, 15.0)  # Range for RDF calculation in Angstroms
+DEFAULT_NBINS = 50  # Number of bins for RDF calculation
+
 def add_arguments(parser):
     """
     Add ADI-specific arguments to the parser.
@@ -54,9 +71,12 @@ def add_arguments(parser):
     Args:
         parser (argparse.ArgumentParser): Argument parser object.
     """
-    parser.add_argument('-c', '--cutoff', type=float, default=6.0, help='Distance cutoff for clustering in Å (default: 6.0 Å)')
-    parser.add_argument('-p', '--persistence', type=int, default=5, help='Minimum persistence (in frames) for aggregates (default: 5 frames)')
-    # Add any other ADI-specific arguments as needed
+    parser.add_argument('-p', '--persistence', type=int, default=DEFAULT_MIN_PERSISTENCE,
+                        help=f'Minimum persistence (in frames) for aggregates (default: {DEFAULT_MIN_PERSISTENCE} frames)')
+    parser.add_argument('--rdf_range', type=float, nargs=2, default=DEFAULT_RDF_RANGE,
+                        help=f'Range for RDF calculation in Angstroms (default: {DEFAULT_RDF_RANGE})')
+    parser.add_argument('--nbins', type=int, default=DEFAULT_NBINS,
+                        help=f'Number of bins for RDF calculation (default: {DEFAULT_NBINS})')
 
 def run(args):
     """
@@ -65,16 +85,23 @@ def run(args):
     Args:
         args (argparse.Namespace): Parsed command-line arguments.
     """
-    # Ensure the output directory exists
-    ensure_output_directory(args.output)
+    import os
 
-    # Initialize logging
-    logger = setup_logging(args.output)
-    module_logger = get_logger(__name__)
+    # Set the descriptor name
+    descriptor_name = 'adi'
+
+    # Create the descriptor-specific output directory
+    output_dir = os.path.join(args.output, descriptor_name)
+    ensure_output_directory(output_dir)
+
+    # Initialize logging with a dynamic log filename
+    logger = setup_logging(output_dir, log_prefix='adi_analysis')
+    logger.info("Starting ADI analysis...")
+    module_logger = get_logger('adi_analysis')
 
     # Load and crop the trajectory
     module_logger.info("Loading and processing trajectory...")
-    u = load_and_crop_trajectory(
+    u, temp_files = load_and_crop_trajectory(
         args.topology,
         args.trajectory,
         args.first,
@@ -85,47 +112,70 @@ def run(args):
     n_frames = len(u.trajectory)
     module_logger.info(f"Total frames to analyze: {n_frames}")
 
-    # Initialize variables for analysis
-    persistent_aggregates = defaultdict(list)  # {aggregate_id: [frame_numbers]}
-    cluster_size_distribution = []  # List to store cluster sizes per frame
-    aggregate_id_counter = 0
+    try:
+        # Calculate adaptive cutoff once
+        module_logger.info("Calculating adaptive cutoff distance based on RDF...")
+        adaptive_cutoff = calculate_adaptive_cutoff(
+            universe=u,
+            selection_string=args.selection,
+            rdf_range=args.rdf_range,
+            nbins=args.nbins,
+            output_dir=output_dir
+        )
+        module_logger.info(f"Adaptive cutoff distance determined: {adaptive_cutoff:.2f} Å")
 
-    # Analyze each frame
-    module_logger.info("Analyzing frames for aggregates...")
-    for frame_number, ts in enumerate(u.trajectory):
-        module_logger.debug(f"Processing frame {frame_number + 1}/{n_frames}...")
-        peptides = u.select_atoms(args.selection)
-        positions = peptides.positions
+        # Initialize variables for analysis
+        persistent_aggregates = defaultdict(list)  # {aggregate_id: [frame_numbers]}
+        cluster_size_distribution = []  # List to store cluster sizes per frame
 
-        # Identify aggregates
-        aggregates = identify_aggregates(positions, args.cutoff)
-        module_logger.debug(f"Frame {frame_number}: Found {len(aggregates)} aggregates")
+        # Analyze each frame
+        module_logger.info("Starting analysis loop over trajectory frames...")
+        for ts in tqdm(u.trajectory, desc="Processing frames"):
+            frame_number = ts.frame  # Get current frame number
+            # Select peptides
+            peptides = u.select_atoms(args.selection)
+            positions = peptides.positions
 
-        # Store cluster sizes for this frame
-        cluster_sizes = [len(aggregate) for aggregate in aggregates]
-        cluster_size_distribution.append({'frame': frame_number, 'cluster_sizes': cluster_sizes})
+            # Identify aggregates using the adaptive cutoff
+            aggregates = identify_aggregates_with_cutoff(
+                positions=positions,
+                distance_cutoff=adaptive_cutoff
+            )
+            module_logger.debug(f"Frame {frame_number}: Found {len(aggregates)} aggregates")
 
-        # Update persistent aggregates
-        for aggregate in aggregates:
-            # Convert indices to a tuple to use as a key
-            aggregate_key = tuple(sorted(aggregate))
-            persistent_aggregates[aggregate_key].append(frame_number)
+            # Store cluster sizes for this frame
+            cluster_sizes = [len(aggregate) for aggregate in aggregates]
+            cluster_size_distribution.append({'frame': frame_number, 'cluster_sizes': cluster_sizes})
 
-    # Filter persistent aggregates based on persistence threshold
-    min_persistence = args.persistence
-    filtered_aggregates = []
-    for aggregate_key, frames in persistent_aggregates.items():
-        if len(frames) >= min_persistence:
-            filtered_aggregates.append((aggregate_key, frames))
-    module_logger.info(f"Found {len(filtered_aggregates)} persistent aggregates with minimum persistence of {min_persistence} frames")
+            # Update persistent aggregates
+            for aggregate in aggregates:
+                # Convert indices to a tuple to use as a key
+                aggregate_key = tuple(sorted(aggregate))
+                persistent_aggregates[aggregate_key].append(frame_number)
 
-    # Save and plot results
-    save_cluster_size_distribution(cluster_size_distribution, args.output)
-    save_persistent_aggregates(filtered_aggregates, args.output)
-    plot_cluster_size_distribution(cluster_size_distribution, args.output)
-    plot_persistent_aggregates(filtered_aggregates, args.output)
+        # Filter persistent aggregates based on persistence threshold
+        min_persistence = args.persistence
+        filtered_aggregates = []
+        for aggregate_key, frames in persistent_aggregates.items():
+            if len(frames) >= min_persistence:
+                filtered_aggregates.append((aggregate_key, frames))
+        module_logger.info(f"Found {len(filtered_aggregates)} persistent aggregates with minimum persistence of {min_persistence} frames")
 
-    module_logger.info("ADI analysis completed successfully.")
+        # Save and plot results
+        save_cluster_size_distribution(cluster_size_distribution, output_dir)
+        save_persistent_aggregates(filtered_aggregates, output_dir)
+        plot_cluster_size_distribution(cluster_size_distribution, output_dir)
+        plot_persistent_aggregates(filtered_aggregates, output_dir)
+    finally:
+        # Clean up temporary files if any
+        if temp_files:
+            module_logger.info("Cleaning up temporary files...")
+            for temp_file in temp_files:
+                try:
+                    os.remove(temp_file)
+                    module_logger.debug(f"Deleted temporary file: {temp_file}")
+                except OSError as e:
+                    module_logger.warning(f"Error deleting temporary file {temp_file}: {e}")
 
 if __name__ == '__main__':
     # Parse command-line arguments

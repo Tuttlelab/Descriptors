@@ -64,3 +64,7 @@ results/
 # Ignore the following directories
 util/__pycache__/
 des/__pycache__/
+
+# Ignore the following files
+input/.eq*.lock
+input/.eq*.npz

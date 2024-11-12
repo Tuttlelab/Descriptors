@@ -19,18 +19,85 @@ import numpy as np
 from scipy.spatial.distance import cdist, pdist, squareform
 from collections import defaultdict
 from sklearn.cluster import AgglomerativeClustering
+from scipy.signal import find_peaks
+from MDAnalysis.analysis import rdf
+import matplotlib.pyplot as plt
+import os
+from datetime import datetime
 
-def identify_aggregates(positions, distance_cutoff):
+def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, output_dir):
     """
-    Identify aggregates (clusters) in the system using a distance cutoff.
+    Calculate an adaptive cutoff distance based on the first minimum after the first peak in the RDF.
 
     Args:
-        positions (numpy.ndarray): Array of positions (N x 3).
-        distance_cutoff (float): Distance cutoff for clustering in Å.
+        universe (MDAnalysis.Universe): The MDAnalysis Universe object.
+        selection_string (str): Selection string for atoms.
+        rdf_range (tuple): Range for RDF calculation in Angstroms.
+        nbins (int): Number of bins for RDF calculation.
+        output_dir (str): Directory to save RDF plot.
 
     Returns:
-        list: List of aggregates, each containing indices of atoms in that aggregate.
+        float: Adaptive cutoff distance in Angstroms.
     """
+    peptides = universe.select_atoms(selection_string)
+    rdf_analysis = rdf.InterRDF(peptides, peptides, nbins=nbins, range=rdf_range)
+    rdf_analysis.run()
+
+    rdf_values = rdf_analysis.results.rdf
+    bins = rdf_analysis.results.bins
+
+    # Identify the first peak
+    peaks, _ = find_peaks(rdf_values)
+    if peaks.size > 0:
+        first_peak = peaks[0]
+        # Identify the first minimum after the first peak
+        minima, _ = find_peaks(-rdf_values[first_peak:])
+        if minima.size > 0:
+            cutoff_idx = first_peak + minima[0]
+            cutoff_distance = bins[cutoff_idx]
+        else:
+            raise ValueError("No minimum found in RDF after the first peak.")
+    else:
+        raise ValueError("No peaks found in RDF.")
+
+    return cutoff_distance
+
+def identify_aggregates_with_cutoff(positions, distance_cutoff):
+    """
+    Identify aggregates using a provided distance cutoff.
+
+    Args:
+        positions (numpy.ndarray): Positions of the selected atoms.
+        distance_cutoff (float): Distance cutoff for clustering.
+
+    Returns:
+        list: List of aggregates, each containing indices of beads in that aggregate.
+    """
+    distance_matrix = cdist(positions, positions)
+    adjacency_matrix = distance_matrix < distance_cutoff
+    np.fill_diagonal(adjacency_matrix, False)
+    labels, num_labels = connected_components(adjacency_matrix)
+    aggregates = defaultdict(list)
+    for idx, label_id in enumerate(labels):
+        aggregates[label_id].append(idx)
+    return list(aggregates.values())
+
+def identify_aggregates(universe, selection_string, rdf_range, nbins, output_dir):
+    """
+    Identify aggregates (clusters) in the system using an adaptive distance cutoff based on RDF.
+
+    Args:
+        universe (MDAnalysis.Universe): The MDAnalysis Universe object.
+        selection_string (str): Selection string for the atoms to be clustered.
+        rdf_range (tuple): Range for RDF calculation.
+        nbins (int): Number of bins for RDF calculation.
+        output_dir (str): Directory to save RDF plot.
+
+    Returns:
+        list: List of aggregates, each containing indices of beads in that aggregate.
+    """
+    positions = universe.select_atoms(selection_string).positions
+    distance_cutoff = calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, output_dir)
     distance_matrix = cdist(positions, positions)
     adjacency_matrix = distance_matrix < distance_cutoff
     np.fill_diagonal(adjacency_matrix, False)
@@ -139,7 +206,7 @@ def compute_distance_matrix(positions):
     Compute the pairwise distance matrix for a set of positions.
 
     Args:
-        positions (numpy.ndarray): Positions of atoms (N x 3).
+        positions (numpy.ndarray): Positions of beads (N x 3).
 
     Returns:
         numpy.ndarray: Pairwise distance matrix (N x N).

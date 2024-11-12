@@ -14,70 +14,45 @@ Functions:
 import logging
 import os
 from datetime import datetime
+from logging.handlers import RotatingFileHandler
 
-def setup_logging(log_dir, log_filename=None, console_level=logging.INFO, file_level=logging.DEBUG):
+def setup_logging(output_dir, log_prefix='analysis'):
     """
-    Set up logging configuration.
+    Set up logging to file and console.
 
     Args:
-        log_dir (str): Directory where the log file will be saved.
-        log_filename (str, optional): Name of the log file. If None, a timestamped filename is created.
-        console_level (int): Logging level for the console handler.
-        file_level (int): Logging level for the file handler.
-
-    Returns:
-        logging.Logger: Configured logger object.
+        output_dir (str): Directory where the log file will be saved.
+        log_prefix (str): Prefix for the log file name.
     """
-    # Ensure the log directory exists
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-
-    # Create a timestamped log filename if not provided
-    if log_filename is None:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_filename = f"analysis_{timestamp}.log"
-
-    log_path = os.path.join(log_dir, log_filename)
-
-    # Create a custom logger
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)  # Set the root logger level to DEBUG
+    logger.setLevel(logging.DEBUG)
 
-    # Remove any existing handlers to prevent duplicate logs
-    if logger.hasHandlers():
-        logger.handlers.clear()
+    # File handler for log file
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    log_file = os.path.join(output_dir, f'{log_prefix}_{timestamp}.log')
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(logging.DEBUG)
+    file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(file_formatter)
+    logger.addHandler(file_handler)
 
-    # Create handlers
-    c_handler = logging.StreamHandler()
-    f_handler = logging.FileHandler(log_path)
-
-    c_handler.setLevel(console_level)
-    f_handler.setLevel(file_level)
-
-    # Create formatters and add them to handlers
-    c_format = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
-    f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-    c_handler.setFormatter(c_format)
-    f_handler.setFormatter(f_format)
-
-    # Add handlers to the logger
-    logger.addHandler(c_handler)
-    logger.addHandler(f_handler)
-
-    # Log the start of a new analysis session
-    logger.info(f"Logging initialized. Log file: {log_path}")
+    # Console handler for terminal output
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_formatter = logging.Formatter('%(message)s')
+    console_handler.setFormatter(console_formatter)
+    logger.addHandler(console_handler)
 
     return logger
 
 def get_logger(name):
     """
-    Retrieve a logger with the given name.
+    Get a logger with the given name.
 
     Args:
         name (str): Name of the logger.
 
     Returns:
-        logging.Logger: Logger object with the specified name.
+        logging.Logger: Configured logger.
     """
     return logging.getLogger(name)

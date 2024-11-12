@@ -19,6 +19,7 @@ Functions:
 """
 
 import os
+import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 from collections import defaultdict
@@ -28,7 +29,7 @@ def set_plot_style():
     """
     Set a consistent style for all plots.
     """
-    plt.style.use('seaborn-darkgrid')
+    plt.style.use('ggplot')
     plt.rcParams.update({
         'figure.figsize': (10, 6),
         'axes.labelsize': 14,
