@@ -25,20 +25,39 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 import logging
 from datetime import datetime
+from tqdm import tqdm
+
+from concurrent.futures import ProcessPoolExecutor
+from functools import lru_cache
+from scipy import sparse
+from scipy.spatial import cKDTree
+from scipy.cluster.hierarchy import fcluster, linkage
+
+
 
 # Constants
-DENSITY_BINS = 100
-SPHERICITY_THRESHOLD = 0.8
-HOLLOWNESS_THRESHOLD = 0.3
-ASPHERICITY_THRESHOLD = 0.2
-ACYLINDRICITY_THRESHOLD = 0.2
-MIN_VESICLE_SIZE = 50  # Minimum number of atoms to consider an aggregate as a vesicle
+DENSITY_BINS = 50  # Reduced from 100
+SPHERICITY_THRESHOLD = 0.5  # Increased from 0.4 for more reliable detection
+HOLLOWNESS_THRESHOLD = 0.05  # More sensitive threshold
+MIN_VESICLE_SIZE = 30  # Reduced from 50
+VOXEL_SIZE = 0.5  # Increased from 0.15 for faster calculation
+ACYLINDRICITY_THRESHOLD = 2.5 # adjacency_matrix = distance_matrix < acylindricity for vesicle classification
+MIN_GRID_SIZE = 10    # Minimum grid dimension for hollowness calculation
+MIN_VOLUME = 500      # Minimum volume in voxels for vesicle detection
+MIN_ATOMS_SPHERICITY = 10  # Minimum atoms needed for meaningful sphericity
+PERFECT_SPHERE_RATIO = (np.pi**(1/3)) * 6**(2/3)  # Pre-calculate constant term
+MIN_VOLUME_SPHERICITY = 100.0  # Minimum volume in nm³
+MIN_SPHERICITY_THRESHOLD = 0.2  # Minimum meaningful sphericity value
+MAX_COMPONENTS = 5000  # Safety limit for number of components
+MIN_COMPONENT_SIZE = 5  # Minimum atoms per component
+MAX_RADIAL_BINS = 200  # Maximum number of bins for density calculation
+ASPHERICITY_THRESHOLD = 1.1  # Maximum asphericity for vesicle classification
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Vesicle Formation Index (VFI) Analysis')
-    parser.add_argument('-t', '--topology', required=True, help='Topology file (e.g., .gro, .pdb)')
-    parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
-    parser.add_argument('-s', '--selection', default='all', help='Atom selection string for peptides')
+    parser.add_argument('-t', '--topology', default='eq_FF1200.gro', help='Topology file (e.g., .gro, .pdb)')
+    parser.add_argument('-x', '--trajectory', default='eq_FF1200.xtc', help='Trajectory file (e.g., .xtc, .trr)')
+    parser.add_argument('-s', '--selection', default='protein', help='Atom selection string for peptides')
     parser.add_argument('-o', '--output', default='vfi_results', help='Output directory for results')
     parser.add_argument('--min_vesicle_size', type=int, default=MIN_VESICLE_SIZE,
                         help='Minimum number of atoms to consider an aggregate as a vesicle')
@@ -59,105 +78,348 @@ def setup_logging(output_dir):
                         format='%(asctime)s - %(levelname)s - %(message)s')
     logging.info("VFI Analysis started.")
 
-def identify_aggregates(universe, selection_string):
+def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection):
+    u = mda.Universe(topology, trajectory)
+
+     # Set the total number of frames
+    total_frames = len(u.trajectory)
+    print(f"Total frames: {total_frames}")
+    print(f"First frame: {first}")
+    print(f"Last frame: {last}")
+    print(f"Skip: {skip}")
+
+    # Validate and set 'first' and 'last'
+    if last is None or last > total_frames:
+        last = total_frames
+    if first < 0 or first >= total_frames:
+        raise ValueError(f"Invalid first frame: {first}.")
+
+    # Ensure that 'last' is greater than 'first'
+    if last <= first:
+        raise ValueError(f"'last' frame must be greater than 'first' frame. Got first={first}, last={last}.")
+
+    # Select the specified beads
+    selection_atoms = u.select_atoms(selection)
+    if len(selection_atoms) == 0:
+        raise ValueError(f"Selection '{selection}' returned no beads.")
+
+    # Create the list of frame indices to process
+    indices = list(range(first, last, skip))
+    logging.debug(f"Indices to be processed: {indices}")
+
+    # Create temporary file names for cropped trajectory
+    temp_gro = "temp_protein_slice.gro"
+    temp_xtc = "temp_protein_slice.xtc"
+
+    # Write the selected beads to a temporary trajectory
+    with mda.Writer(temp_gro, selection_atoms.n_atoms) as W:
+        W.write(selection_atoms)
+    with mda.Writer(temp_xtc, selection_atoms.n_atoms) as W:
+        for ts in u.trajectory[indices]:
+            W.write(selection_atoms)
+
+    # Reload the cropped trajectory
+    cropped_u = mda.Universe(temp_gro, temp_xtc)
+    return cropped_u
+
+def center_and_wrap_trajectory(universe, selection_string):
     """
-    Identify aggregates (clusters) in the system using a distance cutoff.
+    Center the selected group in the simulation box and wrap all atoms to handle PBC issues.
     """
     selection = universe.select_atoms(selection_string)
+
+    # Calculate the center of mass of the selection
+    com = selection.center_of_mass()
+
+    # Get the simulation box dimensions
+    box_dimensions = universe.dimensions[:3]  # [lx, ly, lz]
+
+    # Calculate the center of the box
+    box_center = box_dimensions / 2
+
+    # Calculate the shift vector needed to move COM to box center
+    shift = box_center - com
+
+    # Translate the entire system by the shift vector
+    universe.atoms.translate(shift)
+
+    # Wrap all atoms back into the primary simulation box
+    universe.atoms.wrap()
+
+    # Optional: Recompute the center of mass after translation and wrapping
+    new_com = selection.center_of_mass()
+    logging.debug(f"Initial COM: {com}, Shift Applied: {shift}, New COM after wrapping: {new_com}")
+
+def identify_aggregates(universe, selection_string):
+    """Identify aggregates using hierarchical clustering"""
+    selection = universe.select_atoms(selection_string)
     positions = selection.positions
-    distance_matrix = np.linalg.norm(positions[:, np.newaxis, :] - positions[np.newaxis, :, :], axis=-1)
-    adjacency_matrix = distance_matrix < 6.0  # Distance cutoff in Å
-    np.fill_diagonal(adjacency_matrix, 0)
-    labels, num_labels = connected_components(adjacency_matrix)
-    aggregates = defaultdict(list)
-    for idx, label_id in enumerate(labels):
-        aggregates[label_id].append(selection.atoms[idx].index)
-    return aggregates.values()
+
+    if len(positions) == 0:
+        return [], 0
+
+    # Perform hierarchical clustering
+    linkage_matrix = linkage(positions, method='single', metric='euclidean')
+    # Cut the dendrogram at 6.0 Angstroms distance
+    labels = fcluster(linkage_matrix, t=6.0, criterion='distance') - 1
+
+    # Count unique clusters
+    unique_clusters = np.unique(labels)
+
+    # Group atoms by cluster
+    aggregates = []
+    for cluster_id in unique_clusters:
+        cluster_indices = np.where(labels == cluster_id)[0]
+        if len(cluster_indices) >= MIN_VESICLE_SIZE:
+            ag_atoms = selection.atoms[cluster_indices]
+            aggregates.append(ag_atoms)
+
+    return aggregates, len(aggregates)
 
 def connected_components(adjacency_matrix):
     """
-    Custom connected components finder for the adjacency matrix.
-    Returns labels indicating component membership.
+    Find connected components in adjacency matrix using depth-first search.
+
+    Parameters:
+        adjacency_matrix (np.ndarray): Boolean matrix where True indicates connection
+
+    Returns:
+        tuple: (labels array, number of components)
+
+    Raises:
+        ValueError: If matrix is invalid or too large
     """
+    if not isinstance(adjacency_matrix, np.ndarray) or adjacency_matrix.ndim != 2:
+        raise ValueError("Input must be 2D numpy array")
+
     n_nodes = adjacency_matrix.shape[0]
+    logging.debug(f"Finding components for {n_nodes} nodes")
+
     visited = np.zeros(n_nodes, dtype=bool)
     labels = np.full(n_nodes, -1, dtype=int)
     label_id = 0
+    component_sizes = []
 
     for node in range(n_nodes):
         if not visited[node]:
             stack = [node]
+            component_size = 0
             while stack:
                 current = stack.pop()
                 if not visited[current]:
                     visited[current] = True
                     labels[current] = label_id
+                    component_size += 1
                     neighbors = np.where(adjacency_matrix[current])[0]
                     stack.extend(neighbors)
-            label_id += 1
+
+            if component_size >= MIN_COMPONENT_SIZE:
+                component_sizes.append(component_size)
+                label_id += 1
+
+            if label_id > MAX_COMPONENTS:
+                raise ValueError(f"Too many components (>{MAX_COMPONENTS})")
+
+    logging.debug(f"Found {label_id} components with sizes: {component_sizes}")
     return labels, label_id
 
 def compute_radial_density(positions, com, num_bins):
-    distances = np.linalg.norm(positions - com, axis=1)
-    max_distance = distances.max()
-    bins = np.linspace(0, max_distance, num_bins)
-    density, bin_edges = np.histogram(distances, bins=bins, density=True)
-    return density, bin_edges
+    """
+    Calculate radial density profile around center of mass.
 
-def is_hollow(density, bin_edges):
+    Parameters:
+        positions (np.ndarray): Atomic positions
+        com (np.ndarray): Center of mass coordinates
+        num_bins (int): Number of radial bins
+
+    Returns:
+        tuple: (density array, bin edges array)
+    """
+        # Input validation
+    if len(positions) == 0:
+        logging.error("Empty positions array in radial density calculation")
+        return np.zeros(num_bins), np.zeros(num_bins + 1)
+
+    if num_bins > MAX_RADIAL_BINS:
+        logging.warning(f"Reducing bins from {num_bins} to {MAX_RADIAL_BINS}")
+        num_bins = MAX_RADIAL_BINS
+
+    try:
+        # Calculate distances from COM
+        distances = np.linalg.norm(positions - com, axis=1)
+
+        # Validate distances
+        if len(distances) == 0:
+            logging.error("No valid distances calculated")
+            return np.zeros(num_bins), np.zeros(num_bins + 1)
+
+        max_distance = distances.max()
+
+        if max_distance == 0:
+                logging.error("Zero maximum distance in radial calculation")
+                return np.zeros(num_bins), np.zeros(num_bins + 1)
+
+        # Create histogram
+        bins = np.linspace(0, max_distance, num_bins)
+        density, bin_edges = np.histogram(distances, bins=bins, density=True)
+        return density, bin_edges
+
+    except Exception as e:
+        logging.error(f"Density calculation failed: {str(e)}")
+        return np.zeros(num_bins), np.zeros(num_bins + 1)
+
+def is_hollow(density, bin_edges, window_size=7, hollow_ratio=HOLLOWNESS_THRESHOLD):
+    """
+    Detect hollow structures using radial density profile.
+
+    Parameters:
+    - density: radial density profile
+    - bin_edges: radial distance bins
+    - window_size: smoothing window (odd number)
+    - hollow_ratio: maximum core/shell density ratio for hollow classification
+    """
     from scipy.signal import argrelextrema
-    density_smooth = np.convolve(density, np.ones(5)/5, mode='same')
+
+    # Wider smoothing window
+    kernel = np.ones(window_size)/window_size
+    density_smooth = np.convolve(density, kernel, mode='same')
+
+    # Find extrema
     maxima = argrelextrema(density_smooth, np.greater)[0]
     minima = argrelextrema(density_smooth, np.less)[0]
+
     if len(maxima) > 0 and len(minima) > 0:
         shell_peak = density_smooth[maxima[0]]
         core_min = density_smooth[minima[0]]
-        if core_min < shell_peak * 0.5:
+
+        # Check if minimum occurs before maximum (core before shell)
+        if minima[0] > maxima[0]:
+            return False
+
+        # Stricter hollow criterion
+        if core_min < shell_peak * hollow_ratio:
             return True
+
     return False
 
 def compute_sphericity(positions):
-    if len(positions) < 4:
-        return 0
-    hull = ConvexHull(positions)
-    surface_area = hull.area
-    volume = hull.volume
-    sphericity = (np.pi**(1/3)) * (6 * volume)**(2/3) / surface_area
-    return sphericity
-
-
-def compute_hollowness_ratio(positions, voxel_size=2.0):
     """
-    Quantify hollowness using voxelization and flood fill algorithm.
+    Calculate sphericity using convex hull.
+    Sphericity = (π^(1/3)) * (6V)^(2/3) / A
+    where V is volume and A is surface area.
+    Perfect sphere = 1.0
     """
-    # Define voxel grid dimensions
+    # Validate input size
+    if len(positions) < MIN_ATOMS_SPHERICITY:
+        logging.debug(f"Too few atoms ({len(positions)}) for sphericity calculation")
+        return 0.0
+
+    try:
+        # Calculate convex hull
+        hull = ConvexHull(positions)
+
+        # Validate volume
+        if hull.volume < MIN_VOLUME_SPHERICITY:
+            logging.debug(f"Volume too small ({hull.volume:.2f}) for meaningful sphericity")
+            return 0.0
+
+        # Calculate sphericity
+        sphericity = PERFECT_SPHERE_RATIO * (hull.volume**(2/3)) / hull.area
+
+        # Validate result
+        if sphericity < MIN_SPHERICITY_THRESHOLD:
+            logging.debug(f"Calculated sphericity too low: {sphericity:.3f}")
+            return 0.0
+
+        return sphericity
+
+    except Exception as e:
+        logging.error(f"Error in sphericity calculation: {str(e)}")
+        return 0.0
+
+def compute_hollowness_ratio(positions, voxel_size=VOXEL_SIZE):
+    """Calculate hollowness using both voxelization and radial density methods"""
+    try:
+        # 1. Voxel-based hollowness
+        pos = positions - positions.min(axis=0)
+        voxel_size = min(voxel_size, np.ptp(pos, axis=0).min() / 20)
+
+        # Create 3D grid with higher resolution
+        grid_size = np.ceil(np.ptp(pos, axis=0) / voxel_size).astype(int) + 4  # More padding
+        grid = np.zeros(grid_size, dtype=bool)
+
+        # Map positions to grid
+        indices = (pos / voxel_size).astype(int)
+        grid[indices[:, 0], indices[:, 1], indices[:, 2]] = True
+
+        # Use smaller structure for dilation to preserve holes better
+        from scipy.ndimage import binary_dilation, binary_fill_holes
+        grid = binary_dilation(grid, structure=ball(1))
+
+        # Fill holes
+        filled = binary_fill_holes(grid)
+
+        if filled is None:
+            logging.warning("binary_fill_holes returned None")
+            return 0.001  # Return minimum non-zero value on error
+
+        # Calculate voxel-based hollowness
+        shell_volume = np.sum(grid)
+        total_volume = np.sum(filled.astype(int))
+        voxel_hollowness = 0.0
+        if total_volume > shell_volume and total_volume > 0:
+            voxel_hollowness = (total_volume - shell_volume) / total_volume
+
+        # 2. Radial density-based hollowness
+        com = np.mean(positions, axis=0)
+        density, bin_edges = compute_radial_density(positions, com, DENSITY_BINS)
+
+        # Analyze density profile
+        if len(density) > 3:  # Ensure enough points for analysis
+            max_density = np.max(density)
+            if (max_density > 0):
+                # Normalize density
+                density = density / max_density
+                # Check for hollow core (lower density in center)
+                core_density = np.mean(density[:len(density)//4])  # Inner quarter
+                shell_density = np.mean(density[len(density)//4:3*len(density)//4])  # Middle half
+                if shell_density > core_density:
+                    radial_hollowness = (shell_density - core_density) / shell_density
+                else:
+                    radial_hollowness = 0.0
+            else:
+                radial_hollowness = 0.0
+        else:
+            radial_hollowness = 0.0
+
+        # Combine both methods (weighted average)
+        combined_hollowness = 0.7 * voxel_hollowness + 0.3 * radial_hollowness
+
+        # Apply gentler sigmoid scaling
+        from scipy.special import expit
+        scaled_ratio = expit(2 * combined_hollowness - 0.5)  # Less aggressive scaling
+
+        return max(scaled_ratio, 0.001)  # Ensure minimum non-zero value for nearly-hollow structures
+
+    except Exception as e:
+        logging.warning(f"Hollowness calculation failed: {e}")
+        return 0.001  # Return minimum non-zero value on error
+
+def voxelize_positions(positions, voxel_size):
+    """Convert atomic positions to voxel grid"""
+    # Get bounding box
     min_coords = positions.min(axis=0) - voxel_size
     max_coords = positions.max(axis=0) + voxel_size
+
+    # Create grid dimensions
     grid_shape = np.ceil((max_coords - min_coords) / voxel_size).astype(int)
-    print(f"Grid shape for hollowness calculation: {grid_shape}")  # Debugging output
     grid = np.zeros(grid_shape, dtype=bool)
 
     # Map positions to grid indices
     indices = np.floor((positions - min_coords) / voxel_size).astype(int)
     grid[indices[:, 0], indices[:, 1], indices[:, 2]] = True
 
-    # Try to fill internal voids
-    try:
-        filled_grid = binary_fill_holes(grid)
-        if filled_grid is None:
-            print("Warning: binary_fill_holes returned None. Defaulting hollowness_ratio to 0.")
-            return 0  # Default hollowness ratio if filling fails
-
-        # Compute volumes
-        aggregate_volume = int(grid.sum())
-        total_volume = int(filled_grid.sum())
-        void_volume = total_volume - aggregate_volume
-
-        hollowness_ratio = void_volume / total_volume if total_volume > 0 else 0
-        return hollowness_ratio
-    except MemoryError:
-        print("Memory error during hollowness calculation. Consider adjusting voxel size or analyzing fewer frames.")
-        return 0  # Return 0 as the default if memory error occurs
+    return grid
 
 def compute_shape_descriptors(positions, com):
     relative_positions = positions - com
@@ -170,72 +432,76 @@ def compute_shape_descriptors(positions, com):
     return asphericity, acylindricity
 
 def analyze_aggregate(aggregate_atoms, frame_number, args):
-    results = {}
+    """Complete aggregate analysis with all shape descriptors"""
     positions = aggregate_atoms.positions
-    com = positions.mean(axis=0)
-    density, bin_edges = compute_radial_density(positions, com, DENSITY_BINS)
-    hollow = is_hollow(density, bin_edges)
+    n_atoms = len(positions)
+
+    if n_atoms < MIN_VESICLE_SIZE:
+        return {'is_vesicle': False}
+
+    # Calculate center of mass
+    com = np.mean(positions, axis=0)
+
+    # Calculate all shape descriptors
     sphericity = compute_sphericity(positions)
-    hollowness_ratio = compute_hollowness_ratio(positions)
+
+    # Calculate radial density profile
+    density, bin_edges = compute_radial_density(positions, com, DENSITY_BINS)
+    hollowness = compute_hollowness_ratio(positions)
+
+    # Calculate additional shape parameters
     asphericity, acylindricity = compute_shape_descriptors(positions, com)
 
+    # Comprehensive vesicle criteria
     is_vesicle = (
-        len(positions) >= args.min_vesicle_size and
         sphericity >= SPHERICITY_THRESHOLD and
-        hollow and
-        hollowness_ratio >= HOLLOWNESS_THRESHOLD and
-        asphericity <= ASPHERICITY_THRESHOLD and
+        hollowness >= HOLLOWNESS_THRESHOLD and
+        asphericity <= ASPHERICITY_THRESHOLD and  # Typical threshold for vesicle-like structures
         acylindricity <= ACYLINDRICITY_THRESHOLD
     )
 
-    logging.debug(f"Frame {frame_number}: sphericity={sphericity:.3f}, hollowness_ratio={hollowness_ratio:.3f}, "
-                  f"asphericity={asphericity:.3f}, acylindricity={acylindricity:.3f}, is_vesicle={is_vesicle}")
-
-    results['frame'] = frame_number
-    results['aggregate_size'] = len(positions)
-    results['sphericity'] = sphericity
-    results['hollowness_ratio'] = hollowness_ratio
-    results['asphericity'] = asphericity
-    results['acylindricity'] = acylindricity
-    results['is_vesicle'] = is_vesicle
-    return results
+    return {
+        'frame': frame_number,
+        'size': n_atoms,
+        'sphericity': sphericity,
+        'hollowness': hollowness,
+        'asphericity': asphericity,
+        'acylindricity': acylindricity,
+        'is_vesicle': is_vesicle
+    }
 
 def main():
     args = parse_arguments()
     ensure_output_directory(args.output)
     setup_logging(args.output)
 
-    u = mda.Universe(args.topology, args.trajectory)
+    # Load and crop trajectory
+    print("Loading and processing trajectory...")
+    u = load_and_crop_trajectory(args.topology, args.trajectory, args.first, args.last, args.skip, args.selection)
+    print(f"Total frames in cropped trajectory: {len(u.trajectory)}")
+
     selection_string = args.selection
     n_frames = len(u.trajectory)
-    print(f"Total frames in trajectory: {n_frames}")
-    start_frame, end_frame = 0, n_frames
 
-    if args.last is not None:
-        start_frame = max(0, n_frames - args.last)
-    if args.first is not None:
-        end_frame = min(n_frames, args.first)
-
-    print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
+    # Center and wrap the trajectory to handle PBC issues
+    center_and_wrap_trajectory(u, selection_string)
 
     vesicle_records = defaultdict(list)
     vesicle_id_counter = 0
     frame_results = []
 
     print("Analyzing frames for vesicle formation...")
-    for frame_number, ts in enumerate(u.trajectory[start_frame:end_frame:args.skip]):
-        actual_frame_number = start_frame + frame_number * args.skip
-        logging.info(f"Processing frame {actual_frame_number + 1}/{n_frames}")
-        print(f"Processing frame {actual_frame_number + 1}/{n_frames}")
-
-        aggregates = identify_aggregates(u, selection_string)
+    for frame_number, ts in enumerate(u.trajectory):
+        print(f"Processing frame {frame_number+1}/{n_frames}...")
+        aggregates, n_aggregates = identify_aggregates(u, selection_string)
+        print(f"Found {n_aggregates} distinct aggregates in frame {frame_number}")
         for aggregate in aggregates:
-            aggregate_atoms = u.select_atoms(selection_string)[aggregate]
-            results = analyze_aggregate(aggregate_atoms, actual_frame_number, args)
+            # Now aggregate is already an AtomGroup, no need for additional selection
+            results = analyze_aggregate(aggregate, frame_number, args)
             if results['is_vesicle']:
                 vesicle_id = f"vesicle_{vesicle_id_counter}"
                 vesicle_id_counter += 1
-                vesicle_records[vesicle_id].append(actual_frame_number)
+                vesicle_records[vesicle_id].append(frame_number)
             frame_results.append(results)
 
     vesicle_lifetimes = analyze_vesicle_lifetimes(vesicle_records)
@@ -276,9 +542,9 @@ def save_frame_results(frame_results, output_dir):
                    'Asphericity', 'Acylindricity', 'IsVesicle']
         f.write(','.join(headers) + '\n')
         for result in frame_results:
-            f.write(f"{result['frame']},{result['aggregate_size']},"
-                    f"{result['sphericity']:.3f},{result['hollowness_ratio']:.3f},"
-                    f"{result['asphericity']:.3f},{result['acylindricity']:.3f},"
+            f.write(f"{result['frame']},{result['size']},"  # Changed from aggregate_size to size
+                    f"{result['sphericity']:.3f},{result['hollowness']:.3f},"  # Changed from hollowness_ratio
+                    f"{result.get('asphericity', 0):.3f},{result.get('acylindricity', 0):.3f},"
                     f"{int(result['is_vesicle'])}\n")
     print(f"Per-frame results saved to {output_file}")
 
@@ -286,15 +552,35 @@ def plot_vesicle_lifetimes(vesicle_lifetimes, output_dir):
     """
     Plot the distribution of vesicle lifetimes.
     """
-    lifetimes = list(vesicle_lifetimes.values())
+    if not vesicle_lifetimes:
+        print("No vesicles found in the analyzed frames - skipping histogram creation")
+        return
+
+    lifetimes = list(vesicle_lifetimes.values())  # Use dictionary values
     plt.figure()
     plt.hist(lifetimes, bins=range(1, max(lifetimes)+2), align='left')
     plt.xlabel('Lifetime (frames)')
     plt.ylabel('Number of Vesicles')
     plt.title('Distribution of Vesicle Lifetimes')
-    plt.savefig(os.path.join(output_dir, 'vesicle_lifetimes_distribution.png'))
+    plot_path = os.path.join(output_dir, 'vesicle_lifetimes_distribution.png')
+    plt.savefig(plot_path)
     plt.close()
     print("Vesicle lifetimes distribution plot saved.")
+
+
+# IMPROVEMENTS:
+
+def visualize_vesicle(universe, aggregate_atoms, frame, output_dir):
+    """Save VMD-style visualization of detected vesicles"""
+
+def track_vesicle_evolution(vesicle_records):
+    """Track how vesicles merge/split over time"""
+
+def analyze_vesicle_composition(aggregate_atoms):
+    """Analyze peptide arrangements in vesicles"""
+
+def generate_summary_report(results, output_dir):
+    """Create detailed PDF report with plots and statistics"""
 
 if __name__ == '__main__':
     main()
