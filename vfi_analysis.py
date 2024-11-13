@@ -502,7 +502,11 @@ def main():
                 vesicle_id = f"vesicle_{vesicle_id_counter}"
                 vesicle_id_counter += 1
                 vesicle_records[vesicle_id].append(frame_number)
+                # Visualize the vesicle and save as PNG
+                visualize_vesicle(u, aggregate, frame_number, args.output, vesicle_id)
+                vesicle_id_counter += 1
             frame_results.append(results)
+
 
     vesicle_lifetimes = analyze_vesicle_lifetimes(vesicle_records)
     save_vesicle_lifetimes(vesicle_lifetimes, args.output)
@@ -570,8 +574,93 @@ def plot_vesicle_lifetimes(vesicle_lifetimes, output_dir):
 
 # IMPROVEMENTS:
 
-def visualize_vesicle(universe, aggregate_atoms, frame, output_dir):
-    """Save VMD-style visualization of detected vesicles"""
+def visualize_vesicle(universe, aggregate_atoms, frame, output_dir, vesicle_id=None):
+    """
+    Save vesicle visualization as PNG images and PDB files for viewing in VMD.
+
+    Parameters:
+        universe: MDAnalysis Universe
+        aggregate_atoms: AtomGroup containing vesicle atoms
+        frame: Frame number
+        output_dir: Output directory
+        vesicle_id: Optional identifier for tracking the same vesicle across frames
+    """
+    import os
+    import subprocess
+    import warnings
+
+    # Create visualization subdirectory
+    vis_dir = os.path.join(output_dir, 'vesicle_visualizations')
+    os.makedirs(vis_dir, exist_ok=True)
+
+    # Generate unique filenames
+    vesicle_tag = f"v{vesicle_id}_" if vesicle_id else ""
+    pdb_file = os.path.join(vis_dir, f"vesicle_{vesicle_tag}frame_{frame}.pdb")
+    png_file = os.path.join(vis_dir, f"vesicle_{vesicle_tag}frame_{frame}.png")
+    vmd_script = os.path.join(vis_dir, f"render_{vesicle_tag}frame_{frame}.tcl")
+
+    try:
+        # Center vesicle within the box
+        com = aggregate_atoms.center_of_mass()
+        box_center = universe.dimensions[:3] / 2
+        shift = box_center - com
+
+        # Save centered structure
+        temp_ag = aggregate_atoms.copy()
+        temp_ag.translate(shift)
+        temp_ag.write(pdb_file)
+
+        # Create VMD script for rendering
+        with open(vmd_script, 'w') as f:
+            f.write(f"""
+# Load the molecule
+mol new {pdb_file} type pdb
+
+# Set representation
+mol delrep 0 top
+mol representation VDW 1.0 12.0
+mol color Name
+mol material Opaque
+mol addrep top
+
+# Display settings
+display projection Orthographic
+display depthcue off
+axes location off
+color Display Background white
+
+# Set display size and rendering parameters
+display resize 800 600
+display antialias on
+
+# Update display
+display update ui
+
+# Render to PNG using Snapshot renderer
+render snapshot {png_file}
+
+quit
+""")
+
+        # Set environment variable for software rendering
+        env = os.environ.copy()
+        env['LIBGL_ALWAYS_SOFTWARE'] = '1'
+
+        # Command to run VMD off-screen
+        vmd_command = f"vmd -dispdev ogl -e {vmd_script}"
+
+        # Run VMD with software rendering
+        subprocess.run(vmd_command, shell=True, check=True, env=env)
+
+        logging.info(f"Saved vesicle visualization to {png_file}")
+        logging.info(f"Saved vesicle structure to {pdb_file}")
+
+    except Exception as e:
+        logging.error(f"Failed to visualize vesicle: {str(e)}")
+    finally:
+        # Cleanup temporary files (keep the PDB file)
+        if os.path.exists(vmd_script):
+            os.remove(vmd_script)
 
 def track_vesicle_evolution(vesicle_records):
     """Track how vesicles merge/split over time"""
