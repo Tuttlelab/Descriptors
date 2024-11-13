@@ -422,43 +422,69 @@ def analyze_orientation_distribution(orientations, principal_axis):
     std_angle = np.std(angles)
     return mean_angle, std_angle, angles
 
-def get_peptide_orientations(aggregate_atoms):
+def get_peptide_orientations(aggregate_atoms, peptide_length=2):
     """
     Compute orientation vectors for peptides in an aggregate.
 
     Args:
         aggregate_atoms (MDAnalysis.AtomGroup): AtomGroup of the aggregate.
+        peptide_length (int): Number of residues per peptide (e.g., 2 for dipeptides).
 
     Returns:
         numpy.ndarray: Array of orientation vectors for each peptide.
     """
-    import MDAnalysis as mda
-
     orientations = []
-    residues = aggregate_atoms.residues
+    residues = list(aggregate_atoms.residues)
+    num_peptides = len(residues) // peptide_length
 
-    for residue in residues:
-        backbone_atoms = residue.atoms.select_atoms('name BB')
-        if len(backbone_atoms) == 1:
-            position = backbone_atoms.positions[0]
-            # Use the position difference between adjacent residues
-            # to define the orientation vector
-            next_residue = residue.residue_group.next(residue)
-            if next_residue:
-                next_bb_atoms = next_residue.atoms.select_atoms('name BB')
+    for i in range(num_peptides):
+        # Group residues into peptides
+        peptide = residues[i * peptide_length : (i + 1) * peptide_length]
+        backbone_positions = []
+
+        for residue in peptide:
+            backbone_atoms = residue.atoms.select_atoms('name BB')
+            if len(backbone_atoms) == 1:
+                position = backbone_atoms.positions[0]
+            elif len(backbone_atoms) == 2:
+                # Average positions if there are two backbone atoms
+                position = backbone_atoms.positions.mean(axis=0)
+            else:
+                # Handle unexpected number of backbone atoms
+                position = np.zeros(3)
+            backbone_positions.append(position)
+
+        # Average backbone positions for the entire peptide
+        peptide_position = np.mean(backbone_positions, axis=0)
+
+        # Get the next peptide if it exists
+        if i < num_peptides - 1:
+            next_peptide = residues[(i + 1) * peptide_length : (i + 2) * peptide_length]
+            next_backbone_positions = []
+
+            for residue in next_peptide:
+                next_bb_atoms = residue.atoms.select_atoms('name BB')
                 if len(next_bb_atoms) == 1:
                     next_position = next_bb_atoms.positions[0]
-                    vector = next_position - position
-                    norm = np.linalg.norm(vector)
-                    if norm > 0:
-                        orientations.append(vector / norm)
-                    else:
-                        orientations.append(np.zeros(3))
+                elif len(next_bb_atoms) == 2:
+                    next_position = next_bb_atoms.positions.mean(axis=0)
                 else:
-                    orientations.append(np.zeros(3))
+                    next_position = np.zeros(3)
+                next_backbone_positions.append(next_position)
+
+            # Average backbone positions for the next peptide
+            next_peptide_position = np.mean(next_backbone_positions, axis=0)
+
+            # Calculate the orientation vector
+            vector = next_peptide_position - peptide_position
+            norm = np.linalg.norm(vector)
+            if norm > 0:
+                orientation = vector / norm
             else:
-                orientations.append(np.zeros(3))
+                orientation = np.zeros(3)
+            orientations.append(orientation)
         else:
+            # No next peptide, append zero vector
             orientations.append(np.zeros(3))
 
     return np.array(orientations)

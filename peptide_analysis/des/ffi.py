@@ -23,7 +23,17 @@ import numpy as np
 import argparse
 import logging
 import os
+import sys
 from collections import defaultdict
+from math import ceil
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import utility functions from the util package
 from util.io import (
@@ -57,6 +67,17 @@ from util.logging import (
     get_logger,
 )
 
+# Constants
+DEFAULT_MIN_FIBER_SIZE = 1000            # Minimum number of beads to consider a fiber
+SHAPE_RATIO_THRESHOLD = 1.5           # Threshold for shape ratios in moment of inertia analysis
+ALIGNMENT_STD_THRESHOLD = 50.0        # Degrees, threshold for standard deviation of orientation angles
+FOP_THRESHOLD = 0.7                   # Threshold for Fibrillar Order Parameter
+CROSS_SECTION_THICKNESS = 5.0         # Thickness for cross-sectional profiling in Å
+NUM_CROSS_SECTIONS = 10               # Number of cross-sections along the fiber
+DEFAULT_DISTANCE_CUTOFF = 7.0         # Distance cutoff for clustering in Å
+FOP_THRESHOLD_POSITIVE = 0.1  # For alignment
+FOP_THRESHOLD_NEGATIVE = -0.1  # For anti-alignment
+
 def add_arguments(parser):
     """
     Add FFI-specific arguments to the parser.
@@ -64,9 +85,9 @@ def add_arguments(parser):
     Args:
         parser (argparse.ArgumentParser): Argument parser object.
     """
-    parser.add_argument('--min_fiber_size', type=int, default=1000,
+    parser.add_argument('--min_fiber_size', type=int, default=DEFAULT_MIN_FIBER_SIZE,
                         help='Minimum number of beads to consider a fiber (default: 1000)')
-    parser.add_argument('--distance_cutoff', type=float, default=7.0,
+    parser.add_argument('--distance_cutoff', type=float, default=DEFAULT_DISTANCE_CUTOFF,
                         help='Distance cutoff for clustering in Å (default: 7.0 Å)')
     parser.add_argument('--spatial_weight', type=float, default=1.2,
                         help='Weight for spatial distance in clustering metric (default: 1.2)')
@@ -74,6 +95,20 @@ def add_arguments(parser):
                         help='Weight for orientation similarity in clustering metric (default: 1.0)')
     parser.add_argument('--clustering_threshold', type=float, default=2.5,
                         help='Threshold for clustering algorithm (default: 2.5)')
+    parser.add_argument('--shape_ratio_threshold', type=float, default=SHAPE_RATIO_THRESHOLD,
+                        help='Threshold for shape ratios in moment of inertia analysis (default: 1.5)')
+    parser.add_argument('--alignment_std_threshold', type=float, default=ALIGNMENT_STD_THRESHOLD,
+                        help='Standard deviation threshold for orientation angles in degrees (default: 50.0)')
+    parser.add_argument('--fop_threshold', type=float, default=FOP_THRESHOLD,
+                        help='Threshold for Fibrillar Order Parameter (default: 0.7)')
+    parser.add_argument('--cross_section_thickness', type=float, default=CROSS_SECTION_THICKNESS,
+                        help='Thickness for cross-sectional profiling in Å (default: 5.0)')
+    parser.add_argument('--num_cross_sections', type=int, default=NUM_CROSS_SECTIONS,
+                        help='Number of cross-sections along the fiber (default: 10)')
+    parser.add_argument('--fop_threshold_positive', type=float, default=FOP_THRESHOLD_POSITIVE,
+                        help='Positive threshold for FOP in alignment (default: 0.1)')
+    parser.add_argument('--fop_threshold_negative', type=float, default=FOP_THRESHOLD_NEGATIVE,
+                        help='Negative threshold for FOP in anti-alignment (default: -0.1)')
     # Add any other FFI-specific arguments as needed
 
 def run(args):
@@ -86,13 +121,13 @@ def run(args):
     # Ensure the output directory exists
     ensure_output_directory(args.output)
 
-    # Initialize logging
-    logger = setup_logging(args.output)
+    # Get the module-level logger
     module_logger = get_logger(__name__)
+    module_logger.debug(f"Handlers attached to logger: {module_logger.handlers}")
 
     # Load and crop the trajectory
     module_logger.info("Loading and processing trajectory...")
-    u = load_and_crop_trajectory(
+    u, _ = load_and_crop_trajectory(
         args.topology,
         args.trajectory,
         args.first,
@@ -104,36 +139,73 @@ def run(args):
     module_logger.info(f"Total frames to analyze: {n_frames}")
 
     # Center and wrap the trajectory to handle PBC issues
-    module_logger.info("Centering and wrapping trajectory...")
-    center_and_wrap_trajectory(u, args.selection)
+    # module_logger.info("Centering and wrapping trajectory...")
+    # center_and_wrap_trajectory(u, args.selection)
 
     # Initialize variables for analysis
     fiber_records = defaultdict(list)  # {fiber_id: [frame_numbers]}
     frame_results = []
-
-    # Analyze each frame
-    module_logger.info("Analyzing frames for fiber formation...")
     fiber_id_counter = 0
-    for frame_number, ts in enumerate(u.trajectory):
-        module_logger.debug(f"Processing frame {frame_number + 1}/{n_frames}...")
-        peptides = u.select_atoms(args.selection)
-        positions = peptides.positions
 
-        # Identify aggregates based on distance cutoff
-        aggregates = identify_aggregates(positions, args.distance_cutoff)
-        module_logger.debug(f"Frame {frame_number}: Found {len(aggregates)} aggregates")
+    # Define batch processing parameters
+    batch_size = 1  # Adjust based on your requirements
+    total_batches = ceil(n_frames / batch_size)
+    module_logger.info(f"Total frames: {n_frames}, Batch size: {batch_size}, Total batches: {total_batches}")
 
-        for aggregate_indices in aggregates:
-            aggregate_atoms = peptides[aggregate_indices]
-            results = analyze_aggregate(aggregate_atoms, frame_number, args)
-            if results.get('is_fiber'):
-                fiber_id = f"fiber_{fiber_id_counter}"
-                fiber_records[fiber_id].append(frame_number)
-                fiber_id_counter += 1
-                module_logger.debug(f"Frame {frame_number}: Aggregate classified as fiber (ID: {fiber_id})")
-            else:
-                module_logger.debug(f"Frame {frame_number}: Aggregate not classified as fiber.")
-            frame_results.append(results)
+    for batch_num in range(total_batches):
+        print(f"Processing batch {batch_num + 1}/{total_batches}")
+        start = batch_num * batch_size
+        end = min(start + batch_size, n_frames)
+        print(f"Choosing frames to analyze: Batch {batch_num + 1}/{total_batches} (Frames {start} to {end-1})")
+        print("Starting preparation")
+        module_logger.info(f"Choosing frames to analyze: Batch {batch_num + 1}/{total_batches} (Frames {start} to {end-1})")
+        module_logger.info("Starting preparation")
+
+        # Extract frames for this batch
+        batch_frames = list(u.trajectory[start:end])
+        # module_logger.info(f"Starting analysis loop over {len(batch_frames)} trajectory frames")
+
+        for frame_number, ts in enumerate(batch_frames, start=start):
+            print(f"Starting analysis loop over {end - start} trajectory frames")
+            module_logger.debug(f"Processing frame {frame_number + 1}/{n_frames}...")
+            peptides = u.select_atoms(args.selection)
+            positions = peptides.positions
+
+            # Identify aggregates
+            try:
+                aggregates = identify_aggregates(
+                    universe=u,
+                    selection_string=args.selection,
+                    rdf_range=(4, 15),
+                    nbins=50,
+                    output_dir=args.output
+                )
+                module_logger.debug(f"Frame {frame_number}: Found {len(aggregates)} aggregates")
+            except Exception as e:
+                module_logger.error(f"Error identifying aggregates in frame {frame_number}: {e}")
+                continue
+
+            # Process each aggregate
+            for aggregate_idx, aggregate_indices in enumerate(aggregates, start=1):
+                try:
+                    aggregate_atoms = peptides[aggregate_indices]
+                except IndexError as e:
+                    module_logger.error(f"Invalid aggregate indices {aggregate_indices} in frame {frame_number}: {e}")
+                    continue
+
+                results = analyze_aggregate(aggregate_atoms, frame_number, args)
+
+                if results.get('is_fiber'):
+                    fiber_id = f"fiber_{fiber_id_counter}"
+                    fiber_records[fiber_id].append(frame_number)
+                    fiber_id_counter += 1
+                    module_logger.debug(f"Frame {frame_number}: Aggregate {aggregate_idx} classified as fiber (ID: {fiber_id})")
+                else:
+                    module_logger.debug(f"Frame {frame_number}: Aggregate {aggregate_idx} not classified as fiber.")
+                frame_results.append(results)
+            print("Finishing up")
+
+        module_logger.info("Finishing up")
 
     # Analyze fiber lifetimes
     fiber_lifetimes = analyze_lifetimes(fiber_records)
@@ -239,5 +311,7 @@ def analyze_aggregate(aggregate_atoms, frame_number, args):
 if __name__ == '__main__':
     # Parse command-line arguments
     args = parse_arguments('Fiber Formation Index (FFI) Analysis', add_arguments)
+    # Initialize logging once
+    setup_logging(args.output)
     # Run the analysis
     run(args)

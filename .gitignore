@@ -6,3 +6,5 @@ python*
 out*
 *_results
 .vscode
+.eq*
+results/

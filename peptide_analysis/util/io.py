@@ -104,13 +104,15 @@ def center_and_wrap_trajectory(universe, selection_string):
     """
     selection = universe.select_atoms(selection_string)
 
-    # Define transformations
-    transformations = [
-        center_in_box(selection, wrap=True),  # Center selected group and wrap the box
-        unwrap(universe.atoms)  # Unwrap all atoms
-    ]
 
-    universe.trajectory.add_transformations(*transformations)
+    # Apply unwrapping
+    universe.trajectory.add_transformations(unwrap(selection))
+
+    # Center the system (example: center of mass)
+    universe.atoms.translate(-selection.center_of_mass())
+
+    # Wrap atoms back into the primary box
+    universe.atoms.wrap()
 
 def parse_common_arguments():
     """
