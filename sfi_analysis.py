@@ -22,6 +22,8 @@ from scipy.optimize import curve_fit
 from sklearn.cluster import AgglomerativeClustering
 from scipy.spatial.distance import pdist, squareform
 from collections import defaultdict
+from scipy.sparse.csgraph import connected_components
+from scipy.sparse import csr_matrix
 import matplotlib.pyplot as plt
 from datetime import datetime
 
@@ -31,18 +33,18 @@ CURVATURE_THRESHOLD = 1.3  # Å, threshold for RMSD in curved sheet fitting
 SPATIAL_WEIGHT = 1.2       # Weight for spatial distance in clustering
 ORIENTATION_WEIGHT = 1.0   # Weight for orientation similarity in clustering
 CLUSTERING_THRESHOLD = 2.5 # Threshold for clustering algorithm
-MIN_SHEET_SIZE = 1         # Minimum number of peptides to consider a sheet
+MIN_SHEET_SIZE = 10         # Minimum number of peptides to consider a sheet
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Sheet Formation Index (SFI) Analysis')
-    parser.add_argument('-t', '--topology', required=True, help='Topology file (e.g., .gro, .pdb)')
-    parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
+    parser.add_argument('-t', '--topology', default="eq_FF1200.gro", help='Topology file (e.g., .gro, .pdb)')
+    parser.add_argument('-x', '--trajectory', default="eq_FF1200.xtc", help='Trajectory file (e.g., .xtc, .trr)')
     parser.add_argument('-s', '--selection', default='protein', help='Bead selection string for peptides')
     parser.add_argument('-o', '--output', default='sfi_results', help='Output directory for results')
-    parser.add_argument('-pl', '--peptide_length', type=int, required=True, help='Length of each peptide in residues')
+    parser.add_argument('-pl', '--peptide_length', type=int, default=8, help='Length of each peptide in residues')
     parser.add_argument('--min_sheet_size', type=int, default=MIN_SHEET_SIZE, help='Minimum number of peptides to consider a sheet')
-    parser.add_argument('--first', type=int, default=0, help='Only analyze the first N frames (default is all frames)')
-    parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
+    parser.add_argument('--first', type=int, default=482, help='Only analyze the first N frames (default is all frames)')
+    parser.add_argument('--last', type=int, default=483, help='Only analyze the last N frames (default is all frames)')
     parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
     args = parser.parse_args()
     return args
@@ -208,39 +210,37 @@ def compute_angle_matrix(orientations):
 
     return angle_matrix
 
-def cluster_peptides(positions, orientations, spatial_weight, orientation_weight, clustering_threshold):
-    """
-    Perform clustering of peptides based on spatial proximity and orientation similarity.
+# Constants adjusted for molecular scale
+SPATIAL_CUTOFF = 2.0      # nm, reasonable for β-sheet formation
+ANGLE_CUTOFF = 30         # degrees, stricter alignment requirement
+MIN_SHEET_SIZE = 4        # minimum peptides for sheet classification
 
-    Parameters:
-    - positions (numpy.ndarray): An array of shape (N, 3) with the 3D coordinates of each peptide.
-    - orientations (numpy.ndarray): An array of shape (N, 3) where each row is a unit vector representing the orientation of each peptide.
-    - spatial_weight (float): The weight for spatial distance in the clustering metric.
-    - orientation_weight (float): The weight for orientation similarity in the clustering metric.
-    - clustering_threshold (float): The distance threshold for clustering.
-
-    Returns:
-    - labels (numpy.ndarray): An array of cluster labels for each peptide, with -1 for noise points.
-    """
-    # Compute spatial distance matrix
+def cluster_peptides(positions, orientations):
+    """Cluster peptides into potential β-sheets"""
+    # Calculate distances excluding self-distances
     spatial_dist = squareform(pdist(positions))
+    np.fill_diagonal(spatial_dist, np.inf)  # Exclude self-distances
 
-    # Compute orientation angle matrix in degrees
+    # Calculate angles excluding self-angles
     angle_matrix = compute_angle_matrix(orientations)
+    np.fill_diagonal(angle_matrix, np.inf)  # Exclude self-angles
 
-    # Normalize spatial and angle matrices
-    if np.max(spatial_dist) > 0:
-        spatial_dist /= np.max(spatial_dist)
-    if np.max(angle_matrix) > 0:
-        angle_matrix /= np.max(angle_matrix)
+    # Create connectivity matrix with stricter conditions
+    connectivity = np.logical_and(
+        spatial_dist <= SPATIAL_CUTOFF,
+        angle_matrix <= ANGLE_CUTOFF
+    ).astype(int)  # Convert to int for connected_components
 
-    # Combine spatial and orientation distances with respective weights
-    distance_matrix = spatial_weight * spatial_dist + orientation_weight * angle_matrix
+    # Clustering
+    n_components, labels = connected_components(csr_matrix(connectivity))
 
-    # Perform agglomerative clustering
-    clustering = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=clustering_threshold)
-    labels = clustering.fit_predict(distance_matrix)
+    # Filter small clusters
+    unique_labels, counts = np.unique(labels, return_counts=True)
+    for label, count in zip(unique_labels, counts):
+        if count < MIN_SHEET_SIZE:
+            labels[labels == label] = -1
 
+    print(f"Valid clusters found: {len(set(labels) - {-1})}")
     return labels
 
 def time_resolved_sheet_analysis(sheet_records, min_sheet_size):
@@ -298,14 +298,27 @@ def main():
     for frame_number, ts in enumerate(u.trajectory):
         print(f"Processing frame {frame_number}/{len(u.trajectory)}...")
 
-        # Calculate positions and orientations for each dipeptide
-        positions = np.array([peptides[i:i + peptide_length].positions.mean(axis=0)
-                              for i in range(0, len(peptides), peptide_length)])
-        orientations = np.array([perform_pca(peptides[i:i + peptide_length].positions)[1]
-                                 for i in range(0, len(peptides), peptide_length)])
+        # For each dipeptide (peptide_length = 8 beads):
+        # 1. Takes 8 beads at a time (peptides[i:i+8])
+        # 2. Calculates center of mass by averaging bead positions (.mean(axis=0))
+        # 3. Results in 1200 positions (one per dipeptide)
+        positions = np.array([
+            peptides[i:i + peptide_length].positions.mean(axis=0)
+            for i in range(0, len(peptides), peptide_length)
+        ])
+
+        # Orientation calculation:
+        # 1. Takes 8 beads of each dipeptide
+        # 2. Performs PCA to find principal axis
+        # 3. Returns orientation vector for each dipeptide
+        orientations = np.array([
+            perform_pca(peptides[i:i + peptide_length].positions)[1]
+            for i in range(0, len(peptides), peptide_length)
+        ])
+
 
         # Perform clustering based on positions and orientations
-        labels = cluster_peptides(positions, orientations, SPATIAL_WEIGHT, ORIENTATION_WEIGHT, CLUSTERING_THRESHOLD)
+        labels = cluster_peptides(positions, orientations)
         unique_labels = set(labels)
 
         # Process each cluster to identify sheets
