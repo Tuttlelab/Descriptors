@@ -27,6 +27,8 @@ from scipy.sparse import csr_matrix
 import matplotlib.pyplot as plt
 from datetime import datetime
 from sklearn.cluster import DBSCAN
+import csv
+from datetime import datetime
 
 # Constants
 PLANARITY_THRESHOLD = 0.9   # Å, threshold for RMSD to classify as a sheet
@@ -36,6 +38,7 @@ ORIENTATION_WEIGHT = 1.0    # Weight for orientation similarity in clustering
 SPATIAL_CUTOFF = 15        # nm, adjusted for smaller sheet detection
 ANGLE_CUTOFF = 45           # degrees, increased to allow for curvature
 MIN_SHEET_SIZE = 5         # Reduced to detect smaller sheets
+CSV_HEADERS = ['Frame', 'Peptides', 'sheet_count', 'total_peptides_in_sheets', 'avg_sheet_size']
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Sheet Formation Index (SFI) Analysis')
@@ -174,36 +177,13 @@ def cluster_peptides(positions, orientations):
         if count < MIN_SHEET_SIZE:
             labels[labels == label] = -1
 
-    valid_clusters = set(labels) - {-1}
-    print(f"Valid clusters found: {len(valid_clusters)}")
-    return labels
+    valid_clusters = []
+    for label in set(labels) - {-1}:
+        cluster_indices = np.where(labels == label)[0]
+        if len(cluster_indices) >= MIN_SHEET_SIZE:
+            valid_clusters.append(cluster_indices)
 
-# def cluster_peptides(positions, orientations):
-#     """
-#     Cluster peptides using DBSCAN based on spatial proximity and orientation similarity.
-#     """
-#     # Normalize orientations
-#     orientations_normalized = orientations / np.linalg.norm(orientations, axis=1).reshape(-1, 1)
-
-#     # Combine positional and orientation data
-#     # You can adjust the weighting factors as needed
-#     spatial_weight = 1.0
-#     orientation_weight = 1.0
-#     features = np.hstack((positions * spatial_weight, orientations_normalized * orientation_weight))
-
-#     # Perform DBSCAN clustering
-#     clustering = DBSCAN(eps=DBSCAN_EPS, min_samples=DBSCAN_MIN_SAMPLES).fit(features)
-#     labels = clustering.labels_
-
-#     # Adjust labels for small clusters
-#     unique_labels, counts = np.unique(labels, return_counts=True)
-#     for label, count in zip(unique_labels, counts):
-#         if count < MIN_SHEET_SIZE:
-#             labels[labels == label] = -1
-
-#     valid_clusters = set(labels) - {-1}
-#     print(f"Valid clusters found: {len(valid_clusters)}")
-#     return labels
+    return valid_clusters
 
 def time_resolved_sheet_analysis(sheet_records, min_sheet_frames):
     sheet_lifetimes = {}
@@ -244,7 +224,21 @@ def plot_sheet_lifetimes(sheet_lifetimes, output_dir):
     plt.close()
     print("Sheet lifetimes distribution plot saved.")
 
+def save_frame_results(frame_records, output_dir):
+    """Save SFI frame results to a CSV file."""
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+    output_file = os.path.join(output_dir, f'sfi_frame_results_{timestamp}.csv')
+
+    with open(output_file, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=CSV_HEADERS)
+        writer.writeheader()
+        for record in frame_records:
+            writer.writerow(record)
+
+    logging.info(f"SFI frame results saved to {output_file}")
+
 def main():
+    global cluster_peptides
     args = parse_arguments()
     ensure_output_directory(args.output)
 
@@ -269,6 +263,9 @@ def main():
 
     min_sheet_frames = 1  # Minimum frames a sheet must persist
 
+    # Initialize frame records
+    frame_records = []
+
     # Process each frame
     for frame_number, ts in enumerate(u.trajectory):
         print(f"Processing frame {frame_number + args.first}/{len(u.trajectory) + args.first - 1}...")
@@ -276,6 +273,8 @@ def main():
         # Calculate positions and orientations for each peptide
         positions = []
         orientations = []
+        peptide_indices = []  # Track peptide indices
+
         for i in range(0, len(peptides), peptide_length):
             peptide = peptides[i:i + peptide_length]
             if len(peptide) < peptide_length:
@@ -283,54 +282,37 @@ def main():
             positions.append(peptide.positions.mean(axis=0))
             _, orientation_vector, _, _, _ = perform_pca(peptide.positions)
             orientations.append(orientation_vector)
+            peptide_indices.append(i // peptide_length)  # Store peptide index
 
         positions = np.array(positions)
         orientations = np.array(orientations)
 
-        # Perform clustering based on positions and orientations
-        labels = cluster_peptides(positions, orientations)
-        unique_labels = set(labels)
+        # Get clusters with peptide indices
+        clusters = cluster_peptides(positions, orientations)
 
-        # Process each cluster to identify sheets
-        for label in unique_labels:
-            if label == -1:
-                continue  # Ignore noise
+        # Convert peptide indices to peptide IDs for the frame
+        frame_peptides = []
+        for cluster in clusters:
+            peptides_in_cluster = [f'PEP{peptide_indices[idx]+1}' for idx in cluster]
+            frame_peptides.extend(peptides_in_cluster)
 
-            cluster_indices = np.where(labels == label)[0]
-            if len(cluster_indices) >= args.min_sheet_size:
-                cluster_positions = positions[cluster_indices]
+        # Calculate frame metrics
+        sheet_count = len(clusters)
+        total_peptides = sum(len(cluster) for cluster in clusters)
+        avg_sheet_size = total_peptides / sheet_count if sheet_count > 0 else 0
 
-                # Perform PCA and check if it succeeded
-                normal_vector, orientation_vector, rmsd_pca, plane_origin, eigenvalues = perform_pca(cluster_positions)
-                if rmsd_pca == np.inf:
-                    print(f"Skipping cluster {label} in frame {frame_number} due to PCA failure.")
-                    continue
+        # Create frame record
+        frame_record = {
+            'Frame': frame_number + args.first,
+            'Peptides': str(sorted(frame_peptides)),  # Sort for consistency
+            'sheet_count': sheet_count,
+            'total_peptides_in_sheets': total_peptides,
+            'avg_sheet_size': avg_sheet_size
+        }
+        frame_records.append(frame_record)
 
-                # Determine if the cluster is planar or curved
-                is_planar = rmsd_pca < PLANARITY_THRESHOLD
-
-                # Initialize rmsd_quad
-                rmsd_quad = None
-
-                # Check for curvature if the cluster is not planar
-                is_curved = False
-                if not is_planar and len(cluster_positions) >= 6:
-                    rmsd_quad, _ = fit_quadratic_surface(cluster_positions)
-                    is_curved = rmsd_quad < CURVATURE_THRESHOLD
-
-                # Register the sheet based on planarity or curvature
-                if is_planar or is_curved:
-                    sheet_id = f"sheet_{label}"
-                    sheet_records[sheet_id].append(frame_number + args.first)
-                    rmsd_quad_str = f"{rmsd_quad:.3f} Å" if rmsd_quad is not None else "N/A"
-                    logging.debug(
-                        f"Frame {frame_number + args.first}, Sheet {sheet_id}: "
-                        f"Size={len(cluster_indices)}, "
-                        f"Planar={is_planar}, Curved={is_curved}, "
-                        f"RMSD_PCA={rmsd_pca:.3f} Å, "
-                        f"Eigenvalues={eigenvalues}, "
-                        f"RMSD_Quadratic={rmsd_quad_str}"
-                    )
+    # Save results
+    save_frame_results(frame_records, args.output)
 
     # Time-resolved analysis, save results, and plot lifetimes
     sheet_lifetimes = time_resolved_sheet_analysis(sheet_records, min_sheet_frames)

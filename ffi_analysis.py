@@ -29,8 +29,11 @@ from Bio import BiopythonDeprecationWarning
 warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
+# from mpi4py import MPI
+
 import logging
 from datetime import datetime
+import csv
 
 # Set up logging
 timestamp = datetime.now().strftime("%m%d_%H%M")
@@ -47,6 +50,7 @@ NUM_CROSS_SECTIONS = 10               # Number of cross-sections along the fiber
 DEFAULT_DISTANCE_CUTOFF = 7.0         # Distance cutoff for clustering in Å
 FOP_THRESHOLD_POSITIVE = 0.1  # For alignment
 FOP_THRESHOLD_NEGATIVE = -0.1  # For anti-alignment
+CSV_HEADERS = ['Frame', 'Peptides', 'fiber_count', 'total_peptides_in_fibers', 'avg_fiber_size']
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Fiber Formation Index (FFI) Analysis')
@@ -69,7 +73,7 @@ def ensure_output_directory(output_dir):
 def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection):
     u = mda.Universe(topology, trajectory)
 
-     # Set the total number of frames
+    # Set the total number of frames
     total_frames = len(u.trajectory)
     print(f"Total frames: {total_frames}")
     print(f"First frame: {first}")
@@ -95,20 +99,7 @@ def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection)
     indices = list(range(first, last, skip))
     logging.debug(f"Indices to be processed: {indices}")
 
-    # Create temporary file names for cropped trajectory
-    temp_gro = "temp_protein_slice.gro"
-    temp_xtc = "temp_protein_slice.xtc"
-
-    # Write the selected beads to a temporary trajectory
-    with mda.Writer(temp_gro, selection_atoms.n_atoms) as W:
-        W.write(selection_atoms)
-    with mda.Writer(temp_xtc, selection_atoms.n_atoms) as W:
-        for ts in u.trajectory[indices]:
-            W.write(selection_atoms)
-
-    # Reload the cropped trajectory
-    cropped_u = mda.Universe(temp_gro, temp_xtc)
-    return cropped_u
+    return u, selection_atoms, indices
 
 def center_and_wrap_trajectory(universe, selection_string):
     """
@@ -138,20 +129,25 @@ def center_and_wrap_trajectory(universe, selection_string):
     new_com = selection.center_of_mass()
     logging.debug(f"Initial COM: {com}, Shift Applied: {shift}, New COM after wrapping: {new_com}")
 
-def identify_aggregates(universe, selection_string, distance_cutoff):
-    """
-    Identify aggregates (clusters) in the system using a distance cutoff.
-    """
+def identify_aggregates(universe, selection_string, distance_cutoff, min_fiber_size):
+    """Modified to return both aggregates and their peptide indices"""
     selection = universe.select_atoms(selection_string)
     positions = selection.positions
     distance_matrix = cdist(positions, positions)
-    adjacency_matrix = distance_matrix < distance_cutoff  # Distance cutoff in Å
+    adjacency_matrix = distance_matrix < distance_cutoff
     np.fill_diagonal(adjacency_matrix, False)
+
     labels, num_labels = connected_components(adjacency_matrix)
-    aggregates = defaultdict(list)
-    for idx, label_id in enumerate(labels):
-        aggregates[label_id].append(selection.atoms[idx].index)
-    return aggregates.values()
+
+    aggregates = []
+    aggregate_indices = []
+    for label in range(num_labels):
+        indices = np.where(labels == label)[0]
+        if len(indices) >= min_fiber_size:
+            aggregates.append(selection.atoms[indices])
+            aggregate_indices.append(indices)
+
+    return aggregates, aggregate_indices
 
 def connected_components(adjacency_matrix):
     """
@@ -191,7 +187,7 @@ def compute_moments_of_inertia(positions):
     principal_axis = eigenvectors[:, -1]
     return shape_ratio1, shape_ratio2, principal_axis
 
-def get_peptide_orientations(cluster_atoms):
+def get_peptide_orientations(cluster_atoms, frame_number):
     """
     Calculate the orientation vectors (backbone vectors) for each dipeptide.
     Returns an array of orientation vectors.
@@ -200,7 +196,7 @@ def get_peptide_orientations(cluster_atoms):
     peptide_groups = cluster_atoms.residues  # Group atoms by residue (peptide)
 
     # Debug: Print the number of residues
-    logging.debug(f"Number of residues: {len(peptide_groups)}")
+    logging.debug(f"Frame {frame_number}: Number of residues: {len(peptide_groups)}")
 
     # Iterate over pairs of residues to form dipeptides
     for i in range(0, len(peptide_groups) - 1, 2):
@@ -271,75 +267,50 @@ def cross_sectional_profiling(relative_positions, principal_axis):
             cross_section_areas.append(0)
     return cross_section_areas
 
-def analyze_aggregate(aggregate_atoms, frame_number, args):
-    """
-    Analyze a single aggregate for fiber properties.
-    """
+def analyze_aggregate(aggregate_atoms, frame_number, peptide_indices, args):
+    """Modified to include peptide tracking"""
     results = {}
     positions = aggregate_atoms.positions
+
     if len(positions) < args.min_fiber_size:
         results['is_fiber'] = False
-        logging.debug(f"Frame {frame_number}: Aggregate too small to be a fiber (size={len(positions)}).")
+        results['peptides'] = []
         return results
 
     # Compute moments of inertia
     shape_ratio1, shape_ratio2, principal_axis = compute_moments_of_inertia(positions)
 
-    # Debug print: shape ratios
-    logging.debug(f"Frame {frame_number}: shape_ratio1={shape_ratio1:.3f}, shape_ratio2={shape_ratio2:.3f}")
-
-    # Criteria for shape ratios
     if shape_ratio1 < SHAPE_RATIO_THRESHOLD or shape_ratio2 < SHAPE_RATIO_THRESHOLD:
         results['is_fiber'] = False
-        logging.debug(f"Frame {frame_number}: Shape ratios below threshold (shape_ratio1={shape_ratio1:.3f}, shape_ratio2={shape_ratio2:.3f}).")
+        results['peptides'] = []
         return results
 
-    # Compute peptide orientations
-    orientations = get_peptide_orientations(aggregate_atoms)
-    logging.debug(f"Frame {frame_number}: Number of orientations: {len(orientations)}")
-    if len(orientations) == 0:
-        results['is_fiber'] = False
-        logging.debug(f"Frame {frame_number}: No valid orientations found.")
-        return results
+    # Get orientations
+    orientations = get_peptide_orientations(aggregate_atoms, frame_number)
 
+    # Compute metrics
     mean_angle, std_angle, angles = analyze_orientation_distribution(orientations, principal_axis)
-
-    # Debug print: orientation distribution
-    logging.debug(f"Frame {frame_number}: mean_angle={mean_angle:.3f}, std_angle={std_angle:.3f}")
-
-    # Compute FOP
     fop = compute_fop(orientations, principal_axis)
-
-    # Debug print: Fibrillar Order Parameter (FOP)
-    logging.debug(f"Frame {frame_number}: FOP={fop:.3f}")
-
-    # Cross-sectional profiling
     relative_positions = positions - positions.mean(axis=0)
     cross_section_areas = cross_sectional_profiling(relative_positions, principal_axis)
-    mean_cross_section_area = np.mean(cross_section_areas)
-    std_cross_section_area = np.std(cross_section_areas)
 
-    # Classification criteria with corrected FOP thresholds
+    # Classification criteria
     is_fiber = (
         std_angle < ALIGNMENT_STD_THRESHOLD and
         (fop > FOP_THRESHOLD_POSITIVE or fop < FOP_THRESHOLD_NEGATIVE)
     )
 
-    # Debug print: final classification
-    logging.debug(f"Frame {frame_number}: Is fiber={is_fiber} (std_angle={std_angle:.3f}, FOP={fop:.3f})")
-
-    # Store results with explicit type casting
-    results['frame'] = frame_number
-    results['aggregate_size'] = len(positions)
-    results['shape_ratio1'] = shape_ratio1
-    results['shape_ratio2'] = shape_ratio2
-    results['mean_angle'] = mean_angle
-    results['std_angle'] = std_angle
-    results['fop'] = fop
-    results['mean_cross_section_area'] = mean_cross_section_area
-    results['std_cross_section_area'] = std_cross_section_area
-    results['is_fiber'] = is_fiber  # Store as boolean
-    results['positions'] = positions  # Add positions to results
+    results = {
+        'frame': frame_number,
+        'size': len(positions),
+        'shape_ratio1': shape_ratio1,
+        'shape_ratio2': shape_ratio2,
+        'mean_angle': mean_angle,
+        'std_angle': std_angle,
+        'fop': fop,
+        'is_fiber': is_fiber,
+        'peptides': [f'PEP{idx+1}' for idx in peptide_indices]
+    }
 
     return results
 
@@ -371,29 +342,18 @@ def save_fiber_lifetimes(fiber_lifetimes, output_dir):
             f.write(f"{fiber_id},{data['start_frame']},{data['end_frame']},{data['lifetime']}\n")
     print(f"Fiber lifetimes data saved to {output_file}")
 
-def save_frame_results(frame_results, output_dir):
-    """
-    Save per-frame analysis results to a file.
-    """
+def save_frame_results(frame_records, output_dir):
+    """Save FFI frame results to a CSV file."""
     timestamp = datetime.now().strftime("%m%d_%H%M")
     output_file = os.path.join(output_dir, f'ffi_frame_results_{timestamp}.csv')
-    with open(output_file, 'w') as f:
-        headers = ['Frame', 'AggregateSize', 'ShapeRatio1', 'ShapeRatio2',
-                   'MeanAngle', 'StdAngle', 'FOP', 'MeanCrossSectionArea',
-                   'StdCrossSectionArea', 'IsFiber']
-        f.write(','.join(headers) + '\n')
-        for frame_result in frame_results:
-            for result in frame_result:
-                is_fiber = result.get('is_fiber', False)
-                # Validate is_fiber is boolean
-                if not isinstance(is_fiber, bool):
-                    is_fiber = bool(is_fiber)
-                f.write(f"{result.get('frame', '')},{result.get('aggregate_size', '')},"
-                        f"{result.get('shape_ratio1', '')},{result.get('shape_ratio2', '')},"
-                        f"{result.get('mean_angle', '')},{result.get('std_angle', '')},"
-                        f"{result.get('fop', '')},{result.get('mean_cross_section_area', '')},"
-                        f"{result.get('std_cross_section_area', '')},{int(is_fiber)}\n")
-    print(f"Per-frame results saved to {output_file}")
+
+    with open(output_file, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=CSV_HEADERS)
+        writer.writeheader()
+        for record in frame_records:
+            writer.writerow(record)
+
+    logging.info(f"FFI frame results saved to {output_file}")
 
 def plot_fiber_lifetimes(fiber_lifetimes, output_dir):
     """
@@ -501,66 +461,81 @@ def main():
     args = parse_arguments()
     ensure_output_directory(args.output)
 
-    # Load and crop trajectory
-    print("Loading and processing trajectory...")
-    u = load_and_crop_trajectory(args.topology, args.trajectory, args.first, args.last, args.skip, args.selection)
-    print(f"Total frames in cropped trajectory: {len(u.trajectory)}")
+    # # Initialize MPI
+    # comm = MPI.COMM_WORLD
+    # rank = comm.Get_rank()
+    # size = comm.Get_size()
 
-    bb_selection = 'protein and name BB'
-    n_frames = len(u.trajectory)
+    # Load trajectory and setup variables
+    u, selection_atoms, indices = load_and_crop_trajectory(
+        args.topology,
+        args.trajectory,
+        args.first,
+        args.last,
+        args.skip,
+        args.selection
+    )
 
-    print(f"Total frames in cropped trajectory: {n_frames}")
+    # Center and wrap the trajectory if needed
+    center_and_wrap_trajectory(u, args.selection)
 
-    # Center and wrap the trajectory to handle PBC issues
-    center_and_wrap_trajectory(u, bb_selection)
-
-    # Initialize variables for analysis
-    fiber_records = defaultdict(list)  # {fiber_id: [frame_numbers]}
+    # Initialize sheet tracking variables
+    sheet_records = defaultdict(list)
+    fiber_records = defaultdict(list)
     fiber_id_counter = 0
-    frame_results = []
+    frame_records = []
 
-    # Analyze each frame
-    print(f"Analyzing {n_frames} frames for fiber formation...")
-    for frame_number, ts in enumerate(u.trajectory):
-        print(f"Processing frame {frame_number+1}/{n_frames}...")
+    min_fiber_frames = 1  # Minimum frames a fiber must persist
 
-        aggregates = identify_aggregates(u, bb_selection, args.distance_cutoff)
-        logging.debug(f"Number of aggregates found: {len(aggregates)}")
-        frame_result = []
-        for aggregate in aggregates:
-            aggregate_atoms = u.select_atoms('index ' + ' '.join(map(str, aggregate)))
-            results = analyze_aggregate(aggregate_atoms, frame_number, args)
-            frame_result.append(results)
-            if results.get('is_fiber'):
+    # Process each specified frame
+    for frame_idx, frame_number in enumerate(indices):
+        u.trajectory[frame_number]
+        print(f"Processing frame {frame_number + 1}/{len(u.trajectory)}...")
+        logging.info(f"Processing frame {frame_number + 1}/{len(u.trajectory)}...")
+
+        # Select current frame's atoms
+        current_atoms = selection_atoms
+
+        # Identify aggregates (clusters)
+        aggregates, peptide_indices = identify_aggregates(u, args.selection, args.distance_cutoff, args.min_fiber_size)
+
+        # Track fibers and their peptides for this frame
+        frame_fibers = []
+        frame_peptides = []
+
+        for aggregate, indices in zip(aggregates, peptide_indices):
+            results = analyze_aggregate(aggregate, frame_number, indices, args)
+
+            if results['is_fiber']:
                 fiber_id = f"fiber_{fiber_id_counter}"
-                fiber_id_counter += 1
                 fiber_records[fiber_id].append(frame_number)
-                logging.debug(f"Frame {frame_number}: Aggregate classified as fiber (ID: {fiber_id})")
-            else:
-                logging.debug(f"Frame {frame_number}: Aggregate not classified as fiber.")
-        frame_results.append(frame_result)
+                fiber_id_counter += 1
+                frame_fibers.append(results)
+                frame_peptides.extend(results['peptides'])
 
-    total_fibers = sum(1 for frame_result in frame_results for result in frame_result if result.get('is_fiber', False))
-    print(f"Total fibers detected: {total_fibers}")
+        # Create frame record
+        fiber_count = len(frame_fibers)
+        total_peptides = sum(f['size'] for f in frame_fibers)
+        avg_fiber_size = total_peptides / fiber_count if fiber_count > 0 else 0
 
-    # Track fibers across frames
-    tracked_fibers = track_fibers_across_frames(fiber_records, frame_results)
+        frame_record = {
+            'Frame': frame_number,
+            'Peptides': str(sorted(frame_peptides)),
+            'fiber_count': fiber_count,
+            'total_peptides_in_fibers': total_peptides,
+            'avg_fiber_size': avg_fiber_size
+        }
+        frame_records.append(frame_record)
 
-    # Save and plot results
+    # Save results
+    save_frame_results(frame_records, args.output)
+
+    # Analyze fiber lifetimes
     fiber_lifetimes = analyze_fiber_lifetimes(fiber_records)
     save_fiber_lifetimes(fiber_lifetimes, args.output)
-    save_frame_results(frame_results, args.output)
-    plot_fiber_lifetimes(fiber_lifetimes, args.output)
-    plot_tracked_fibers(tracked_fibers, args.output)
 
     print("FFI analysis completed successfully.")
-
-    # Clean up temporary files
-    try:
-        os.remove("temp_protein_slice.gro")
-        os.remove("temp_protein_slice.xtc")
-    except OSError as e:
-        print(f"Error removing temporary files: {e}")
+    logging.info("FFI analysis completed successfully.")
 
 if __name__ == '__main__':
     main()

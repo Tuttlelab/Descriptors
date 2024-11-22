@@ -32,7 +32,7 @@ from functools import lru_cache
 from scipy import sparse
 from scipy.spatial import cKDTree
 from scipy.cluster.hierarchy import fcluster, linkage
-
+import csv
 
 
 # Constants
@@ -52,6 +52,7 @@ MAX_COMPONENTS = 5000  # Safety limit for number of components
 MIN_COMPONENT_SIZE = 5  # Minimum atoms per component
 MAX_RADIAL_BINS = 200  # Maximum number of bins for density calculation
 ASPHERICITY_THRESHOLD = 1.1  # Maximum asphericity for vesicle classification
+CSV_HEADERS = ['Frame', 'Peptides', 'vesicle_count', 'total_peptides_in_vesicles', 'avg_vesicle_size']
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Vesicle Formation Index (VFI) Analysis')
@@ -156,7 +157,7 @@ def identify_aggregates(universe, selection_string):
     positions = selection.positions
 
     if len(positions) == 0:
-        return [], 0
+        return [], []
 
     # Perform hierarchical clustering
     linkage_matrix = linkage(positions, method='single', metric='euclidean')
@@ -168,13 +169,15 @@ def identify_aggregates(universe, selection_string):
 
     # Group atoms by cluster
     aggregates = []
+    aggregate_indices = []
     for cluster_id in unique_clusters:
         cluster_indices = np.where(labels == cluster_id)[0]
         if len(cluster_indices) >= MIN_VESICLE_SIZE:
             ag_atoms = selection.atoms[cluster_indices]
             aggregates.append(ag_atoms)
+            aggregate_indices.append(cluster_indices)
 
-    return aggregates, len(aggregates)
+    return aggregates, aggregate_indices
 
 def connected_components(adjacency_matrix):
     """
@@ -431,32 +434,26 @@ def compute_shape_descriptors(positions, com):
                      (eigenvalues[0] - eigenvalues[2])**2) / (2 * lambda_avg**2)
     return asphericity, acylindricity
 
-def analyze_aggregate(aggregate_atoms, frame_number, args):
-    """Complete aggregate analysis with all shape descriptors"""
+def analyze_aggregate(aggregate_atoms, frame_number, peptide_indices):
+    """Modified aggregate analysis to include peptide tracking"""
     positions = aggregate_atoms.positions
     n_atoms = len(positions)
 
     if n_atoms < MIN_VESICLE_SIZE:
-        return {'is_vesicle': False}
+        return {'is_vesicle': False, 'peptides': []}
 
-    # Calculate center of mass
+    # Calculate center of mass and shape descriptors
     com = np.mean(positions, axis=0)
-
-    # Calculate all shape descriptors
     sphericity = compute_sphericity(positions)
-
-    # Calculate radial density profile
     density, bin_edges = compute_radial_density(positions, com, DENSITY_BINS)
     hollowness = compute_hollowness_ratio(positions)
-
-    # Calculate additional shape parameters
     asphericity, acylindricity = compute_shape_descriptors(positions, com)
 
-    # Comprehensive vesicle criteria
+    # Determine if structure is a vesicle
     is_vesicle = (
         sphericity >= SPHERICITY_THRESHOLD and
         hollowness >= HOLLOWNESS_THRESHOLD and
-        asphericity <= ASPHERICITY_THRESHOLD and  # Typical threshold for vesicle-like structures
+        asphericity <= ASPHERICITY_THRESHOLD and
         acylindricity <= ACYLINDRICITY_THRESHOLD
     )
 
@@ -467,7 +464,8 @@ def analyze_aggregate(aggregate_atoms, frame_number, args):
         'hollowness': hollowness,
         'asphericity': asphericity,
         'acylindricity': acylindricity,
-        'is_vesicle': is_vesicle
+        'is_vesicle': is_vesicle,
+        'peptides': [f'PEP{idx+1}' for idx in peptide_indices]
     }
 
 def main():
@@ -488,32 +486,46 @@ def main():
 
     vesicle_records = defaultdict(list)
     vesicle_id_counter = 0
-    frame_results = []
+    frame_records = []
 
     print("Analyzing frames for vesicle formation...")
     for frame_number, ts in enumerate(u.trajectory):
         print(f"Processing frame {frame_number+1}/{n_frames}...")
-        aggregates, n_aggregates = identify_aggregates(u, selection_string)
-        print(f"Found {n_aggregates} distinct aggregates in frame {frame_number}")
-        for aggregate in aggregates:
-            # Now aggregate is already an AtomGroup, no need for additional selection
-            results = analyze_aggregate(aggregate, frame_number, args)
+
+        # Get aggregates with their peptide indices
+        aggregates, peptide_indices = identify_aggregates(u, selection_string)
+
+        # Track vesicles and their peptides for this frame
+        frame_vesicles = []
+        frame_peptides = []
+
+        for aggregate, indices in zip(aggregates, peptide_indices):
+            results = analyze_aggregate(aggregate, frame_number, indices)
+
             if results['is_vesicle']:
                 vesicle_id = f"vesicle_{vesicle_id_counter}"
                 vesicle_id_counter += 1
                 vesicle_records[vesicle_id].append(frame_number)
-                # Visualize the vesicle and save as PNG
-                visualize_vesicle(u, aggregate, frame_number, args.output, vesicle_id)
-                vesicle_id_counter += 1
-            frame_results.append(results)
+                frame_vesicles.append(results)
+                frame_peptides.extend(results['peptides'])
 
+        # Create frame record
+        vesicle_count = len(frame_vesicles)
+        total_peptides = sum(v['size'] for v in frame_vesicles)
+        avg_vesicle_size = total_peptides / vesicle_count if vesicle_count > 0 else 0
 
-    vesicle_lifetimes = analyze_vesicle_lifetimes(vesicle_records)
-    save_vesicle_lifetimes(vesicle_lifetimes, args.output)
-    save_frame_results(frame_results, args.output)
-    plot_vesicle_lifetimes(vesicle_lifetimes, args.output)
+        frame_record = {
+            'Frame': frame_number,
+            'Peptides': str(sorted(frame_peptides)),
+            'vesicle_count': vesicle_count,
+            'total_peptides_in_vesicles': total_peptides,
+            'avg_vesicle_size': avg_vesicle_size
+        }
+        frame_records.append(frame_record)
 
-    print("VFI analysis completed successfully.")
+    # Save results
+    save_frame_results(frame_records, args.output)
+    # ...existing analysis and plotting code...
 
 def analyze_vesicle_lifetimes(vesicle_records):
     """
@@ -537,20 +549,17 @@ def save_vesicle_lifetimes(vesicle_lifetimes, output_dir):
     print(f"Vesicle lifetimes data saved to {output_file}")
 
 def save_frame_results(frame_results, output_dir):
-    """
-    Save per-frame analysis results to a file.
-    """
-    output_file = os.path.join(output_dir, 'vfi_frame_results.csv')
-    with open(output_file, 'w') as f:
-        headers = ['Frame', 'AggregateSize', 'Sphericity', 'HollownessRatio',
-                   'Asphericity', 'Acylindricity', 'IsVesicle']
-        f.write(','.join(headers) + '\n')
-        for result in frame_results:
-            f.write(f"{result['frame']},{result['size']},"  # Changed from aggregate_size to size
-                    f"{result['sphericity']:.3f},{result['hollowness']:.3f},"  # Changed from hollowness_ratio
-                    f"{result.get('asphericity', 0):.3f},{result.get('acylindricity', 0):.3f},"
-                    f"{int(result['is_vesicle'])}\n")
-    print(f"Per-frame results saved to {output_file}")
+    """Save VFI frame results to a CSV file."""
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+    output_file = os.path.join(output_dir, f'vfi_frame_results_{timestamp}.csv')
+
+    with open(output_file, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=CSV_HEADERS)
+        writer.writeheader()
+        for record in frame_results:
+            writer.writerow(record)
+
+    logging.info(f"VFI frame results saved to {output_file}")
 
 def plot_vesicle_lifetimes(vesicle_lifetimes, output_dir):
     """
@@ -574,93 +583,93 @@ def plot_vesicle_lifetimes(vesicle_lifetimes, output_dir):
 
 # IMPROVEMENTS:
 
-def visualize_vesicle(universe, aggregate_atoms, frame, output_dir, vesicle_id=None):
-    """
-    Save vesicle visualization as PNG images and PDB files for viewing in VMD.
+# def visualize_vesicle(universe, aggregate_atoms, frame, output_dir, vesicle_id=None):
+#     """
+#     Save vesicle visualization as PNG images and PDB files for viewing in VMD.
 
-    Parameters:
-        universe: MDAnalysis Universe
-        aggregate_atoms: AtomGroup containing vesicle atoms
-        frame: Frame number
-        output_dir: Output directory
-        vesicle_id: Optional identifier for tracking the same vesicle across frames
-    """
-    import os
-    import subprocess
-    import warnings
+#     Parameters:
+#         universe: MDAnalysis Universe
+#         aggregate_atoms: AtomGroup containing vesicle atoms
+#         frame: Frame number
+#         output_dir: Output directory
+#         vesicle_id: Optional identifier for tracking the same vesicle across frames
+#     """
+#     import os
+#     import subprocess
+#     import warnings
 
-    # Create visualization subdirectory
-    vis_dir = os.path.join(output_dir, 'vesicle_visualizations')
-    os.makedirs(vis_dir, exist_ok=True)
+#     # Create visualization subdirectory
+#     vis_dir = os.path.join(output_dir, 'vesicle_visualizations')
+#     os.makedirs(vis_dir, exist_ok=True)
 
-    # Generate unique filenames
-    vesicle_tag = f"v{vesicle_id}_" if vesicle_id else ""
-    pdb_file = os.path.join(vis_dir, f"vesicle_{vesicle_tag}frame_{frame}.pdb")
-    png_file = os.path.join(vis_dir, f"vesicle_{vesicle_tag}frame_{frame}.png")
-    vmd_script = os.path.join(vis_dir, f"render_{vesicle_tag}frame_{frame}.tcl")
+#     # Generate unique filenames
+#     vesicle_tag = f"v{vesicle_id}_" if vesicle_id else ""
+#     pdb_file = os.path.join(vis_dir, f"vesicle_{vesicle_tag}frame_{frame}.pdb")
+#     png_file = os.path.join(vis_dir, f"vesicle_{vesicle_tag}frame_{frame}.png")
+#     vmd_script = os.path.join(vis_dir, f"render_{vesicle_tag}frame_{frame}.tcl")
 
-    try:
-        # Center vesicle within the box
-        com = aggregate_atoms.center_of_mass()
-        box_center = universe.dimensions[:3] / 2
-        shift = box_center - com
+#     try:
+#         # Center vesicle within the box
+#         com = aggregate_atoms.center_of_mass()
+#         box_center = universe.dimensions[:3] / 2
+#         shift = box_center - com
 
-        # Save centered structure
-        temp_ag = aggregate_atoms.copy()
-        temp_ag.translate(shift)
-        temp_ag.write(pdb_file)
+#         # Save centered structure
+#         temp_ag = aggregate_atoms.copy()
+#         temp_ag.translate(shift)
+#         temp_ag.write(pdb_file)
 
-        # Create VMD script for rendering
-        with open(vmd_script, 'w') as f:
-            f.write(f"""
-# Load the molecule
-mol new {pdb_file} type pdb
+#         # Create VMD script for rendering
+#         with open(vmd_script, 'w') as f:
+#             f.write(f"""
+# # Load the molecule
+# mol new {pdb_file} type pdb
 
-# Set representation
-mol delrep 0 top
-mol representation VDW 1.0 12.0
-mol color Name
-mol material Opaque
-mol addrep top
+# # Set representation
+# mol delrep 0 top
+# mol representation VDW 1.0 12.0
+# mol color Name
+# mol material Opaque
+# mol addrep top
 
-# Display settings
-display projection Orthographic
-display depthcue off
-axes location off
-color Display Background white
+# # Display settings
+# display projection Orthographic
+# display depthcue off
+# axes location off
+# color Display Background white
 
-# Set display size and rendering parameters
-display resize 800 600
-display antialias on
+# # Set display size and rendering parameters
+# display resize 800 600
+# display antialias on
 
-# Update display
-display update ui
+# # Update display
+# display update ui
 
-# Render to PNG using Snapshot renderer
-render snapshot {png_file}
+# # Render to PNG using Snapshot renderer
+# render snapshot {png_file}
 
-quit
-""")
+# quit
+# """)
 
-        # Set environment variable for software rendering
-        env = os.environ.copy()
-        env['LIBGL_ALWAYS_SOFTWARE'] = '1'
+#         # Set environment variable for software rendering
+#         env = os.environ.copy()
+#         env['LIBGL_ALWAYS_SOFTWARE'] = '1'
 
-        # Command to run VMD off-screen
-        vmd_command = f"vmd -dispdev ogl -e {vmd_script}"
+#         # Command to run VMD off-screen
+#         vmd_command = f"vmd -dispdev ogl -e {vmd_script}"
 
-        # Run VMD with software rendering
-        subprocess.run(vmd_command, shell=True, check=True, env=env)
+#         # Run VMD with software rendering
+#         subprocess.run(vmd_command, shell=True, check=True, env=env)
 
-        logging.info(f"Saved vesicle visualization to {png_file}")
-        logging.info(f"Saved vesicle structure to {pdb_file}")
+#         logging.info(f"Saved vesicle visualization to {png_file}")
+#         logging.info(f"Saved vesicle structure to {pdb_file}")
 
-    except Exception as e:
-        logging.error(f"Failed to visualize vesicle: {str(e)}")
-    finally:
-        # Cleanup temporary files (keep the PDB file)
-        if os.path.exists(vmd_script):
-            os.remove(vmd_script)
+#     except Exception as e:
+#         logging.error(f"Failed to visualize vesicle: {str(e)}")
+#     finally:
+#         # Cleanup temporary files (keep the PDB file)
+#         if os.path.exists(vmd_script):
+#             os.remove(vmd_script)
 
 def track_vesicle_evolution(vesicle_records):
     """Track how vesicles merge/split over time"""

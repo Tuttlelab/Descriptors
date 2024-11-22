@@ -15,24 +15,27 @@ It provides a unified analysis of structural evolution over time, capturing tran
 different structural features and providing insights into the dynamics of peptide self-assembly.
 
 """
-
 import os
 import argparse
+import subprocess
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from collections import defaultdict
+import glob
 
 # Constants
 OVERLAP_THRESHOLD = 0.5  # Threshold for peptide overlap when matching structures between frames
 
+import warnings
+from Bio import Application
+from Bio import BiopythonDeprecationWarning
+
+warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Tracking Shape Changes in Peptide Simulations')
-    parser.add_argument('-adi', '--adi_results', help='Path to ADI results directory')
-    parser.add_argument('-sfi', '--sfi_results', help='Path to SFI results directory')
-    parser.add_argument('-vfi', '--vfi_results', help='Path to VFI results directory')
-    parser.add_argument('-tfi', '--tfi_results', help='Path to TFI results directory')
-    parser.add_argument('-ffi', '--ffi_results', help='Path to FFI results directory')
+    parser.add_argument('--run_descriptors', action='store_true', help='Run descriptor analyses before tracking')
     parser.add_argument('-o', '--output', default='tracker_results', help='Output directory for tracker results')
     parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
     parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
@@ -44,19 +47,47 @@ def ensure_output_directory(output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-def load_descriptor_results(descriptor_results_dir, descriptor_name):
+def run_descriptor(descriptor_script, output_dir, first, last, skip):
     """
-    Load results from a descriptor's results directory.
+    Run a descriptor analysis script.
     """
-    if descriptor_results_dir is None or not os.path.isdir(descriptor_results_dir):
-        print(f"Skipping {descriptor_name}: directory not provided or doesn't exist.")
+    try:
+        subprocess.run(['python3', descriptor_script,
+                        '--output', output_dir,
+                        '-t', "eq_FF1200.gro",
+                        '-x', "eq_FF1200.xtc",
+                        '--first', str(first) if first is not None else 'None',
+                        '--last', str(last) if last is not None else 'None',
+                        '--skip', str(skip)],
+                       check=True)
+        print(f"{descriptor_script} executed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error running {descriptor_script}: {e}")
+        exit(1)
+
+def load_descriptor_results(descriptor_results_dir, descriptor_name, start_frame, end_frame):
+    """Load descriptor results and filter frames within specified range."""
+    # Look for most recent file matching pattern
+    pattern = f'{descriptor_name}_frame_results_*.csv'
+    matching_files = sorted(glob.glob(os.path.join(descriptor_results_dir, pattern)))
+
+    if not matching_files:
+        print(f"Skipping {descriptor_name}: no matching files found in {descriptor_results_dir}")
         return None
-    frame_results_file = os.path.join(descriptor_results_dir, f'{descriptor_name}_frame_results.csv')
-    if not os.path.isfile(frame_results_file):
-        print(f"Skipping {descriptor_name}: file {frame_results_file} not found.")
+
+    # Use most recent file
+    frame_results_file = matching_files[-1]
+    print(f"Loading {descriptor_name} results from {frame_results_file}")
+
+    try:
+        frame_results = pd.read_csv(frame_results_file)
+        if 'Peptides' not in frame_results.columns:
+            print(f"Warning: {descriptor_name} results missing 'Peptides' column")
+            return None
+        return frame_results
+    except Exception as e:
+        print(f"Error loading {descriptor_name} results: {e}")
         return None
-    frame_results = pd.read_csv(frame_results_file)
-    return frame_results
 
 def match_structures(tracks, current_structures, frame_number, structure_type):
     """
@@ -64,26 +95,28 @@ def match_structures(tracks, current_structures, frame_number, structure_type):
     """
     if current_structures is None or current_structures.empty:
         return
-    # For each current structure
+    if 'Peptides' not in current_structures.columns:
+        print(f"Skipping {structure_type}: 'Peptides' column not found.")
+        return
     for _, curr_structure in current_structures.iterrows():
         curr_peptides = set(eval(curr_structure['Peptides']))
         matched = False
-        # Attempt to match with existing tracks
         for track_id, track in tracks.items():
             if track['type'] != structure_type:
                 continue
             last_peptides = track['peptides'][-1]
             overlap = curr_peptides & last_peptides
-            overlap_ratio = len(overlap) / len(curr_peptides)
+            if len(curr_peptides) == 0:
+                overlap_ratio = 0
+            else:
+                overlap_ratio = len(overlap) / len(curr_peptides)
             if overlap_ratio >= OVERLAP_THRESHOLD:
-                # Update existing track
                 track['frames'].append(frame_number)
                 track['peptides'].append(curr_peptides)
                 track['properties'].append(curr_structure.to_dict())
                 matched = True
                 break
         if not matched:
-            # Create new track
             new_id = len(tracks) + 1
             tracks[new_id] = {
                 'type': structure_type,
@@ -93,88 +126,91 @@ def match_structures(tracks, current_structures, frame_number, structure_type):
             }
 
 def analyze_tracks(tracks, output_dir):
-    """
-    Analyze the tracks of structures over time.
-    """
+    """Analyze the tracks and create plots."""
     # Prepare data for visualization
-    structure_counts = defaultdict(list)
-    for frame_number in sorted({frame for track in tracks.values() for frame in track['frames']}):
-        frame_structures = [track for track in tracks.values() if frame_number in track['frames']]
-        structure_types = [track['type'] for track in frame_structures]
-        for structure_type in ['Aggregate', 'Sheet', 'Vesicle', 'Tube', 'Fiber']:
-            count = structure_types.count(structure_type)
-            structure_counts[structure_type].append((frame_number, count))
+    frame_list = sorted(set(frame for track in tracks.values() for frame in track['frames']))
+    df_counts = pd.DataFrame({'Frame': frame_list})
+    structure_types = ['Aggregate', 'Sheet', 'Vesicle', 'Tube', 'Fiber']
 
-    # Plot structure counts over time
-    plt.figure()
-    for structure_type, counts in structure_counts.items():
-        frames, counts = zip(*sorted(counts))
-        plt.plot(frames, counts, label=structure_type)
+    for stype in structure_types:
+        df_counts[stype] = 0
+
+    for index, row in df_counts.iterrows():
+        frame = row['Frame']
+        frame_counts = {stype: 0 for stype in structure_types}
+        for track in tracks.values():
+            if frame in track['frames']:
+                frame_counts[track['type']] += 1
+        for stype in structure_types:
+            df_counts.at[index, stype] = frame_counts[stype]
+
+    # Save detailed results to CSV file
+    results_csv_path = os.path.join(output_dir, 'structure_tracks.csv')
+    df_counts.to_csv(results_csv_path, index=False)
+    print(f"Structure tracks data saved to {results_csv_path}")
+
+    # Plot line chart
+    plt.figure(figsize=(10, 6))
+    for stype, color in zip(structure_types, ['gray', 'blue', 'green', 'red', 'purple']):
+        plt.plot(df_counts['Frame'], df_counts[stype], label=stype, color=color)
     plt.xlabel('Frame')
     plt.ylabel('Number of Structures')
     plt.title('Structure Counts Over Time')
     plt.legend()
+    plt.tight_layout()
     plt.savefig(os.path.join(output_dir, 'structure_counts_over_time.png'))
     plt.close()
     print("Structure counts over time plot saved.")
-
-    # Save tracks to file
-    tracks_file = os.path.join(output_dir, 'structure_tracks.csv')
-    with open(tracks_file, 'w') as f:
-        headers = ['TrackID', 'Type', 'Lifetime', 'StartFrame', 'EndFrame']
-        f.write(','.join(headers) + '\n')
-        for track_id, track in tracks.items():
-            lifetime = len(track['frames'])
-            start_frame = track['frames'][0]
-            end_frame = track['frames'][-1]
-            f.write(f"{track_id},{track['type']},{lifetime},{start_frame},{end_frame}\n")
-    print(f"Structure tracks data saved to {tracks_file}")
 
 def main():
     args = parse_arguments()
     ensure_output_directory(args.output)
 
-    # Load descriptor results
+    descriptor_dirs = {
+        'adi': 'adi_results',
+        'sfi': 'sfi_results',
+        'vfi': 'vfi_results',
+        'tfi': 'tfi_results',
+        'ffi': 'ffi_results'
+    }
+
+    if args.run_descriptors:
+        print("Running descriptor analyses...")
+        run_descriptor('adi_analysis.py', descriptor_dirs['adi'], args.first, args.last, args.skip)
+        run_descriptor('sfi_analysis.py', descriptor_dirs['sfi'], args.first, args.last, args.skip)
+        run_descriptor('vfi_analysis.py', descriptor_dirs['vfi'], args.first, args.last, args.skip)
+        run_descriptor('tfi_analysis.py', descriptor_dirs['tfi'], args.first, args.last, args.skip)
+        run_descriptor('ffi_analysis.py', descriptor_dirs['ffi'], args.first, args.last, args.skip)
+
+    # Load descriptor results without frame filtering
     print("Loading descriptor results...")
-    adi_results = load_descriptor_results(args.adi_results, 'adi')
-    sfi_results = load_descriptor_results(args.sfi_results, 'sfi')
-    vfi_results = load_descriptor_results(args.vfi_results, 'vfi')
-    tfi_results = load_descriptor_results(args.tfi_results, 'tfi')
-    ffi_results = load_descriptor_results(args.ffi_results, 'ffi')
+    adi_results = load_descriptor_results(descriptor_dirs['adi'], 'adi', args.first, args.last)
+    sfi_results = load_descriptor_results(descriptor_dirs['sfi'], 'sfi', args.first, args.last)
+    vfi_results = load_descriptor_results(descriptor_dirs['vfi'], 'vfi', args.first, args.last)
+    tfi_results = load_descriptor_results(descriptor_dirs['tfi'], 'tfi', args.first, args.last)
+    ffi_results = load_descriptor_results(descriptor_dirs['ffi'], 'ffi', args.first, args.last)
+
+    # Combine all frames from the descriptors
+    all_frames = set()
+    for results in [adi_results, sfi_results, vfi_results, tfi_results, ffi_results]:
+        if results is not None:
+            all_frames.update(results['Frame'].unique())
+
+    # Apply frame range and skip
+    start_frame = args.first if args.first is not None else min(all_frames)
+    end_frame = args.last if args.last is not None else max(all_frames)
+    frame_numbers = range(start_frame, end_frame + 1, args.skip)
+
+    print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
 
     # Initialize tracks dictionary
     structure_tracks = {}
 
-    # Get total number of frames
-    all_frames = set()
-    for results in [adi_results, sfi_results, vfi_results, tfi_results, ffi_results]:
-        if results is not None:
-            all_frames.update(results['Frame'])
-    
-    if not all_frames:
-        print("No frames found. Exiting.")
-        return
-    
-    total_frames = max(all_frames) + 1
-    print(f"Total frames in simulation: {total_frames}")
-
-    # Determine the frame range, considering 'first', 'last', and 'skip' options
-    start_frame = 0  # Default start is the first frame
-    end_frame = total_frames  # Default end is the total number of frames
-
-    if args.last is not None:
-        start_frame = max(0, total_frames - args.last)  # Analyze only the last N frames
-
-    if args.first is not None:
-        end_frame = min(total_frames, args.first)  # Limit the analysis to the first N frames
-
-    print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
-
-    # Process the selected frames, applying first, last, and skip
+    # Process the selected frames
     print("Processing frames for structure tracking...")
-    for frame_number in range(start_frame, end_frame, args.skip):
-        print(f"Processing frame {frame_number+1}/{total_frames}...")
-        
+    for idx, frame_number in enumerate(frame_numbers):
+        print(f"Processing frame {frame_number} ({idx + 1}/{len(frame_numbers)})...")
+
         # Get structures from each descriptor in the current frame
         adi_structures = adi_results[adi_results['Frame'] == frame_number] if adi_results is not None else None
         sfi_structures = sfi_results[sfi_results['Frame'] == frame_number] if sfi_results is not None else None
@@ -191,8 +227,6 @@ def main():
 
     # Analyze tracks
     analyze_tracks(structure_tracks, args.output)
-
-    print("Tracking analysis completed successfully.")
 
 if __name__ == '__main__':
     main()

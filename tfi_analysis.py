@@ -21,6 +21,7 @@ import MDAnalysis as mda
 from scipy.spatial.distance import cdist
 from scipy.signal import argrelextrema
 from collections import defaultdict
+from scipy.cluster.hierarchy import linkage, fcluster
 import matplotlib.pyplot as plt
 import logging
 from datetime import datetime
@@ -33,6 +34,7 @@ RATIO_THRESHOLD = 0.3              # Threshold for eigenvalue ratio in shape ana
 MIN_TUBE_SIZE = 50                 # Minimum number of atoms to consider an aggregate as a tube
 SEGMENT_LENGTH = 40                # Number of atoms in each segment
 STEP_SIZE = 20                     # Step size for overlapping segments
+CSV_HEADERS = ['Frame', 'Peptides', 'tube_count', 'total_peptides_in_tubes', 'avg_tube_size']
 
 
 def parse_arguments():
@@ -219,47 +221,29 @@ def ensure_output_directory(output_dir):
 #         if os.path.exists(vmd_script):
 #             os.remove(vmd_script)
 
-def identify_aggregates(universe, selection_string, min_aggregate_size=20, output_csv=None):
-    print("Selecting atoms based on the selection string...")
+def identify_aggregates(universe, selection_string):
+    """Modified to return both aggregates and their peptide indices"""
     selection = universe.select_atoms(selection_string)
-    print(f"Number of selected atoms: {len(selection)}")
-
-    print("Calculating positions of selected atoms...")
     positions = selection.positions
-    print(f"Positions shape: {positions.shape}")
 
-    print("Calculating distance matrix...")
-    distance_matrix = cdist(positions, positions)
-    print(f"Distance matrix shape: {distance_matrix.shape}")
+    if len(positions) == 0:
+        return [], []
 
-    print("Creating adjacency matrix with distance cutoff...")
-    adjacency_matrix = distance_matrix < 7.0  # Distance cutoff in Å
-    np.fill_diagonal(adjacency_matrix, 0)
-    print(f"Adjacency matrix:\n{adjacency_matrix}")
+    # Perform clustering
+    linkage_matrix = linkage(positions, method='single', metric='euclidean')
+    labels = fcluster(linkage_matrix, t=6.0, criterion='distance') - 1
 
-    print("Finding connected components...")
-    labels, num_labels = connected_components(adjacency_matrix)
-    print(f"Number of connected components: {num_labels}")
+    # Group atoms by cluster
+    aggregates = []
+    aggregate_indices = []
+    for cluster_id in np.unique(labels):
+        cluster_indices = np.where(labels == cluster_id)[0]
+        if len(cluster_indices) >= MIN_TUBE_SIZE:
+            ag_atoms = selection.atoms[cluster_indices]
+            aggregates.append(ag_atoms)
+            aggregate_indices.append(cluster_indices)
 
-    print("Grouping atoms into aggregates...")
-    aggregates = defaultdict(list)
-    for idx, label_id in enumerate(labels):
-        aggregates[label_id].append(selection.atoms[idx].index)
-
-    # Filter aggregates by minimum size
-    filtered_aggregates = {k: v for k, v in aggregates.items() if len(v) >= min_aggregate_size}
-    print(f"Number of aggregates found: {len(filtered_aggregates)}")
-
-    # Save aggregates to CSV if output_csv is specified
-    if output_csv:
-        with open(output_csv, 'w', newline='') as csvfile:
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerow(['AggregateID', 'AtomIndices'])
-            for aggregate_id, atom_indices in filtered_aggregates.items():
-                csvwriter.writerow([aggregate_id, ','.join(map(str, atom_indices))])
-        print(f"Aggregates saved to {output_csv}")
-
-    return filtered_aggregates.values()
+    return aggregates, aggregate_indices
 
 def connected_components(adjacency_matrix):
     n_nodes = adjacency_matrix.shape[0]
@@ -355,47 +339,43 @@ def compute_shape_anisotropy(positions):
     ratio = eigenvalues[0] / eigenvalues[2]
     return asphericity, ratio
 
-def analyze_aggregate(aggregate_atoms, frame_number, args):
-    # Initialize results with frame number first
-    results = {
-        'frame': frame_number,
-        'aggregate_size': len(aggregate_atoms),
-        'is_tube': False  # default value
-    }
-
-    # Early return for small aggregates
-    if len(aggregate_atoms) < args.min_tube_size:
-        logging.debug(f"Frame {frame_number}: Aggregate too small to be a tube (size={len(aggregate_atoms)}).")
-        return results
-
-    # Rest of analysis...
+def analyze_aggregate(aggregate_atoms, frame_number, peptide_indices, args):
+    """Modified to include peptide tracking"""
     positions = aggregate_atoms.positions
+    n_atoms = len(positions)
 
+    if n_atoms < args.min_tube_size:
+        return {'is_tube': False, 'peptides': []}
+
+    # Perform tube analysis
     tube_segment_ratio = segment_based_analysis(positions, SEGMENT_LENGTH, STEP_SIZE)
     radial_std, angular_uniformity, r, theta, z, principal_axis = perform_cylindrical_analysis(positions)
     density, bin_edges = compute_radial_density(r)
     hollow = is_hollow_tube(density, bin_edges)
     asphericity, ratio = compute_shape_anisotropy(positions)
 
-    # Update results with all metrics
-    results.update({
+    is_tube = (
+        tube_segment_ratio >= 0.5 and
+        radial_std < RADIAL_THRESHOLD and
+        angular_uniformity > ANGULAR_UNIFORMITY_THRESHOLD and
+        hollow and
+        asphericity > ASPHERICITY_THRESHOLD and
+        ratio < RATIO_THRESHOLD
+    )
+
+    return {
+        'frame': frame_number,
+        'size': n_atoms,
         'radial_std': radial_std,
         'angular_uniformity': angular_uniformity,
         'tube_segment_ratio': tube_segment_ratio,
         'hollow': hollow,
         'asphericity': asphericity,
         'eigenvalue_ratio': ratio,
-        'is_tube': (
-            tube_segment_ratio >= 0.5 and
-            radial_std < RADIAL_THRESHOLD and
-            angular_uniformity > ANGULAR_UNIFORMITY_THRESHOLD and
-            hollow and
-            asphericity > ASPHERICITY_THRESHOLD and
-            ratio < RATIO_THRESHOLD
-        )
-    })
+        'is_tube': is_tube,
+        'peptides': [f'PEP{idx+1}' for idx in peptide_indices]
+    }
 
-    return results
 def main():
     args = parse_arguments()
     ensure_output_directory(args.output)
@@ -439,23 +419,40 @@ def main():
         print(f"Processing frame {actual_frame_number + 1}/{n_frames}...")  # Debug print for each processed frame
         logging.debug(f"Processing frame {actual_frame_number + 1}/{n_frames}...")
 
-        aggregates = identify_aggregates(u, selection_string, min_aggregate_size=20, output_csv=f'{args.output}/aggregates_{timestamp}.csv')
-        for aggregate in aggregates:
-            aggregate_atoms = u.select_atoms(selection_string)[aggregate]
-            results = analyze_aggregate(aggregate_atoms, actual_frame_number, args)
-            if results.get('is_tube'):
+        # Get aggregates with their peptide indices
+        aggregates, peptide_indices = identify_aggregates(u, selection_string)
+
+        # Track tubes and their peptides for this frame
+        frame_tubes = []
+        frame_peptides = []
+
+        for aggregate, indices in zip(aggregates, peptide_indices):
+            results = analyze_aggregate(aggregate, frame_number, indices, args)
+
+            if results['is_tube']:
                 tube_id = f"tube_{tube_id_counter}"
                 tube_id_counter += 1
-                tube_records[tube_id].append(actual_frame_number)
-            frame_results.append(results)
+                tube_records[tube_id].append(frame_number)
+                frame_tubes.append(results)
+                frame_peptides.extend(results['peptides'])
 
-    # Time-resolved analysis
-    tube_lifetimes = analyze_tube_lifetimes(tube_records)
-    save_tube_lifetimes(tube_lifetimes, args.output, timestamp)
-    save_frame_results(frame_results, args.output, timestamp)
-    # plot_tube_lifetimes(tube_lifetimes, args.output)
+        # Create frame record
+        tube_count = len(frame_tubes)
+        total_peptides = sum(t['size'] for t in frame_tubes)
+        avg_tube_size = total_peptides / tube_count if tube_count > 0 else 0
 
-    print("TFI analysis completed successfully.")
+        frame_record = {
+            'Frame': frame_number,
+            'Peptides': str(sorted(frame_peptides)),
+            'tube_count': tube_count,
+            'total_peptides_in_tubes': total_peptides,
+            'avg_tube_size': avg_tube_size
+        }
+        frame_results.append(frame_record)
+
+    # Save results
+    save_frame_results(frame_results, args.output)
+    # ...existing analysis and plotting code...
 
 def analyze_tube_lifetimes(tube_records):
     """
@@ -478,22 +475,18 @@ def save_tube_lifetimes(tube_lifetimes, output_dir, timestamp):
             f.write(f"{tube_id},{lifetime}\n")
     print(f"Tube lifetimes data saved to {output_file}")
 
-def save_frame_results(frame_results, output_dir, timestamp):
-    """Save per-frame analysis results to a file."""
+def save_frame_results(frame_records, output_dir):
+    """Save TFI frame results to a CSV file."""
+    timestamp = datetime.now().strftime("%m%d_%H%M")
     output_file = os.path.join(output_dir, f'tfi_frame_results_{timestamp}.csv')
-    with open(output_file, 'w') as f:
-        headers = ['Frame', 'AggregateSize', 'RadialStd', 'AngularUniformity',
-                  'TubeSegmentRatio', 'Hollow', 'Asphericity', 'EigenvalueRatio', 'IsTube']
-        f.write(','.join(headers) + '\n')
-        for result in frame_results:
-            f.write(f"{result['frame']},{result['aggregate_size']},"
-                   f"{result.get('radial_std', 0):.3f},{result.get('angular_uniformity', 0):.3f},"
-                   f"{result.get('tube_segment_ratio', 0):.3f},{int(result.get('hollow', False))},"
-                   f"{result.get('asphericity', 0):.3f},{result.get('eigenvalue_ratio', 0):.3f},"
-                   f"{int(result.get('is_tube', False))}\n")
-            logging.debug(f"Wrote result to CSV: Frame {result['frame']}, "
-                          f"Size {result['aggregate_size']}, Is tube: {result['is_tube']}")
-    print(f"Per-frame results saved to {output_file}")
+
+    with open(output_file, 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=CSV_HEADERS)
+        writer.writeheader()
+        for record in frame_records:
+            writer.writerow(record)
+
+    logging.info(f"TFI frame results saved to {output_file}")
 
 # # def plot_tube_lifetimes(tube_lifetimes, output_dir):
 #     """

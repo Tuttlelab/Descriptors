@@ -39,3 +39,9 @@ f9.png
 .traj*
 peptide_analysis/
 results/
+conda_packages.txt
+convert_pip_to_conda.py
+find_convertible_packages.py
+md_analysis_env_backup.yml
+pip_packages.txt
+tracker_results/

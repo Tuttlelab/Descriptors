@@ -4,3 +4,6 @@ pandas
 matplotlib
 MDAnalysis
 scikit-image
+tqdm
+Bio
+scikit-learn
