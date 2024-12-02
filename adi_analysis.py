@@ -10,22 +10,28 @@ size distribution analysis, and spatial distribution insights.
 """
 
 import os
-import csv
 import argparse
 import numpy as np
 import MDAnalysis as mda
 from MDAnalysis.analysis import rdf
-from MDAnalysis.transformations import unwrap, center_in_box
 from scipy.spatial.distance import cdist
 import networkx as nx
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from collections import defaultdict
 from datetime import datetime
+import psutil  # Add at top of file with other imports
+from scipy.spatial import cKDTree
+import gc
 import logging
+from logging.handlers import RotatingFileHandler
 
 import warnings
-from Bio import BiopythonDeprecationWarning
-warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
+# Remove the import that causes the deprecation warning
+# from Bio import BiopythonDeprecationWarning
+# Modify the warnings filter to ignore the BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", ".*BiopythonDeprecationWarning.*")
 warnings.filterwarnings("ignore", category=UserWarning)
 
 # Constants
@@ -37,10 +43,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Aggregate Detection Index (ADI) Analysis')
     parser.add_argument('-t', '--topology', required=True, help='Topology file (e.g., .gro, .pdb)')
     parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
-    parser.add_argument('-s', '--selection', default='protein', help='Atom selection string for peptides')
+    parser.add_argument('-o', '--output', default='adi_results', help='Output directory for results')
     parser.add_argument('-p', '--persistence', type=int, default=DEFAULT_MIN_PERSISTENCE,
                         help='Minimum persistence (in frames) for a contact to be considered stable')
-    parser.add_argument('-o', '--output', default='adi_results', help='Output directory for results')
     parser.add_argument('--rdf_range', type=float, nargs=2, default=DEFAULT_RDF_RANGE,
                         help='Range for RDF calculation (start, end)')
     parser.add_argument('--nbins', type=int, default=DEFAULT_NBINS, help='Number of bins for RDF')
@@ -48,19 +53,38 @@ def parse_arguments():
     parser.add_argument('--first', type=int, default=0, help='Only analyze the first N frames (default is all frames)')
     parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
     args = parser.parse_args()
-    logging.debug(f"Parsed arguments: {args}")
     return args
 
 def ensure_output_directory(output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-        logging.info(f"Created output directory: {output_dir}")
-        print(f"Created output directory: {output_dir}")  # Added print statement
-    else:
-        logging.debug(f"Output directory already exists: {output_dir}")
 
+def setup_logging(output_dir):
+    """Configure logging to both file and console."""
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+    log_file = os.path.join(output_dir, f'adi_analysis_{timestamp}.log')
+
+    # Create formatter
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+    # Setup file handler
+    file_handler = RotatingFileHandler(log_file, maxBytes=10*1024*1024, backupCount=5)
+    file_handler.setFormatter(formatter)
+
+    # Setup console handler
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+
+    # Setup logger
+    logger = logging.getLogger('ADI_Analysis')
+    logger.setLevel(logging.INFO)
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    return logger
+
+'''
 def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection="protein"):
-    logging.info("Loading universe with topology and trajectory.")
     u = mda.Universe(topology, trajectory)
 
     # Set last frame if not specified
@@ -83,7 +107,7 @@ def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection=
         W.write(protein)
 
     # Apply centering transformation
-    logging.info("Applying centering and wrapping transformations.")
+    print("Centering and wrapping protein in the box...")
     transformations = [
         center_in_box(protein, wrap=True)    # Center selected protein group and wrap the box
     ]
@@ -94,21 +118,36 @@ def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection=
             W.write(protein)
 
     # Reload the cropped trajectory
-    logging.info("Reloading the cropped trajectory.")
     cropped_u = mda.Universe(temp_gro, temp_xtc)
     return cropped_u
+'''
 
-def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, output_dir):
+def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, output_dir, first, last, skip):
     """
     Calculate an adaptive cutoff distance based on the first minimum after the first peak in the RDF.
+    Uses the same frame range as specified in command line arguments.
     """
-    logging.info("Calculating adaptive cutoff distance based on RDF.")
+    print("Calculating adaptive cutoff distance based on RDF...")
+    print()
     peptides = universe.select_atoms(selection_string)
-    logging.debug(f"{len(peptides)} peptide beads selected for RDF analysis.")
+    print(f'{len(peptides)} peptide beads selected for RDF analysis.')
+    print()
 
+    # Use the same frame range as main analysis
+    if last is None or last > len(universe.trajectory):
+        last = len(universe.trajectory)
+    print(f"Using frames {first} to {last} with step {skip} for RDF calculation...")
+    print()
+
+    start_time = datetime.now()
     rdf_analysis = rdf.InterRDF(peptides, peptides, nbins=nbins, range=rdf_range)
-    rdf_analysis.run()
-    logging.info("RDF calculation completed.")
+
+    # Run RDF analysis over specified frames
+    rdf_analysis.run(start=first, stop=last, step=skip)
+
+    end_time = datetime.now()
+    print(f"RDF calculation completed in {end_time - start_time}.")
+    print()
 
     # Save RDF plot
     plt.figure()
@@ -118,7 +157,8 @@ def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, outp
     plt.title('Radial Distribution Function')
     timestamp = datetime.now().strftime("%m%d_%H%M")
     plt.savefig(os.path.join(output_dir, f'rdf_plot_{timestamp}.png'))
-    logging.info("RDF plot saved.")
+    print("RDF plot saved.")
+    print()
     # plt.show()
     plt.close()
 
@@ -127,51 +167,43 @@ def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, outp
     bins = rdf_analysis.results.bins
     peaks = (np.diff(np.sign(np.diff(rdf_values))) < 0).nonzero()[0] + 1
     if peaks.size > 0:
-        logging.debug(f"First peak found at bin index {peaks[0]}.")
         first_peak = peaks[0]
         minima = (np.diff(np.sign(np.diff(rdf_values[first_peak:]))) > 0).nonzero()[0] + first_peak + 1
         if minima.size > 0:
             cutoff_distance = bins[minima[0]]
-            logging.info(f"Adaptive cutoff distance determined: {cutoff_distance:.2f} Å")
+            print(f"Adaptive cutoff distance determined: {cutoff_distance:.2f} Å")
+            print()
         else:
-            logging.error("No minimum found in RDF after the first peak.")
             raise ValueError("No minimum found in RDF after the first peak. Please check your RDF or specify a manual cutoff.")
     else:
-        logging.error("No peaks found in RDF.")
         raise ValueError("No peaks found in RDF. Please check your RDF or specify a manual cutoff.")
     return cutoff_distance
 
-def identify_clusters(peptides, cutoff_distance):
+def identify_clusters(peptides, cutoff_distance, min_peptides=50):
     """
-    Identify clusters of peptides based on center of mass and cutoff distance.
+    Identify clusters of peptides based on the cutoff distance.
+    Only returns clusters with at least min_peptides members.
     """
-    logging.debug(f"Identifying clusters with cutoff distance: {cutoff_distance:.2f} Å.")
-
-    # Get unique residues and their centers of mass
-    residues = peptides.residues
-    positions = np.array([residue.atoms.center_of_mass() for residue in residues])
-    resids = np.array([residue.resid for residue in residues])
-
-    # Create distance matrix based on centers of mass
+    positions = peptides.positions
     dist_matrix = cdist(positions, positions)
     adjacency_matrix = dist_matrix < cutoff_distance
     np.fill_diagonal(adjacency_matrix, 0)
-
-    # Create graph and find connected components (clusters)
     G = nx.from_numpy_array(adjacency_matrix)
-    components = list(nx.connected_components(G))
-
-    # Convert node indices to residue IDs
-    clusters = [set(resids[list(component)]) for component in components]
-
-    logging.debug(f"Found {len(clusters)} clusters.")
-    return clusters
+    all_clusters = list(nx.connected_components(G))
+    # Filter clusters to include only those with min_peptides or more
+    significant_clusters = [cluster for cluster in all_clusters if len(cluster) >= min_peptides]
+    # Add debug print before returning
+    print(f"Identified {len(significant_clusters)} significant clusters")
+    for i, cluster in enumerate(significant_clusters):
+        print(f"Cluster {i} size: {len(cluster)}")
+    return significant_clusters
 
 def analyze_aggregate_persistence(cluster_records, contact_persistence, min_persistence):
     """
     Apply persistence criteria to filter out transient aggregates.
     """
-    logging.info("Applying persistence criteria to aggregates.")
+    # print("Applying persistence criteria to aggregates...")
+    # print()
     persistent_aggregates = []
     for cluster_id, frames in cluster_records.items():
         if len(frames) >= min_persistence:
@@ -190,154 +222,183 @@ def analyze_aggregate_persistence(cluster_records, contact_persistence, min_pers
             # Only add this aggregate if all contacts are persistent
             if all_contacts_persistent:
                 persistent_aggregates.append((cluster_id, frames))
-    logging.info(f"Identified {len(persistent_aggregates)} persistent aggregates.")
     return persistent_aggregates
+
+def save_frame_results(frame_data, output_dir):
+    """
+    Save frame-by-frame ADI analysis results.
+    Format: Frame,Peptides,aggregate_count,total_peptides_in_aggregate,avg_aggregate_size
+    """
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+    output_file = os.path.join(output_dir, f'adi_frame_results_{timestamp}.csv')
+    with open(output_file, 'w') as f:
+        f.write('Frame,Peptides,aggregate_count,total_peptides_in_aggregate,avg_aggregate_size\n')
+        for data in frame_data:
+            f.write(f"{data['frame']},{data['peptides']},{data['aggregate_count']},"
+                   f"{data['total_peptides_in_aggregate']},{data['avg_aggregate_size']:.2f}\n")
+    print(f"Frame-by-frame ADI results saved to {output_file}")
+    print()
+
+def process_cluster_contacts(peptides, cluster, cutoff_distance, max_pairs=1000000):
+    """
+    Process contacts for a cluster using KDTree for efficiency.
+    Limits maximum number of pairs to avoid memory explosion.
+    """
+    cluster = list(cluster)
+    positions = peptides.positions[cluster]
+
+    # Use KDTree for efficient neighbor search
+    tree = cKDTree(positions)
+    pairs = tree.query_pairs(cutoff_distance, output_type='set')
+
+    # Convert indices back to original atom indices
+    contact_pairs = set()
+    for i, j in pairs:
+        a, b = cluster[i], cluster[j]
+        if a < b:
+            contact_pairs.add(frozenset([a, b]))
+        if len(contact_pairs) > max_pairs:
+            print(f"WARNING: Reached maximum pairs limit ({max_pairs})")
+            break
+
+    return contact_pairs
 
 def main():
     args = parse_arguments()
-    logging.info("Starting ADI analysis.")
-    print("Starting ADI analysis.")
     ensure_output_directory(args.output)
 
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s [%(levelname)s] %(message)s',
-        handlers=[
-            logging.FileHandler(os.path.join(args.output, f'adi_analysis_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log')),
-            logging.StreamHandler()
-        ]
-    )
+    # Setup logging
+    logger = setup_logging(args.output)
+    logger.info("Starting ADI analysis")
+    logger.info(f"Input topology: {args.topology}")
+    logger.info(f"Input trajectory: {args.trajectory}")
 
-    # logging.info(f"Output directory: {args.output}")
-    # print(f"Output directory: {args.output}")
+    # Load trajectory
+    logger.info("Loading trajectory...")
+    u = mda.Universe(args.topology, args.trajectory)
+    peptides = u.select_atoms('all')
+    logger.info(f"Successfully loaded trajectory:")
+    logger.info(f"  - Total atoms: {len(peptides)}")
+    logger.info(f"  - Total frames: {len(u.trajectory)}")
+    logger.info(f"  - Time step: {u.trajectory.dt} ps")
 
-    # Initialize a list to store frame records
-    frame_records = []
+    # Calculate adaptive cutoff distance based on RDF using specified frame range
+    cutoff_distance = calculate_adaptive_cutoff(u, 'all', args.rdf_range, args.nbins,
+                                              args.output, args.first, args.last, args.skip)
+    logger.info(f"Determined adaptive cutoff distance: {cutoff_distance:.2f} Å")
+
+    # Initialize variables for analysis
+    cluster_records = defaultdict(list)  # {cluster_id: [frame_numbers]}
+    cluster_size_distribution = []  # List of dicts with frame number and cluster sizes
+    contact_persistence = defaultdict(int)  # {contact_pair: persistence_count}
+    frame_data = []
 
     try:
-        # Load and crop trajectory
-        logging.info("Loading and processing trajectory...")
-        u = load_and_crop_trajectory(args.topology, args.trajectory, args.first, args.last, args.skip, args.selection)
-        logging.info(f"Total frames in cropped trajectory: {len(u.trajectory)}")
-
-        selection_string = args.selection
-        logging.debug(f"Atom selection string: {selection_string}")
-        peptides = u.select_atoms(selection_string)
-
-        # Calculate adaptive cutoff distance based on RDF
-        cutoff_distance = calculate_adaptive_cutoff(u, selection_string, args.rdf_range, args.nbins, args.output)
-
-        # Initialize variables for analysis
-        logging.info("Initializing variables for analysis.")
-        cluster_records = defaultdict(list)  # {cluster_id: [frame_numbers]}
-        cluster_size_distribution = []  # List of dicts with frame number and cluster sizes
-        contact_persistence = defaultdict(int)  # {contact_pair: persistence_count}
-
         # Analyze each frame
-        logging.info("Analyzing frames for aggregation.")
-        for frame_number, ts in enumerate(u.trajectory):
-            logging.info(f"Processing frame {frame_number}...")
+        logger.info("Starting frame analysis")
+        print("Analyzing frames for aggregation...")
+        print()
 
-            # Get peptide residues instead of atoms
-            peptide_residues = peptides.residues
+        frames = range(args.first, args.last or len(u.trajectory), args.skip)
+        for frame_number in frames:
+            try:
+                u.trajectory[frame_number]
+                logger.info(f"Processing frame {frame_number}")
+                print(f"Processing frame {frame_number}...")
 
-            # Identify clusters using residue-based approach
-            current_clusters = identify_clusters(peptides, cutoff_distance)
+                # Identify clusters
+                current_clusters = identify_clusters(peptides, cutoff_distance, min_peptides=50)
+                cluster_sizes = [len(cluster) for cluster in current_clusters]
+                logger.info(f"Frame {frame_number}: Found clusters with sizes: {cluster_sizes}")
+                print(f"Found clusters with sizes: {cluster_sizes}")
 
-            # Convert residue IDs to peptide identifiers
-            aggregated_peptides = set()
-            for cluster in current_clusters:
-                aggregated_peptides.update(f'PEP{resid}' for resid in cluster)
+                if cluster_sizes:
+                    logger.info("Processing cluster data...")
+                    print("Processing cluster data...")
+                    cluster_size_distribution.append({'frame': frame_number, 'cluster_sizes': cluster_sizes})
 
-            # Calculate ADI metrics
-            aggregate_size = len(aggregated_peptides)
-            aggregation_rate = aggregate_size / (frame_number + 1)
-            stability_index = aggregate_size / len(peptide_residues)
+                    current_contacts = set()  # Initialize the set for current frame's contacts
+                    total_peptides = len(peptides)
+                    aggregate_count = len(current_clusters)
+                    logger.info(f"Found {aggregate_count} aggregates in frame {frame_number}.")
+                    print(f"Found {aggregate_count} aggregates in frame {frame_number}.")
+                    total_in_aggregates = sum(cluster_sizes)
+                    avg_size = total_in_aggregates / aggregate_count if aggregate_count > 0 else 0
 
-            # Create frame record with proper peptide identification
-            frame_record = {
-                'Frame': frame_number,
-                'Peptides': sorted(list(aggregated_peptides)),  # Sort for consistency
-                'aggregate_size': aggregate_size,
-                'aggregation_rate': aggregation_rate,
-                'stability_index': stability_index
-            }
+                    logger.info("Updating frame data...")
+                    print("Updating frame data...")
+                    frame_data.append({
+                        'frame': frame_number,
+                        'peptides': total_peptides,
+                        'aggregate_count': aggregate_count,
+                        'total_peptides_in_aggregate': total_in_aggregates,
+                        'avg_aggregate_size': avg_size
+                    })
 
-            frame_records.append(frame_record)
+                    logger.info("Processing contacts...")
+                    print("Processing contacts...")
 
-            # Identify clusters in the current frame
-            current_clusters = identify_clusters(peptides, cutoff_distance)
-            logging.debug(f"Found {len(current_clusters)} clusters in frame {frame_number}.")
-            cluster_sizes = [len(cluster) for cluster in current_clusters]
-            cluster_size_distribution.append({'frame': frame_number, 'cluster_sizes': cluster_sizes})
+                    # Add memory usage monitoring
+                    process = psutil.Process()
+                    mem_usage = process.memory_info().rss / 1024 / 1024
+                    logger.info(f"Memory usage before contact processing: {mem_usage:.2f} MB")
+                    print(f"Memory usage before contact processing: {mem_usage:.2f} MB")
 
-            #ADI-specific metrics (replace with actual calculations)
-            aggregate_size = sum(cluster_sizes)
-            aggregation_rate = aggregate_size / (frame_number + 1)  # Example metric
-            stability_index = aggregate_size / (len(peptides) + 1)  # Example metric
+                    for cluster_idx, cluster in enumerate(current_clusters):
+                        try:
+                            logger.info(f"Processing cluster {cluster_idx} with size {len(cluster)}")
+                            print(f"Processing cluster {cluster_idx} with size {len(cluster)}")
+                            cluster_pairs = process_cluster_contacts(peptides, cluster, cutoff_distance)
+                            current_contacts.update(cluster_pairs)
+                            logger.info(f"Cluster {cluster_idx} generated {len(cluster_pairs)} contact pairs")
+                            print(f"Cluster {cluster_idx} generated {len(cluster_pairs)} contact pairs")
 
-            # Extract peptides involved in aggregates
-            aggregated_peptides = []
-            for cluster in current_clusters:
-                aggregated_peptides.extend(cluster)
-            aggregated_peptides = list(set(aggregated_peptides))  # Remove duplicates
+                            # Force garbage collection after each cluster
+                            gc.collect()
 
-            # Create a record for the current frame
-            frame_record = {
-                'Frame': frame_number,
-                'Peptides': str(aggregated_peptides),
-                'aggregate_size': aggregate_size,
-                'aggregation_rate': aggregation_rate,
-                'stability_index': stability_index
-                # Add other ADI-specific metrics here
-            }
+                        except Exception as e:
+                            logger.error(f"Error processing cluster {cluster_idx}: {e}")
+                            print(f"Error processing cluster {cluster_idx}: {e}")
+                            continue
 
-            frame_records.append(frame_record)
+                    mem_usage = process.memory_info().rss / 1024 / 1024
+                    logger.info(f"Memory usage after contact processing: {mem_usage:.2f} MB")
+                    print(f"Memory usage after contact processing: {mem_usage:.2f} MB")
+                    logger.info(f"Total contacts generated: {len(current_contacts)}")
+                    print(f"Total contacts generated: {len(current_contacts)}")
+                    logger.info(f"Completed frame {frame_number} processing")
+                    print(f"Completed frame {frame_number} processing")
+                    print("-" * 50)
 
-            # Track contact persistence across frames
-            current_contacts = set()
-            for cluster in current_clusters:
-                cluster_pairs = {frozenset([a, b]) for i, a in enumerate(cluster) for b in cluster if a != b}
-                current_contacts.update(cluster_pairs)
+            except Exception as e:
+                logger.error(f"ERROR in frame {frame_number}: {str(e)}")
+                print(f"ERROR in frame {frame_number}: {str(e)}")
+                import traceback
+                logger.error(traceback.format_exc())
+                traceback.print_exc()
+                continue
 
-            # Update persistence counts for ongoing contacts
-            for contact in current_contacts:
-                contact_persistence[contact] += 1  # Increase count if contact is present in this frame
+    except Exception as e:
+        logger.critical(f"FATAL ERROR: {str(e)}")
+        print(f"FATAL ERROR: {str(e)}")
+        import traceback
+        logger.critical(traceback.format_exc())
+        traceback.print_exc()
 
-            # Reset counts for contacts no longer present
-            for contact in list(contact_persistence.keys()):
-                if contact not in current_contacts:
-                    contact_persistence[contact] = 0  # Reset persistence count for broken contact
+    # Apply persistence criteria
+    persistent_aggregates = analyze_aggregate_persistence(cluster_records, contact_persistence, args.persistence)
 
-            # Record clusters for persistence analysis
-            for cluster in current_clusters:
-                cluster_id = frozenset(cluster)
-                cluster_records[cluster_id].append(frame_number)
+    # Save results
+    save_frame_results(frame_data, args.output)
+    save_cluster_size_distribution(cluster_size_distribution, args.output)
+    # save_persistent_aggregates(persistent_aggregates, args.output)
 
-        # Apply persistence criteria
-        persistent_aggregates = analyze_aggregate_persistence(cluster_records, contact_persistence, args.persistence)
+    # Generate plots
+    plot_cluster_size_distribution(cluster_size_distribution, args.output)
+    # plot_persistent_aggregates(persistent_aggregates, args.output)
 
-        # Save results
-        logging.info("Saving analysis results.")
-        print("Saving analysis results.")
-        save_cluster_size_distribution(cluster_size_distribution, args.output)
-        save_persistent_aggregates(persistent_aggregates, args.output)
-        # Save ADI frame results
-        save_frame_results(frame_records, args.output)
-
-        # Generate plots
-        logging.info("Generating plots.")
-        print("Generating plots.")
-        plot_cluster_size_distribution(cluster_size_distribution, args.output)  # Updated function call
-        plot_persistent_aggregates(persistent_aggregates, args.output)
-
-        logging.info("ADI analysis completed successfully.")
-        print("ADI analysis completed successfully.")
-
-    finally:
-        # Clean up the fixed temporary files after the analysis
-        os.remove("centered_protein_slice.gro")
-        os.remove("centered_protein_slice.xtc")
+    logger.info("ADI analysis completed successfully.")
+    print("ADI analysis completed successfully.")
 
 def save_cluster_size_distribution(cluster_size_distribution, output_dir):
     """
@@ -350,27 +411,8 @@ def save_cluster_size_distribution(cluster_size_distribution, output_dir):
         for entry in cluster_size_distribution:
             sizes = ';'.join(map(str, entry['cluster_sizes']))
             f.write(f"{entry['frame']},{sizes}\n")
-    logging.info("Cluster size distribution data saved.")
-
-def save_frame_results(frame_records, output_dir):
-    """
-    Save ADI frame results to a CSV file with proper peptide identification.
-    """
-    timestamp = datetime.now().strftime("%m%d_%H%M")
-    output_file = os.path.join(output_dir, f'adi_frame_results_{timestamp}.csv')
-
-    fieldnames = ['Frame', 'Peptides', 'aggregate_size', 'aggregation_rate', 'stability_index']
-
-    with open(output_file, 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for record in frame_records:
-            # Ensure Peptides is a string representation of a list
-            if isinstance(record['Peptides'], (list, set)):
-                record['Peptides'] = str(sorted(record['Peptides']))
-            writer.writerow(record)
-
-    logging.info(f"ADI frame results saved to {output_file}")
+    print(f"Cluster size distribution data saved to {output_file}")
+    print()
 
 def save_persistent_aggregates(persistent_aggregates, output_dir):
     """
@@ -383,61 +425,31 @@ def save_persistent_aggregates(persistent_aggregates, output_dir):
         for idx, (cluster_id, frames) in enumerate(persistent_aggregates):
             frames_str = ';'.join(map(str, frames))
             f.write(f"{idx},{frames_str}\n")
-    logging.info("Persistent aggregates data saved.")
+    print(f"Persistent aggregates data saved to {output_file}")
+    print()
 
 def plot_cluster_size_distribution(cluster_size_distribution, output_dir):
     """
-    Plot the number of clusters per frame with circle sizes proportional to the average cluster size.
+    Plot the cluster size distribution over time.
     """
-    logging.info("Plotting cluster size distribution.")
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import os
-    from datetime import datetime
-
-    # Extract frame numbers, number of clusters, and average cluster sizes
     frames = [entry['frame'] for entry in cluster_size_distribution]
-    num_clusters = [len(entry['cluster_sizes']) for entry in cluster_size_distribution]
-    avg_cluster_sizes = [np.mean(entry['cluster_sizes']) if entry['cluster_sizes'] else 0 for entry in cluster_size_distribution]
-
-    # Scale the sizes of the scatter points for better visibility
-    sizes_scaled = np.array(avg_cluster_sizes) * 100  # Adjust scaling factor as needed
-
-    # Create the bubble plot
-    plt.figure(figsize=(10, 6))
-    scatter = plt.scatter(frames, num_clusters, s=sizes_scaled, alpha=0.6, c=num_clusters, cmap='viridis', edgecolors='w', linewidth=0.5)
-
-    # Add color bar to indicate the number of clusters
-    plt.colorbar(scatter, label='Number of Clusters')
-
-    # Enhance plot aesthetics
-    plt.xlabel("Frame Number")
-    plt.ylabel("Number of Clusters")
-    plt.title("Number of Clusters per Frame with Average Cluster Size")
-    plt.grid(True, linestyle='--', alpha=0.5)
-    plt.tight_layout()
-
-    # Save the plot with a timestamped filename
+    max_cluster_sizes = [max(entry['cluster_sizes']) if entry['cluster_sizes'] else 0 for entry in cluster_size_distribution]
+    plt.figure()
+    plt.plot(frames, max_cluster_sizes, label='Max Cluster Size')
+    plt.xlabel('Frame')
+    plt.ylabel('Cluster Size')
+    plt.title('Cluster Size Distribution Over Time')
+    plt.legend()
     timestamp = datetime.now().strftime("%m%d_%H%M")
-    plot_filename = os.path.join(output_dir, f'number_of_clusters_per_frame_{timestamp}.png')
-    plt.savefig(plot_filename)
+    plt.savefig(os.path.join(output_dir, f'cluster_size_distribution_{timestamp}.png'))
     plt.close()
-    logging.info("Cluster size distribution plot saved.")
-
-    # Save cluster size distribution data to a CSV file
-    csv_filename = os.path.join(output_dir, f'cluster_size_distribution_{timestamp}.csv')
-    with open(csv_filename, 'w') as f:
-        f.write('Frame,ClusterSizes\n')
-        for entry in cluster_size_distribution:
-            sizes = ';'.join(map(str, entry['cluster_sizes']))
-            f.write(f"{entry['frame']},{sizes}\n")
-    logging.info(f"Cluster size distribution data saved to {csv_filename}")
+    print("Cluster size distribution plot saved.")
+    print()
 
 def plot_persistent_aggregates(persistent_aggregates, output_dir):
     """
     Plot the number of persistent aggregates over time.
     """
-    logging.info("Plotting persistent aggregates over time.")
     aggregate_counts = defaultdict(int)
     for _, frames in persistent_aggregates:
         for frame in frames:
@@ -453,7 +465,9 @@ def plot_persistent_aggregates(persistent_aggregates, output_dir):
     timestamp = datetime.now().strftime("%m%d_%H%M")
     plt.savefig(os.path.join(output_dir, f'persistent_aggregates_{timestamp}.png'))
     plt.close()
-    logging.info("Persistent aggregates plot saved.")
+    print("Persistent aggregates plot saved.")
+    print()
 
 if __name__ == '__main__':
     main()
+    print()

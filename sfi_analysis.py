@@ -3,15 +3,12 @@
 sfi_analysis.py
 
 This script calculates the Sheet Formation Index (SFI) for peptide simulations.
-It incorporates advanced features such as:
-
-- Principal Component Analysis (PCA) for robust plane fitting.
-- Flexibility to detect curved or twisted sheets using quadratic surface fitting.
-- Topological methods using persistent homology for complex sheet structures.
-- Cluster analysis to distinguish multiple sheets.
-- Time-resolved analysis to track the dynamics of sheet formation.
-
 """
+
+import warnings
+from Bio import BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 import logging
 import os
@@ -42,14 +39,13 @@ CSV_HEADERS = ['Frame', 'Peptides', 'sheet_count', 'total_peptides_in_sheets', '
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Sheet Formation Index (SFI) Analysis')
-    parser.add_argument('-t', '--topology', default="eq_FF1200.gro", help='Topology file (e.g., .gro, .pdb)')
-    parser.add_argument('-x', '--trajectory', default="eq_FF1200.xtc", help='Trajectory file (e.g., .xtc, .trr)')
-    parser.add_argument('-s', '--selection', default='protein', help='Bead selection string for peptides')
+    parser.add_argument('-t', '--topology', required=True, help='Topology file (e.g., .gro, .pdb)')
+    parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
     parser.add_argument('-o', '--output', default='sfi_results', help='Output directory for results')
     parser.add_argument('-pl', '--peptide_length', type=int, default=8, help='Length of each peptide in residues')
     parser.add_argument('--min_sheet_size', type=int, default=MIN_SHEET_SIZE, help='Minimum number of peptides to consider a sheet')
-    parser.add_argument('--first', type=int, default=482, help='First frame to analyze')
-    parser.add_argument('--last', type=int, default=483, help='Last frame to analyze')
+    parser.add_argument('--first', type=int, default=0, help='First frame to analyze')
+    parser.add_argument('--last', type=int, default=None, help='Last frame to analyze')
     parser.add_argument('--skip', type=int, default=1, help='Process every nth frame')
     args = parser.parse_args()
     return args
@@ -58,37 +54,11 @@ def ensure_output_directory(output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection="protein"):
-    u = mda.Universe(topology, trajectory)
-
-    # Define end frame if not specified
-    total_frames = len(u.trajectory)
-    if last is None or last > total_frames:
-        last = total_frames
-    if first < 0 or first >= total_frames:
-        raise ValueError(f"Invalid first frame: {first}.")
-
-    # Select the specified atoms
-    peptides = u.select_atoms(selection)
-    if len(peptides) == 0:
-        raise ValueError(f"Selection '{selection}' returned no atoms.")
-
-    indices = list(range(first, last, skip))
-
-    # Create temporary file names for cropped trajectory
-    temp_gro = "temp_protein_slice.gro"
-    temp_xtc = "temp_protein_slice.xtc"
-
-    # Write the selected atoms to a temporary trajectory
-    with mda.Writer(temp_gro, peptides.n_atoms) as W:
-        W.write(peptides)
-    with mda.Writer(temp_xtc, peptides.n_atoms) as W:
-        for ts in u.trajectory[indices]:
-            W.write(peptides)
-
-    # Reload the cropped trajectory
-    cropped_u = mda.Universe(temp_gro, temp_xtc)
-    return cropped_u
+'''
+def load_and_crop_trajectory():
+    # Comment out this function as we'll use direct loading
+    # ...existing function code...
+'''
 
 def perform_pca(positions):
     if len(positions) < 3:
@@ -206,12 +176,14 @@ def save_sheet_lifetimes(sheet_lifetimes, output_dir):
         for sheet_id, data in sheet_lifetimes.items():
             f.write(f"{sheet_id},{data['start_frame']},{data['end_frame']},{data['lifetime']}\n")
     print(f"Sheet lifetimes data saved to {output_file}")
+    print()
 
 def plot_sheet_lifetimes(sheet_lifetimes, output_dir):
     lifetimes = [data["lifetime"] for data in sheet_lifetimes.values()]
 
     if not lifetimes:
         print("No sheets met the minimum lifetime criteria; skipping plot.")
+        print()
         return
 
     plt.figure()
@@ -223,6 +195,7 @@ def plot_sheet_lifetimes(sheet_lifetimes, output_dir):
     plt.savefig(os.path.join(output_dir, f'sheet_lifetimes_distribution_{timestamp}.png'))
     plt.close()
     print("Sheet lifetimes distribution plot saved.")
+    print()
 
 def save_frame_results(frame_records, output_dir):
     """Save SFI frame results to a CSV file."""
@@ -252,10 +225,14 @@ def main():
         datefmt='%Y-%m-%d %H:%M:%S'
     )
 
-    # Load trajectory and setup variables
-    u = load_and_crop_trajectory(args.topology, args.trajectory, args.first, args.last, args.skip, args.selection)
-    peptide_length = args.peptide_length
-    peptides = u.select_atoms(args.selection)
+    # Direct loading of pre-processed trajectory
+    print()
+    print("Loading trajectory...")
+    print()
+    u = mda.Universe(args.topology, args.trajectory)
+    peptides = u.select_atoms('all')  # Use all atoms as file is pre-processed
+    print(f"Loaded {len(peptides)} peptide beads.")
+    print()
 
     # Initialize sheet tracking variables
     sheet_records = defaultdict(list)
@@ -267,22 +244,25 @@ def main():
     frame_records = []
 
     # Process each frame
-    for frame_number, ts in enumerate(u.trajectory):
-        print(f"Processing frame {frame_number + args.first}/{len(u.trajectory) + args.first - 1}...")
+    frames = range(args.first, args.last or len(u.trajectory), args.skip)
+    for frame_number in frames:
+        u.trajectory[frame_number]
+        print(f"Processing frame {frame_number}...")
+        print()
 
         # Calculate positions and orientations for each peptide
         positions = []
         orientations = []
         peptide_indices = []  # Track peptide indices
 
-        for i in range(0, len(peptides), peptide_length):
-            peptide = peptides[i:i + peptide_length]
-            if len(peptide) < peptide_length:
+        for i in range(0, len(peptides), args.peptide_length):
+            peptide = peptides[i:i + args.peptide_length]
+            if len(peptide) < args.peptide_length:
                 continue
             positions.append(peptide.positions.mean(axis=0))
             _, orientation_vector, _, _, _ = perform_pca(peptide.positions)
             orientations.append(orientation_vector)
-            peptide_indices.append(i // peptide_length)  # Store peptide index
+            peptide_indices.append(i // args.peptide_length)  # Store peptide index
 
         positions = np.array(positions)
         orientations = np.array(orientations)
@@ -303,7 +283,7 @@ def main():
 
         # Create frame record
         frame_record = {
-            'Frame': frame_number + args.first,
+            'Frame': frame_number,
             'Peptides': str(sorted(frame_peptides)),  # Sort for consistency
             'sheet_count': sheet_count,
             'total_peptides_in_sheets': total_peptides,
@@ -320,6 +300,7 @@ def main():
     plot_sheet_lifetimes(sheet_lifetimes, args.output)
 
     print("SFI analysis completed successfully.")
+    print()
 
 if __name__ == '__main__':
     main()

@@ -34,6 +34,12 @@ from scipy.spatial import cKDTree
 from scipy.cluster.hierarchy import fcluster, linkage
 import csv
 
+import warnings
+# Remove the import that causes the deprecation warning
+# from Bio import BiopythonDeprecationWarning
+# Modify the warnings filter to ignore the BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", ".*BiopythonDeprecationWarning.*")
+warnings.filterwarnings("ignore", category=UserWarning)
 
 # Constants
 DENSITY_BINS = 50  # Reduced from 100
@@ -56,15 +62,14 @@ CSV_HEADERS = ['Frame', 'Peptides', 'vesicle_count', 'total_peptides_in_vesicles
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Vesicle Formation Index (VFI) Analysis')
-    parser.add_argument('-t', '--topology', default='eq_FF1200.gro', help='Topology file (e.g., .gro, .pdb)')
-    parser.add_argument('-x', '--trajectory', default='eq_FF1200.xtc', help='Trajectory file (e.g., .xtc, .trr)')
-    parser.add_argument('-s', '--selection', default='protein', help='Atom selection string for peptides')
+    parser.add_argument('-t', '--topology', required=True, help='Topology file (e.g., .gro, .pdb)')
+    parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
     parser.add_argument('-o', '--output', default='vfi_results', help='Output directory for results')
     parser.add_argument('--min_vesicle_size', type=int, default=MIN_VESICLE_SIZE,
                         help='Minimum number of atoms to consider an aggregate as a vesicle')
-    parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
-    parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
-    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
+    parser.add_argument('--first', type=int, default=0, help='First frame to analyze')
+    parser.add_argument('--last', type=int, default=None, help='Last frame to analyze')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame')
     args = parser.parse_args()
     return args
 
@@ -78,83 +83,24 @@ def setup_logging(output_dir):
     logging.basicConfig(filename=log_filename, level=logging.DEBUG,
                         format='%(asctime)s - %(levelname)s - %(message)s')
     logging.info("VFI Analysis started.")
+    print()
+    print(f"Logging to {log_filename}")
 
-def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection):
-    u = mda.Universe(topology, trajectory)
+'''
+def load_and_crop_trajectory():
+    # Comment out this function as we'll use direct loading
+    # ...existing function code...
+'''
 
-     # Set the total number of frames
-    total_frames = len(u.trajectory)
-    print(f"Total frames: {total_frames}")
-    print(f"First frame: {first}")
-    print(f"Last frame: {last}")
-    print(f"Skip: {skip}")
+'''
+def center_and_wrap_trajectory():
+    # Comment out this function as files are pre-processed
+    # ...existing function code...
+'''
 
-    # Validate and set 'first' and 'last'
-    if last is None or last > total_frames:
-        last = total_frames
-    if first < 0 or first >= total_frames:
-        raise ValueError(f"Invalid first frame: {first}.")
-
-    # Ensure that 'last' is greater than 'first'
-    if last <= first:
-        raise ValueError(f"'last' frame must be greater than 'first' frame. Got first={first}, last={last}.")
-
-    # Select the specified beads
-    selection_atoms = u.select_atoms(selection)
-    if len(selection_atoms) == 0:
-        raise ValueError(f"Selection '{selection}' returned no beads.")
-
-    # Create the list of frame indices to process
-    indices = list(range(first, last, skip))
-    logging.debug(f"Indices to be processed: {indices}")
-
-    # Create temporary file names for cropped trajectory
-    temp_gro = "temp_protein_slice.gro"
-    temp_xtc = "temp_protein_slice.xtc"
-
-    # Write the selected beads to a temporary trajectory
-    with mda.Writer(temp_gro, selection_atoms.n_atoms) as W:
-        W.write(selection_atoms)
-    with mda.Writer(temp_xtc, selection_atoms.n_atoms) as W:
-        for ts in u.trajectory[indices]:
-            W.write(selection_atoms)
-
-    # Reload the cropped trajectory
-    cropped_u = mda.Universe(temp_gro, temp_xtc)
-    return cropped_u
-
-def center_and_wrap_trajectory(universe, selection_string):
-    """
-    Center the selected group in the simulation box and wrap all atoms to handle PBC issues.
-    """
-    selection = universe.select_atoms(selection_string)
-
-    # Calculate the center of mass of the selection
-    com = selection.center_of_mass()
-
-    # Get the simulation box dimensions
-    box_dimensions = universe.dimensions[:3]  # [lx, ly, lz]
-
-    # Calculate the center of the box
-    box_center = box_dimensions / 2
-
-    # Calculate the shift vector needed to move COM to box center
-    shift = box_center - com
-
-    # Translate the entire system by the shift vector
-    universe.atoms.translate(shift)
-
-    # Wrap all atoms back into the primary simulation box
-    universe.atoms.wrap()
-
-    # Optional: Recompute the center of mass after translation and wrapping
-    new_com = selection.center_of_mass()
-    logging.debug(f"Initial COM: {com}, Shift Applied: {shift}, New COM after wrapping: {new_com}")
-
-def identify_aggregates(universe, selection_string):
+def identify_aggregates(universe):
     """Identify aggregates using hierarchical clustering"""
-    selection = universe.select_atoms(selection_string)
-    positions = selection.positions
+    positions = universe.atoms.positions
 
     if len(positions) == 0:
         return [], []
@@ -173,7 +119,7 @@ def identify_aggregates(universe, selection_string):
     for cluster_id in unique_clusters:
         cluster_indices = np.where(labels == cluster_id)[0]
         if len(cluster_indices) >= MIN_VESICLE_SIZE:
-            ag_atoms = selection.atoms[cluster_indices]
+            ag_atoms = universe.atoms[cluster_indices]
             aggregates.append(ag_atoms)
             aggregate_indices.append(cluster_indices)
 
@@ -473,27 +419,29 @@ def main():
     ensure_output_directory(args.output)
     setup_logging(args.output)
 
-    # Load and crop trajectory
-    print("Loading and processing trajectory...")
-    u = load_and_crop_trajectory(args.topology, args.trajectory, args.first, args.last, args.skip, args.selection)
-    print(f"Total frames in cropped trajectory: {len(u.trajectory)}")
+    # Direct loading of pre-processed trajectory
+    print()
+    print("Loading trajectory...")
+    print()
+    u = mda.Universe(args.topology, args.trajectory)
+    peptides = u.select_atoms('all')  # Use all atoms as file is pre-processed
+    print(f"Loaded {len(peptides)} atoms")
+    print()
 
-    selection_string = args.selection
-    n_frames = len(u.trajectory)
-
-    # Center and wrap the trajectory to handle PBC issues
-    center_and_wrap_trajectory(u, selection_string)
-
+    # Initialize tracking variables
     vesicle_records = defaultdict(list)
     vesicle_id_counter = 0
     frame_records = []
 
-    print("Analyzing frames for vesicle formation...")
-    for frame_number, ts in enumerate(u.trajectory):
-        print(f"Processing frame {frame_number+1}/{n_frames}...")
+    # Process frames
+    frames = range(args.first, args.last or len(u.trajectory), args.skip)
+    for frame_number in frames:
+        u.trajectory[frame_number]
+        print(f"Processing frame {frame_number}...")
+        print()
 
-        # Get aggregates with their peptide indices
-        aggregates, peptide_indices = identify_aggregates(u, selection_string)
+        # Get aggregates
+        aggregates, peptide_indices = identify_aggregates(u)
 
         # Track vesicles and their peptides for this frame
         frame_vesicles = []
@@ -547,6 +495,7 @@ def save_vesicle_lifetimes(vesicle_lifetimes, output_dir):
         for vesicle_id, lifetime in vesicle_lifetimes.items():
             f.write(f"{vesicle_id},{lifetime}\n")
     print(f"Vesicle lifetimes data saved to {output_file}")
+    print()
 
 def save_frame_results(frame_results, output_dir):
     """Save VFI frame results to a CSV file."""
@@ -560,6 +509,8 @@ def save_frame_results(frame_results, output_dir):
             writer.writerow(record)
 
     logging.info(f"VFI frame results saved to {output_file}")
+    print(f"VFI frame results saved to {output_file}")
+    print()
 
 def plot_vesicle_lifetimes(vesicle_lifetimes, output_dir):
     """
@@ -567,6 +518,7 @@ def plot_vesicle_lifetimes(vesicle_lifetimes, output_dir):
     """
     if not vesicle_lifetimes:
         print("No vesicles found in the analyzed frames - skipping histogram creation")
+
         return
 
     lifetimes = list(vesicle_lifetimes.values())  # Use dictionary values

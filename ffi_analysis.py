@@ -13,6 +13,11 @@ It incorporates advanced features such as:
 
 """
 
+import warnings
+# Suppress BiopythonDeprecationWarning messages before any Bio modules are imported
+warnings.filterwarnings("ignore", message=".*Bio.Application modules and modules relying on it have been deprecated.*")
+warnings.filterwarnings("ignore", category=UserWarning)
+
 import os
 import argparse
 import numpy as np
@@ -23,13 +28,6 @@ from scipy.spatial import ConvexHull
 from collections import defaultdict
 import matplotlib.pyplot as plt
 from datetime import datetime
-
-import warnings
-from Bio import BiopythonDeprecationWarning
-warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
-warnings.filterwarnings("ignore", category=UserWarning)
-
-# from mpi4py import MPI
 
 import logging
 from datetime import datetime
@@ -75,10 +73,15 @@ def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection)
 
     # Set the total number of frames
     total_frames = len(u.trajectory)
+    print()
     print(f"Total frames: {total_frames}")
+    print()
     print(f"First frame: {first}")
+    print()
     print(f"Last frame: {last}")
+    print()
     print(f"Skip: {skip}")
+    print()
 
     # Validate and set 'first' and 'last'
     if last is None or last > total_frames:
@@ -341,6 +344,7 @@ def save_fiber_lifetimes(fiber_lifetimes, output_dir):
         for fiber_id, data in fiber_lifetimes.items():
             f.write(f"{fiber_id},{data['start_frame']},{data['end_frame']},{data['lifetime']}\n")
     print(f"Fiber lifetimes data saved to {output_file}")
+    print()
 
 def save_frame_results(frame_records, output_dir):
     """Save FFI frame results to a CSV file."""
@@ -362,6 +366,7 @@ def plot_fiber_lifetimes(fiber_lifetimes, output_dir):
     lifetimes = [data['lifetime'] for data in fiber_lifetimes.values()]
     if not lifetimes:
         print("No fibers detected; skipping plot.")
+        print()
         return
     plt.figure()
     plt.hist(lifetimes, bins=range(1, max(lifetimes)+2), align='left')
@@ -372,6 +377,7 @@ def plot_fiber_lifetimes(fiber_lifetimes, output_dir):
     plt.savefig(os.path.join(output_dir, f'fiber_lifetimes_distribution_{timestamp}.png'))
     plt.close()
     print("Fiber lifetimes distribution plot saved.")
+    print()
 
 def plot_number_of_fibers_per_frame(frame_results, output_dir):
     """
@@ -399,6 +405,7 @@ def plot_number_of_fibers_per_frame(frame_results, output_dir):
     plt.savefig(plot_filename)
     plt.close()
     print(f"Number of fibers per frame plot saved to {plot_filename}")
+    print()
 
 def track_fibers_across_frames(fiber_records, frame_results, distance_threshold=5.0):
     """
@@ -456,6 +463,7 @@ def plot_tracked_fibers(tracked_fibers, output_dir):
     plt.savefig(plot_filename)
     plt.close()
     print(f"Tracked fibers plot saved to {plot_filename}")
+    print()
 
 def main():
     args = parse_arguments()
@@ -491,6 +499,7 @@ def main():
     for frame_idx, frame_number in enumerate(indices):
         u.trajectory[frame_number]
         print(f"Processing frame {frame_number + 1}/{len(u.trajectory)}...")
+        print()
         logging.info(f"Processing frame {frame_number + 1}/{len(u.trajectory)}...")
 
         # Select current frame's atoms
@@ -518,6 +527,9 @@ def main():
         total_peptides = sum(f['size'] for f in frame_fibers)
         avg_fiber_size = total_peptides / fiber_count if fiber_count > 0 else 0
 
+        print(f"{fiber_count} fibers found.")
+        print()
+
         frame_record = {
             'Frame': frame_number,
             'Peptides': str(sorted(frame_peptides)),
@@ -535,6 +547,7 @@ def main():
     save_fiber_lifetimes(fiber_lifetimes, args.output)
 
     print("FFI analysis completed successfully.")
+    print()
     logging.info("FFI analysis completed successfully.")
 
 if __name__ == '__main__':

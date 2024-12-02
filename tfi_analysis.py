@@ -3,15 +3,14 @@
 tfi_analysis.py
 
 This script calculates the Tube Formation Index (TFI) for peptide simulations.
-It incorporates advanced features such as:
-
-- Cylindrical harmonic analysis for robust tube detection, accommodating curvature and twists.
-- Segment-based analysis to handle long, curved tubes.
-- Radial density profiling to assess hollowness.
-- Shape anisotropy analysis using the gyration tensor.
-- Temporal tracking of tube formation, growth, and stability over the simulation time.
-
 """
+
+import warnings
+# Remove the import that causes the deprecation warning
+# from Bio import BiopythonDeprecationWarning
+# Modify the warnings filter to ignore the BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", ".*BiopythonDeprecationWarning.*")
+warnings.filterwarnings("ignore", category=UserWarning)
 
 import os
 import csv
@@ -39,187 +38,19 @@ CSV_HEADERS = ['Frame', 'Peptides', 'tube_count', 'total_peptides_in_tubes', 'av
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Tube Formation Index (TFI) Analysis')
-    parser.add_argument('-t', '--topology', default="eq_FF1200.gro", help='Topology file (e.g., .gro, .pdb)')
-    parser.add_argument('-x', '--trajectory', default="eq_FF1200.xtc", help='Trajectory file (e.g., .xtc, .trr)')
-    parser.add_argument('-s', '--selection', default='protein', help='Bead selection string for peptides')
+    parser.add_argument('-t', '--topology', required=True, help='Topology file (e.g., .gro, .pdb)')
+    parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
     parser.add_argument('-o', '--output', default='tfi_results', help='Output directory for results')
-    parser.add_argument('--min_tube_size', type=int, default=MIN_TUBE_SIZE, help='Minimum number of atoms to consider a tube')
-    parser.add_argument('--first', type=int, default=3024, help='Only analyze the first N frames (default is all frames)')
-    parser.add_argument('--last', type=int, default=3025, help='Only analyze the last N frames (default is all frames)')
-    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
+    parser.add_argument('--min_tube_size', type=int, default=MIN_TUBE_SIZE, help='Minimum number of atoms for tube')
+    parser.add_argument('--first', type=int, default=0, help='First frame to analyze')
+    parser.add_argument('--last', type=int, default=None, help='Last frame to analyze')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame')
     args = parser.parse_args()
     return args
 
 def ensure_output_directory(output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-
-# def center_and_wrap_trajectory(universe, selection_string):
-#     """
-#     Center and wrap trajectory while preserving molecular connectivity.
-#     Specialized for MARTINI CG dipeptides.
-#     """
-#     selection = universe.select_atoms(selection_string)
-#     all_atoms = universe.atoms
-#     box = universe.dimensions[:3]
-#     box_center = box / 2
-
-#     # Use existing identify_aggregates function to find connected components
-#     aggregates = identify_aggregates(universe, selection_string, min_aggregate_size=1)
-
-#     # Convert aggregates to list and sort by size
-#     aggregates = sorted(aggregates, key=len, reverse=True)
-
-#     if not aggregates:
-#         return universe
-
-#     # Get positions of largest aggregate
-#     largest_aggregate = aggregates[0]
-#     largest_positions = selection.atoms[largest_aggregate].positions
-#     com = np.mean(largest_positions, axis=0)
-
-#     # Calculate shift to center the largest aggregate
-#     shift = box_center - com
-
-#     # Apply shift to all atoms
-#     all_atoms.positions += shift
-
-#     # Handle each aggregate for PBC
-#     for aggregate_indices in aggregates:
-#         aggregate_atoms = selection.atoms[aggregate_indices]
-#         positions = aggregate_atoms.positions
-
-#         # Check if aggregate spans PBC
-#         spans_pbc = False
-#         for i in range(len(positions)):
-#             for j in range(i+1, len(positions)):
-#                 diff = positions[i] - positions[j]
-#                 if np.any(np.abs(diff) > box/2):
-#                     spans_pbc = True
-#                     break
-#             if spans_pbc:
-#                 break
-
-#         if spans_pbc:
-#             # Unwrap this aggregate
-#             ref_pos = positions[0]
-#             for i in range(1, len(positions)):
-#                 diff = positions[i] - ref_pos
-#                 for dim in range(3):
-#                     if diff[dim] > box[dim]/2:
-#                         positions[i] -= box[dim]
-#                     elif diff[dim] < -box[dim]/2:
-#                         positions[i] += box[dim]
-
-#             # Update positions
-#             aggregate_atoms.positions = positions
-
-#     # Final wrap to primary unit cell
-#     wrapped_positions = np.copy(all_atoms.positions)
-#     wrapped_positions -= np.floor(wrapped_positions/box)*box
-#     all_atoms.positions = wrapped_positions
-
-#     return universe
-
-# def visualize_centered_trajectory(universe, selection_string, frame, output_dir, traj_id=None):
-#     """Save centered trajectory visualization as PNG images and PDB files."""
-#     import os
-#     import subprocess
-
-#     vis_dir = os.path.join(output_dir, 'trajectory_visualizations')
-#     os.makedirs(vis_dir, exist_ok=True)
-
-#     # Get timestep information
-#     timestep = universe.trajectory[frame].time  # Get actual simulation time
-
-#     traj_tag = f"t{traj_id}_" if traj_id else ""
-#     pdb_file = os.path.join(vis_dir, f"trajectory_{traj_tag}frame_{frame}_time_{timestep:.1f}ps.pdb")
-#     png_file = os.path.join(vis_dir, f"trajectory_{traj_tag}frame_{frame}_time_{timestep:.1f}ps.png")
-#     vmd_script = os.path.join(vis_dir, f"render_{traj_tag}frame_{frame}.tcl")
-
-#     try:
-#         # Move to the correct frame
-#         universe.trajectory[frame]
-
-#         # Use already centered universe
-#         selection = universe.select_atoms(selection_string)
-#         selection.write(pdb_file)
-#         print(f"Saved PDB file to {pdb_file}")
-
-#         # Create VMD script with modified settings
-#         with open(vmd_script, 'w') as f:
-#             f.write(f"""
-# # Load molecule
-# mol new {pdb_file} type pdb waitfor all
-
-# # Set display size
-# display resize 800 600
-
-# # Set representation
-# mol delrep 0 top
-# mol representation VDW 1.0 12.0
-# mol color Name
-# mol material Opaque
-# mol addrep top
-
-# # Basic display settings
-# display projection Orthographic
-# display depthcue off
-# display shadows off
-# display ambientocclusion off
-# axes location off
-# color Display Background white
-
-# # Center view
-# mol center top
-# display resetview
-# rotate y by 90
-# rotate x by 90
-
-# # Force display update
-# display update
-# after idle
-
-# # Wait for rendering
-# after 1000
-
-# # Render with snapshot
-# render snapshot {png_file} 800 600 false %
-
-# quit
-# """)
-#         print(f"Created VMD script at {vmd_script}")
-
-#         # Set environment variables for software rendering
-#         env = os.environ.copy()
-#         env['LIBGL_ALWAYS_SOFTWARE'] = '1'
-#         env['VMDNOCUDA'] = '1'
-#         env['VMDNOOPTIX'] = '1'
-
-#         # Run VMD with software OpenGL
-#         vmd_command = f"vmd -dispdev opengl -size 800 600 -eofexit < {vmd_script}"
-#         result = subprocess.run(vmd_command, shell=True, capture_output=True, text=True, env=env)
-
-#         if result.returncode != 0:
-#             print(f"VMD Output: {result.stdout}")
-#             print(f"VMD Error: {result.stderr}")
-#             raise RuntimeError(f"VMD failed: {result.stderr}")
-
-#         if not os.path.exists(png_file):
-#             raise RuntimeError("PNG file was not created")
-
-#         if os.path.getsize(png_file) == 0:
-#             raise RuntimeError("PNG file is empty")
-
-#         print(f"Successfully saved PNG file to {png_file}")
-#         logging.info(f"Saved visualization to {png_file}")
-
-#     except Exception as e:
-#         logging.error(f"Failed to visualize trajectory: {str(e)}")
-#         print(f"Error: {str(e)}")
-#     finally:
-#         if os.path.exists(vmd_script):
-#             os.remove(vmd_script)
 
 def identify_aggregates(universe, selection_string):
     """Modified to return both aggregates and their peptide indices"""
@@ -340,7 +171,7 @@ def compute_shape_anisotropy(positions):
     return asphericity, ratio
 
 def analyze_aggregate(aggregate_atoms, frame_number, peptide_indices, args):
-    """Modified to include peptide tracking"""
+    """Analyze aggregate for tube characteristics with peptide tracking"""
     positions = aggregate_atoms.positions
     n_atoms = len(positions)
 
@@ -379,48 +210,26 @@ def analyze_aggregate(aggregate_atoms, frame_number, peptide_indices, args):
 def main():
     args = parse_arguments()
     ensure_output_directory(args.output)
-
-    # Set up logging
-    timestamp = datetime.now().strftime("%m%d_%H%M")
-    log_filename = os.path.join(args.output, f"tfi_{timestamp}.log")
-    logging.basicConfig(filename=log_filename, level=logging.DEBUG, format='%(message)s')
-    print("Loading trajectory data...")
+    args.selection = 'protein'  # Hardcoded for now
+    print()
+    print("Loading trajectory...")
+    print()
     u = mda.Universe(args.topology, args.trajectory)
-    # u = center_and_wrap_trajectory(u, args.selection)
+    peptides = u.select_atoms('all')  # Use all atoms as file is pre-processed
+    print(f"Loaded {len(peptides)} peptide beads.")
+    print()
 
-    # # Move to the specified frame and visualize
-    # u.trajectory[args.first]  # Move to the correct frame
-    # visualize_centered_trajectory(u, args.selection, args.first, args.output)
+    frame_records = []
 
-    selection_string = args.selection
-    n_frames = len(u.trajectory)
-    print(f"Total frames in trajectory: {n_frames}")
-    start_frame = 0  # Default start is the first frame
-    end_frame = n_frames  # Default end is the total number of frames
+    # Process each frame
+    frames = range(args.first, args.last or len(u.trajectory), args.skip)
+    for frame_number in frames:
+        u.trajectory[frame_number]
+        print(f"Processing frame {frame_number}...")
+        print()
 
-    if args.first is not None:
-        start_frame = max(0, args.first)  # Start from the specified first frame or 0
-
-    if args.last is not None:
-        end_frame = min(n_frames, args.last)  # End at the specified last frame or the total number of frames
-
-    print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
-
-    # Initialize variables for analysis
-    tube_records = defaultdict(list)  # {tube_id: [frame_numbers]}
-    tube_id_counter = 0
-    frame_results = []
-
-    # Analyze each frame
-    print("Analyzing frames for tube formation...")
-
-    for frame_number, ts in enumerate(u.trajectory[start_frame:end_frame:args.skip]):
-        actual_frame_number = start_frame + frame_number * args.skip  # Track the actual frame number
-        print(f"Processing frame {actual_frame_number + 1}/{n_frames}...")  # Debug print for each processed frame
-        logging.debug(f"Processing frame {actual_frame_number + 1}/{n_frames}...")
-
-        # Get aggregates with their peptide indices
-        aggregates, peptide_indices = identify_aggregates(u, selection_string)
+        # Get aggregates and analyze
+        aggregates, peptide_indices = identify_aggregates(u, args.selection)
 
         # Track tubes and their peptides for this frame
         frame_tubes = []
@@ -430,14 +239,13 @@ def main():
             results = analyze_aggregate(aggregate, frame_number, indices, args)
 
             if results['is_tube']:
-                tube_id = f"tube_{tube_id_counter}"
-                tube_id_counter += 1
-                tube_records[tube_id].append(frame_number)
                 frame_tubes.append(results)
                 frame_peptides.extend(results['peptides'])
 
         # Create frame record
         tube_count = len(frame_tubes)
+        print(f"Number of tubes found in frame {frame_number}: {tube_count}")
+        print()
         total_peptides = sum(t['size'] for t in frame_tubes)
         avg_tube_size = total_peptides / tube_count if tube_count > 0 else 0
 
@@ -448,32 +256,12 @@ def main():
             'total_peptides_in_tubes': total_peptides,
             'avg_tube_size': avg_tube_size
         }
-        frame_results.append(frame_record)
+        frame_records.append(frame_record)
 
     # Save results
-    save_frame_results(frame_results, args.output)
-    # ...existing analysis and plotting code...
-
-def analyze_tube_lifetimes(tube_records):
-    """
-    Analyze the lifetimes of tubes over time.
-    """
-    tube_lifetimes = {}
-    for tube_id, frames in tube_records.items():
-        lifetime = len(frames)
-        tube_lifetimes[tube_id] = lifetime
-    return tube_lifetimes
-
-def save_tube_lifetimes(tube_lifetimes, output_dir, timestamp):
-    """
-    Save tube lifetimes data to a file.
-    """
-    output_file = os.path.join(output_dir, f'tube_lifetimes_{timestamp}.csv')
-    with open(output_file, 'w') as f:
-        f.write('TubeID,Lifetime\n')
-        for tube_id, lifetime in tube_lifetimes.items():
-            f.write(f"{tube_id},{lifetime}\n")
-    print(f"Tube lifetimes data saved to {output_file}")
+    save_frame_results(frame_records, args.output)
+    print("TFI analysis completed successfully.")
+    print()
 
 def save_frame_results(frame_records, output_dir):
     """Save TFI frame results to a CSV file."""
@@ -487,20 +275,6 @@ def save_frame_results(frame_records, output_dir):
             writer.writerow(record)
 
     logging.info(f"TFI frame results saved to {output_file}")
-
-# # def plot_tube_lifetimes(tube_lifetimes, output_dir):
-#     """
-#     Plot the distribution of tube lifetimes.
-#     """
-#     lifetimes = list(tube_lifetimes.values())
-#     plt.figure()
-#     plt.hist(lifetimes, bins=range(1, max(lifetimes)+2), align='left')
-#     plt.xlabel('Lifetime (frames)')
-#     plt.ylabel('Number of Tubes')
-#     plt.title('Distribution of Tube Lifetimes')
-#     plt.savefig(os.path.join(output_dir, 'tube_lifetimes_distribution.png'))
-#     plt.close()
-#     print("Tube lifetimes distribution plot saved.")
 
 if __name__ == '__main__':
     main()

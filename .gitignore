@@ -45,3 +45,5 @@ find_convertible_packages.py
 md_analysis_env_backup.yml
 pip_packages.txt
 tracker_results/
+.temp_protein_slice*.lock
+.temp_protein_slice*.npz

@@ -15,6 +15,14 @@ It provides a unified analysis of structural evolution over time, capturing tran
 different structural features and providing insights into the dynamics of peptide self-assembly.
 
 """
+
+import warnings
+# Remove the import that causes the deprecation warning
+# from Bio import BiopythonDeprecationWarning
+# Modify the warnings filter to ignore the BiopythonDeprecationWarning
+warnings.filterwarnings("ignore", ".*BiopythonDeprecationWarning.*")
+warnings.filterwarnings("ignore", category=UserWarning)
+
 import os
 import argparse
 import subprocess
@@ -23,47 +31,80 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from collections import defaultdict
 import glob
+import datetime
+import MDAnalysis as mda
+import logging
 
 # Constants
 OVERLAP_THRESHOLD = 0.5  # Threshold for peptide overlap when matching structures between frames
 
-import warnings
-from Bio import Application
-from Bio import BiopythonDeprecationWarning
-
-warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
-
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Tracking Shape Changes in Peptide Simulations')
-    parser.add_argument('--run_descriptors', action='store_true', help='Run descriptor analyses before tracking')
-    parser.add_argument('-o', '--output', default='tracker_results', help='Output directory for tracker results')
-    parser.add_argument('--first', type=int, default=None, help='Only analyze the first N frames (default is all frames)')
-    parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
-    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
+    parser.add_argument('-t', '--topology', required=True, help='Topology file (e.g., .gro, .pdb)')
+    parser.add_argument('-x', '--trajectory', required=True, help='Trajectory file (e.g., .xtc, .trr)')
+    parser.add_argument('--run_descriptors', default=True, action='store_true', help='Run descriptor analyses before tracking')
+    parser.add_argument('-o', '--output', required=True, help='Output directory for tracker results')
+    parser.add_argument('--first', type=int, default=0, help='First frame to analyse')
+    parser.add_argument('--last', type=int, default=None, help='Last frame to analyse')
+    parser.add_argument('--skip', type=int, default=1, help='Process every nth frame')
     args = parser.parse_args()
     return args
 
-def ensure_output_directory(output_dir):
+def ensure_output_directory(base_dir, subdir):
+    """Create output directory within the current working directory"""
+    output_dir = os.path.join(base_dir, subdir)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+    return output_dir
 
-def run_descriptor(descriptor_script, output_dir, first, last, skip):
-    """
-    Run a descriptor analysis script.
-    """
+def setup_logging(output_dir):
+    """Setup logging configuration"""
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = os.path.join(output_dir, f'shape_tracker_{timestamp}.log')
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s [%(levelname)s] %(message)s',
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ]
+    )
+    return log_file
+
+def run_descriptor(descriptor_script, output_dir, topology, trajectory, first, last, skip):
+    """Run descriptor analysis script with input directory as output"""
+    logging.info(f"Running {descriptor_script}")
+    logging.info(f"Parameters: first={first}, last={last}, skip={skip}")
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    descriptor_path = os.path.join(script_dir, descriptor_script)
+
     try:
-        subprocess.run(['python3', descriptor_script,
-                        '--output', output_dir,
-                        '-t', "eq_FF1200.gro",
-                        '-x', "eq_FF1200.xtc",
-                        '--first', str(first) if first is not None else 'None',
-                        '--last', str(last) if last is not None else 'None',
-                        '--skip', str(skip)],
-                       check=True)
-        print(f"{descriptor_script} executed successfully.")
+        cmd = [
+            'python3', descriptor_path,
+            '--output', output_dir,
+            '-t', os.path.basename(topology),
+            '-x', os.path.basename(trajectory),
+            '--first', str(first),
+            '--last', str(last),
+            '--skip', str(skip)
+        ]
+        logging.info(f"Executing command: {' '.join(cmd)}")
+
+        result = subprocess.run(cmd,
+                              capture_output=True,
+                              text=True,
+                              check=True)
+
+        logging.info(f"{descriptor_script} completed successfully")
+        if result.stdout:
+            logging.debug(f"Output: {result.stdout}")
+
     except subprocess.CalledProcessError as e:
-        print(f"Error running {descriptor_script}: {e}")
-        exit(1)
+        logging.error(f"Error running {descriptor_script}: {e}")
+        logging.error(f"Error output: {e.stderr}")
+        raise
 
 def load_descriptor_results(descriptor_results_dir, descriptor_name, start_frame, end_frame):
     """Load descriptor results and filter frames within specified range."""
@@ -125,6 +166,22 @@ def match_structures(tracks, current_structures, frame_number, structure_type):
                 'properties': [curr_structure.to_dict()],
             }
 
+def get_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+def count_structures(counts, current_structures, frame_number, structure_type):
+    """
+    Count the number of each shape per frame.
+    """
+    if current_structures is None or current_structures.empty:
+        return
+    if 'Peptides' not in current_structures.columns:
+        print(f"Skipping {structure_type}: 'Peptides' column not found.")
+        return
+    if frame_number not in counts:
+        counts[frame_number] = {stype: 0 for stype in ['Aggregate', 'Sheet', 'Vesicle', 'Tube', 'Fiber']}
+    counts[frame_number][structure_type] += len(current_structures)
+
 def analyze_tracks(tracks, output_dir):
     """Analyze the tracks and create plots."""
     # Prepare data for visualization
@@ -145,7 +202,8 @@ def analyze_tracks(tracks, output_dir):
             df_counts.at[index, stype] = frame_counts[stype]
 
     # Save detailed results to CSV file
-    results_csv_path = os.path.join(output_dir, 'structure_tracks.csv')
+    timestamp = get_timestamp()
+    results_csv_path = os.path.join(output_dir, f'structure_tracks_{timestamp}.csv')
     df_counts.to_csv(results_csv_path, index=False)
     print(f"Structure tracks data saved to {results_csv_path}")
 
@@ -158,75 +216,58 @@ def analyze_tracks(tracks, output_dir):
     plt.title('Structure Counts Over Time')
     plt.legend()
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'structure_counts_over_time.png'))
+    plt.savefig(os.path.join(output_dir, f'structure_counts_over_time_{timestamp}.png'))
     plt.close()
-    print("Structure counts over time plot saved.")
+    print(f"Structure counts over time plot saved to structure_counts_over_time_{timestamp}.png")
 
 def main():
     args = parse_arguments()
-    ensure_output_directory(args.output)
 
+    # Setup logging
+    log_file = setup_logging(args.output)
+    logging.info(f"Starting shape tracker analysis")
+    logging.info(f"Log file: {log_file}")
+    logging.info(f"Arguments: {vars(args)}")
+
+    # Create output subdirectories in current directory
     descriptor_dirs = {
-        'adi': 'adi_results',
-        'sfi': 'sfi_results',
-        'vfi': 'vfi_results',
-        'tfi': 'tfi_results',
-        'ffi': 'ffi_results'
+        'adi': ensure_output_directory(args.output, 'adi_results'),
+        'sfi': ensure_output_directory(args.output, 'sfi_results'),
+        'vfi': ensure_output_directory(args.output, 'vfi_results'),
+        'tfi': ensure_output_directory(args.output, 'tfi_results'),
+        'ffi': ensure_output_directory(args.output, 'ffi_results')
     }
+    logging.info(f"Created output directories: {descriptor_dirs}")
 
-    if args.run_descriptors:
-        print("Running descriptor analyses...")
-        run_descriptor('adi_analysis.py', descriptor_dirs['adi'], args.first, args.last, args.skip)
-        run_descriptor('sfi_analysis.py', descriptor_dirs['sfi'], args.first, args.last, args.skip)
-        run_descriptor('vfi_analysis.py', descriptor_dirs['vfi'], args.first, args.last, args.skip)
-        run_descriptor('tfi_analysis.py', descriptor_dirs['tfi'], args.first, args.last, args.skip)
-        run_descriptor('ffi_analysis.py', descriptor_dirs['ffi'], args.first, args.last, args.skip)
+    try:
+        u = mda.Universe(args.topology, args.trajectory)
+        logging.info(f"Loaded universe: {len(u.trajectory)} frames")
 
-    # Load descriptor results without frame filtering
-    print("Loading descriptor results...")
-    adi_results = load_descriptor_results(descriptor_dirs['adi'], 'adi', args.first, args.last)
-    sfi_results = load_descriptor_results(descriptor_dirs['sfi'], 'sfi', args.first, args.last)
-    vfi_results = load_descriptor_results(descriptor_dirs['vfi'], 'vfi', args.first, args.last)
-    tfi_results = load_descriptor_results(descriptor_dirs['tfi'], 'tfi', args.first, args.last)
-    ffi_results = load_descriptor_results(descriptor_dirs['ffi'], 'ffi', args.first, args.last)
+        first = args.first
+        last = args.last
+        skip = args.skip
 
-    # Combine all frames from the descriptors
-    all_frames = set()
-    for results in [adi_results, sfi_results, vfi_results, tfi_results, ffi_results]:
-        if results is not None:
-            all_frames.update(results['Frame'].unique())
+        # Set last frame if not specified
+        if last is None or last > len(u.trajectory):
+            last = len(u.trajectory)
+        if first < 0 or first >= len(u.trajectory):
+            raise ValueError(f"Invalid first frame: {first}.")
 
-    # Apply frame range and skip
-    start_frame = args.first if args.first is not None else min(all_frames)
-    end_frame = args.last if args.last is not None else max(all_frames)
-    frame_numbers = range(start_frame, end_frame + 1, args.skip)
+        # Run descriptors with progress tracking
+        descriptors = ['adi', 'sfi', 'vfi', 'tfi', 'ffi']
+        for idx, desc in enumerate(descriptors, 1):
+            logging.info(f"Running descriptor {idx}/{len(descriptors)}: {desc}")
+            run_descriptor(f'{desc}_analysis.py',
+                         descriptor_dirs[desc],
+                         args.topology,
+                         args.trajectory,
+                         first, last, skip)
 
-    print(f"Analyzing frames from {start_frame} to {end_frame}, skipping every {args.skip} frames")
+        logging.info("All descriptors completed successfully")
 
-    # Initialize tracks dictionary
-    structure_tracks = {}
-
-    # Process the selected frames
-    print("Processing frames for structure tracking...")
-    for idx, frame_number in enumerate(frame_numbers):
-        print(f"Processing frame {frame_number} ({idx + 1}/{len(frame_numbers)})...")
-
-        # Get structures from each descriptor in the current frame
-        adi_structures = adi_results[adi_results['Frame'] == frame_number] if adi_results is not None else None
-        sfi_structures = sfi_results[sfi_results['Frame'] == frame_number] if sfi_results is not None else None
-        vfi_structures = vfi_results[vfi_results['Frame'] == frame_number] if vfi_results is not None else None
-        tfi_structures = tfi_results[tfi_results['Frame'] == frame_number] if tfi_results is not None else None
-        ffi_structures = ffi_results[ffi_results['Frame'] == frame_number] if ffi_results is not None else None
-
-        # Match and track structures
-        match_structures(structure_tracks, adi_structures, frame_number, 'Aggregate')
-        match_structures(structure_tracks, sfi_structures, frame_number, 'Sheet')
-        match_structures(structure_tracks, vfi_structures, frame_number, 'Vesicle')
-        match_structures(structure_tracks, tfi_structures, frame_number, 'Tube')
-        match_structures(structure_tracks, ffi_structures, frame_number, 'Fiber')
-
-    # Analyze tracks
-    analyze_tracks(structure_tracks, args.output)
+    except Exception as e:
+        logging.error(f"Fatal error: {str(e)}", exc_info=True)
+        raise
 
 if __name__ == '__main__':
     main()
