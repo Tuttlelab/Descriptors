@@ -47,3 +47,4 @@ pip_packages.txt
 tracker_results/
 .temp_protein_slice*.lock
 .temp_protein_slice*.npz
+*.png
