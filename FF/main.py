@@ -6,8 +6,8 @@ import argparse
 import logging
 from datetime import datetime
 from collections import defaultdict
-import logging
 import numpy as np
+import MDAnalysis as mda
 
 # Import analysis modules
 from center import load_and_process_trajectory as center_trajectory
@@ -19,24 +19,39 @@ from tfi import analyze_clusters as analyze_tfi
 from plot import analyze_and_plot_evolution as analyze_and_plot
 
 # Add these imports at the top with other imports
-from sfi import (
-    PLANARITY_THRESHOLD, CURVATURE_THRESHOLD,
-    MIN_SHEET_SIZE, MIN_ATOMS_SPHERICITY
-)
-from vfi import (
-    SPHERICITY_THRESHOLD, HOLLOWNESS_THRESHOLD,
-    ASPHERICITY_THRESHOLD, ACYLINDRICITY_THRESHOLD
-)
-from ffi import (
-    SHAPE_RATIO_THRESHOLD, ALIGNMENT_STD_THRESHOLD,
-    FOP_THRESHOLD_POSITIVE, MIN_LENGTH_RATIO,
-    RADIUS_VARIATION_THRESHOLD, MIN_CYLINDRICAL_SCORE
-)
-from tfi import (
-    RADIAL_THRESHOLD, ANGULAR_UNIFORMITY_THRESHOLD,
-    ASPHERICITY_THRESHOLD as TUBE_ASPHERICITY_THRESHOLD,
-    RATIO_THRESHOLD, TUBE_SEGMENT_RATIO_THRESHOLD
-)
+try:
+    from sfi import (
+        PLANARITY_THRESHOLD, CURVATURE_THRESHOLD,
+        MIN_SHEET_SIZE, MIN_ATOMS_SPHERICITY
+    )
+except ImportError:
+    logging.warning("Could not import SFI thresholds")
+
+try:
+    from vfi import (
+        SPHERICITY_THRESHOLD, HOLLOWNESS_THRESHOLD,
+        ASPHERICITY_THRESHOLD, ACYLINDRICITY_THRESHOLD
+    )
+except ImportError:
+    logging.warning("Could not import VFI thresholds")
+
+try:
+    from ffi import (
+        SHAPE_RATIO_THRESHOLD, ALIGNMENT_STD_THRESHOLD,
+        FOP_THRESHOLD_POSITIVE, MIN_LENGTH_RATIO,
+        RADIUS_VARIATION_THRESHOLD, MIN_CYLINDRICAL_SCORE
+    )
+except ImportError:
+    logging.warning("Could not import FFI thresholds")
+
+try:
+    from tfi import (
+        RADIAL_THRESHOLD, ANGULAR_UNIFORMITY_THRESHOLD,
+        ASPHERICITY_THRESHOLD as TUBE_ASPHERICITY_THRESHOLD,
+        RATIO_THRESHOLD, TUBE_SEGMENT_RATIO_THRESHOLD
+    )
+except ImportError:
+    logging.warning("Could not import TFI thresholds")
 
 def setup_logging(output_dir):
     """Setup logging with timestamp"""
@@ -179,25 +194,40 @@ def classify_frame_aggregates(cluster_files, args):
     return "undetermined"
 
 def find_cluster_files(output_dir, first_frame=None, last_frame=None):
-    """Find all cluster files in frame-specific directories"""
+    """Find all cluster files in clusters directory"""
     cluster_files = []
     clusters_dir = os.path.join(output_dir, "clusters")
+    logger = logging.getLogger('main')
 
     if os.path.exists(clusters_dir):
-        # Look for frame directories (f*)
-        for frame_dir in os.listdir(clusters_dir):
-            if frame_dir.startswith('f'):
+        for file in os.listdir(clusters_dir):
+            if file.endswith('.gro'):
                 try:
-                    frame_num = int(frame_dir[1:])  # Extract number after 'f'
-                    if (first_frame is None or frame_num >= first_frame) and \
-                       (last_frame is None or frame_num <= last_frame):
-                        frame_path = os.path.join(clusters_dir, frame_dir)
-                        if os.path.isdir(frame_path):
-                            for cluster_file in os.listdir(frame_path):
-                                if cluster_file.endswith('.gro'):
-                                    cluster_files.append(os.path.join(frame_path, cluster_file))
-                except ValueError:
-                    continue  # Skip directories that don't match fXXXX pattern
+                    # Extract frame number (format: frame{frame}_size{size}.gro)
+                    frame_num = int(file.split('_')[0].replace('frame', ''))
+
+                    # Debug logging
+                    logger = logging.getLogger('main')
+                    logger.debug(f"Found file {file} with frame {frame_num}")
+
+                    # Check if frame is within range
+                    if first_frame is not None and frame_num < first_frame:
+                        continue
+                    if last_frame is not None and frame_num >= last_frame:  # Make last frame exclusive
+                        continue
+
+                    cluster_files.append(os.path.join(clusters_dir, file))
+                    logger.debug(f"Added file {file} to analysis list")
+                except (ValueError, IndexError) as e:
+                    logger.warning(f"Skipping file {file}: {str(e)}")
+                    continue
+
+    if not cluster_files:
+        logger = logging.getLogger('main')
+        logger.warning(f"No cluster files found in range {first_frame} to {last_frame}")
+        logger.warning(f"Checked directory: {clusters_dir}")
+        if os.path.exists(clusters_dir):
+            logger.warning(f"Files in directory: {os.listdir(clusters_dir)}")
 
     return sorted(cluster_files)
 
@@ -221,129 +251,122 @@ def save_shape_results(results, output_dir, frame_num, logger):
             f.write(f"{msg}\n")
 
 def analyze_frame_clusters(frame_cluster_files, min_peptides, logger, args, frame_num):
-    """Analyze all clusters in a single frame and determine dominant shape"""
+    """Analyze all clusters in a single frame, focusing on the largest cluster"""
     frame_results = {
         'sheets': 0, 'fibers': 0, 'vesicles': 0, 'tubes': 0,
         'total_peptides': 0, 'shape_counts': {},
         'largest_cluster_shape': 'undetermined',
-        'cluster_results': []  # Store individual cluster results
+        'cluster_results': []
     }
 
-    # Track largest cluster
-    largest_cluster_size = 0
-    largest_cluster_shape = 'undetermined'
-
+    # First pass: find the largest cluster
+    largest_cluster = None
+    largest_size = 0
     for cluster_file in frame_cluster_files:
         try:
-            cluster_num = os.path.basename(cluster_file).split('_')[0].replace('cluster', '')
-
-            shapes = []
-            all_metrics = {}
-
-            # Sheet analysis
-            sheet_results = analyze_sfi([cluster_file], min_peptides)
-            if sheet_results and sheet_results[0].get('metrics'):
-                metrics = sheet_results[0]['metrics']
-                if sheet_results[0].get('is_sheet', False):
-                    shapes.append('sheet')
-                all_metrics['sheet'] = metrics
-
-            # Fiber analysis
-            fiber_results = analyze_ffi([cluster_file], min_peptides)
-            if fiber_results and fiber_results[0].get('metrics'):
-                metrics = fiber_results[0]['metrics']
-                if fiber_results[0].get('is_fiber', False):
-                    shapes.append('fiber')
-                all_metrics['fiber'] = metrics
-
-            # Vesicle analysis
-            vesicle_results = analyze_vfi([cluster_file], min_peptides)
-            if vesicle_results and vesicle_results[0].get('metrics'):
-                metrics = vesicle_results[0]['metrics']
-                if vesicle_results[0].get('is_vesicle', False):
-                    shapes.append('vesicle')
-                all_metrics['vesicle'] = metrics
-
-            # Tube analysis
-            tube_results = analyze_tfi([cluster_file], min_peptides)
-            if tube_results and tube_results[0].get('metrics'):
-                metrics = tube_results[0]['metrics']
-                if tube_results[0].get('is_tube', False):
-                    shapes.append('tube')
-                all_metrics['tube'] = metrics
-
-            # Get cluster size from any valid result
-            cluster_size = next((r['size'] for results in [sheet_results, fiber_results, vesicle_results, tube_results]
-                               for r in results if 'size' in r), 0)
-
-            # Round metrics before logging
-            for shape_type, metrics in all_metrics.items():
-                if isinstance(metrics, dict):
-                    all_metrics[shape_type] = {k: round(float(v), 1) if isinstance(v, (float, np.floating)) else v
-                                             for k, v in metrics.items()}
-
-            # Create cluster result with all shape flags
-            cluster_result = {
-                'cluster_num': cluster_num,
-                'size': cluster_size,
-                'shapes': shapes,
-                'metrics': all_metrics
-            }
-
-            # Log results
-            logger.info(f"\nCluster {cluster_num} analysis:")
-            for shape_type, metrics in all_metrics.items():
-                logger.info(f"{shape_type.capitalize()} metrics: {metrics}")
-
-            # Only show shapes that were determined to be true
-            true_shapes = []
-            if sheet_results and sheet_results[0].get('is_sheet', False):
-                true_shapes.append('sheet')
-            if fiber_results and fiber_results[0].get('is_fiber', False):
-                true_shapes.append('fiber')
-            if vesicle_results and vesicle_results[0].get('is_vesicle', False):
-                true_shapes.append('vesicle')
-            if tube_results and tube_results[0].get('is_tube', False):
-                true_shapes.append('tube')
-
-            current_shape = 'undetermined' if not true_shapes else ', '.join(true_shapes)
-            logger.info(f"Classification: {current_shape}")
-
-            # Create cluster result with only true shapes
-            cluster_result = {
-                'cluster_num': cluster_num,
-                'size': cluster_size,
-                'shapes': true_shapes,  # Use true_shapes instead of shapes
-                'metrics': all_metrics
-            }
-
-            # Update frame results based on true shapes
-            for shape in true_shapes:  # Use true_shapes instead of shapes
-                frame_results[f'{shape}s'] += cluster_size
-                frame_results['shape_counts'][shape] = frame_results['shape_counts'].get(shape, 0) + 1
-
-            # Update largest cluster information
-            if cluster_size > largest_cluster_size:
-                largest_cluster_size = cluster_size
-                largest_cluster_shape = current_shape
-
-            frame_results['cluster_results'].append(cluster_result)
-
+            u = mda.Universe(cluster_file)
+            size = len(u.atoms) if u.atoms is not None else 0
+            if size > largest_size:
+                largest_size = size
+                largest_cluster = cluster_file
         except Exception as e:
-            logger.error(f"Error analyzing cluster {cluster_file}: {str(e)}", exc_info=True)
+            logger.error(f"Error reading cluster file {cluster_file}: {str(e)}")
             continue
 
-    frame_results['largest_cluster_shape'] = largest_cluster_shape
-    frame_results['total_peptides'] = (frame_results['sheets'] + frame_results['fibers'] +
-                                     frame_results['vesicles'] + frame_results['tubes'])
+    if not largest_cluster:
+        return frame_results
 
-    # Save detailed results for this frame
-    save_shape_results(frame_results['cluster_results'], args.output, frame_num, logger)
+    # Analyze only the largest cluster and save it
+    try:
+        # Create new filename with frame and size
+        clusters_dir = os.path.join(args.output, "clusters")
+        new_filename = f"frame{frame_num}_size{largest_size}.gro"
+        new_filepath = os.path.join(clusters_dir, new_filename)
+
+        # Copy the largest cluster to the new location
+        u = mda.Universe(largest_cluster)
+        if u.atoms is not None:
+            u.atoms.write(new_filepath)
+        else:
+            logger.error(f"No atoms found in the largest cluster {largest_cluster}")
+
+        # Remove all other cluster files for this frame
+        for cluster_file in frame_cluster_files:
+            if cluster_file != largest_cluster:
+                try:
+                    os.remove(cluster_file)
+                except OSError:
+                    continue
+
+        # Continue with shape analysis
+        shapes = []
+        all_metrics = {}
+
+        # Sheet analysis
+        sheet_results = analyze_sfi([largest_cluster], min_peptides)
+        if sheet_results and sheet_results[0].get('metrics'):
+            metrics = sheet_results[0]['metrics']
+            if sheet_results[0].get('is_sheet', False):
+                shapes.append('sheet')
+            all_metrics['sheet'] = metrics
+
+        # Fiber analysis
+        fiber_results = analyze_ffi([largest_cluster], min_peptides)
+        if fiber_results and fiber_results[0].get('metrics'):
+            metrics = fiber_results[0]['metrics']
+            if fiber_results[0].get('is_fiber', False):
+                shapes.append('fiber')
+            all_metrics['fiber'] = metrics
+
+        # Vesicle analysis
+        vesicle_results = analyze_vfi([largest_cluster], min_peptides)
+        if vesicle_results and vesicle_results[0].get('metrics'):
+            metrics = vesicle_results[0]['metrics']
+            if vesicle_results[0].get('is_vesicle', False):
+                shapes.append('vesicle')
+            all_metrics['vesicle'] = metrics
+
+        # Tube analysis
+        tube_results = analyze_tfi([largest_cluster], min_peptides)
+        if tube_results and tube_results[0].get('metrics'):
+            metrics = tube_results[0]['metrics']
+            if tube_results[0].get('is_tube', False):
+                shapes.append('tube')
+            all_metrics['tube'] = metrics
+
+        # Round metrics
+        for shape_type, metrics in all_metrics.items():
+            if isinstance(metrics, dict):
+                all_metrics[shape_type] = {k: round(float(v), 1) if isinstance(v, (float, np.floating)) else v
+                                         for k, v in metrics.items()}
+
+        # Create result for largest cluster without trying to extract cluster_num
+        cluster_result = {
+            'cluster_num': 1,  # Always 1 since we're only keeping the largest cluster
+            'size': largest_size,
+            'shapes': shapes,
+            'metrics': all_metrics
+        }
+
+        for shape_type, metrics in all_metrics.items():
+            logger.info(f"{shape_type.capitalize()} metrics: {metrics}")
+
+        # Update frame results based on shapes
+        for shape in shapes:
+            frame_results[f'{shape}s'] = largest_size
+            frame_results['shape_counts'][shape] = 1
+
+        frame_results['largest_cluster_shape'] = ', '.join(shapes) if shapes else 'undetermined'
+        frame_results['total_peptides'] = largest_size
+        frame_results['cluster_results'].append(cluster_result)
+
+    except Exception as e:
+        logger.error(f"Error analyzing largest cluster {largest_cluster}: {str(e)}", exc_info=True)
 
     return frame_results
 
 def save_analysis_data(frame_results, output_dir):
-    """Save analysis data for plotting"""
+    """Save analysis data focusing on largest cluster per frame"""
     results_dir = os.path.join(output_dir, "analysis")
     os.makedirs(results_dir, exist_ok=True)
 
@@ -352,22 +375,59 @@ def save_analysis_data(frame_results, output_dir):
 
     # Save frame-by-frame data
     with open(os.path.join(results_dir, 'shape_evolution.csv'), 'w') as f:
-        f.write('Frame,Sheets,Fibers,Vesicles,Tubes,Total,LargestClusterShape\n')
-        for frame, results in sorted(frame_results.items()):
-            # Get counts from shape_counts dictionary, default to 0 if not present
-            sheet_count = results['shape_counts'].get('sheet', 0)
-            fiber_count = results['shape_counts'].get('fiber', 0)
-            vesicle_count = results['shape_counts'].get('vesicle', 0)
-            tube_count = results['shape_counts'].get('tube', 0)
+        # Write header
+        f.write('Frame,LargestClusterSize,Shape')
+        # Add metric headers dynamically based on first frame with metrics
+        metric_headers = set()
+        for results in frame_results.values():
+            if results['cluster_results']:
+                metrics = results['cluster_results'][0].get('metrics', {})
+                for shape_type, shape_metrics in metrics.items():
+                    if isinstance(shape_metrics, dict):
+                        for metric_name in shape_metrics.keys():
+                            metric_headers.add(f"{shape_type}_{metric_name}")
 
-            f.write(f"{frame},{sheet_count},{fiber_count},"
-                   f"{vesicle_count},{tube_count},{results['total_peptides']},"
-                   f"{results['largest_cluster_shape']}\n")
+        for header in sorted(metric_headers):
+            f.write(f",{header}")
+        f.write('\n')
+
+        # Write data
+        for frame, results in sorted(frame_results.items()):
+            cluster_size = results['total_peptides']
+            shape = results['largest_cluster_shape']
+            line = f"{frame},{cluster_size},{shape}"
+
+            # Add metrics
+            metrics_dict = {}
+            if results['cluster_results']:
+                all_metrics = results['cluster_results'][0].get('metrics', {})
+                for shape_type, shape_metrics in all_metrics.items():
+                    if isinstance(shape_metrics, dict):
+                        for metric_name, value in shape_metrics.items():
+                            metrics_dict[f"{shape_type}_{metric_name}"] = value
+
+            # Write metrics in consistent order
+            for header in sorted(metric_headers):
+                line += f",{metrics_dict.get(header, '')}"
+
+            f.write(f"{line}\n")
 
 def main():
     args = parse_arguments()
     ensure_analysis_directories(args.output)
     logger = setup_logging(args.output)
+
+    # Add frame range validation
+    if args.last is not None:
+        if args.last <= args.first:
+            logger.error("Last frame must be greater than first frame")
+            sys.exit(1)
+        # Set last frame to be exclusive
+        args.last = args.last
+
+    # Create only the main clusters directory
+    clusters_dir = os.path.join(args.output, "clusters")
+    os.makedirs(clusters_dir, exist_ok=True)
 
     # Set flags if --all is specified
     if args.all:
@@ -405,7 +465,7 @@ def main():
                     args.output,
                     "FF",  # or get from filename
                     args.first,
-                    args.last,
+                    args.last,  # Now last frame is exclusive
                     args.stride
                 )
                 logger.info("Centering completed successfully")
@@ -419,7 +479,7 @@ def main():
                     centered_files[0],
                     centered_files[1],
                     args.first,
-                    args.last,
+                    args.last,  # Using same exclusive last frame
                     args.stride,
                     args.cluster_cutoff,
                     args.output,
@@ -433,17 +493,33 @@ def main():
 
         # Analysis step
         if args.analyze:
+            logger.info(f"Looking for clusters between frames {args.first} and {args.last}")
             cluster_files = find_cluster_files(args.output, args.first, args.last)
+
             if not cluster_files:
-                logger.error("No cluster files found for analysis!")
-                sys.exit(1)
+                # Try clustering if no files found and we have trajectory data
+                if args.trajectory and centered_files[1]:
+                    logger.info("No existing cluster files found, performing clustering...")
+                    cluster_files = cluster_trajectory(
+                        centered_files[0],
+                        centered_files[1],
+                        args.first,
+                        args.last,
+                        args.stride,
+                        args.cluster_cutoff,
+                        args.output,
+                        logger
+                    )
+
+                if not cluster_files:
+                    logger.error("No cluster files found or generated for analysis!")
+                    sys.exit(1)
 
             # Group clusters by frame and analyze
             frame_clusters = defaultdict(list)
             for cluster_file in cluster_files:
-                frame_dir = os.path.basename(os.path.dirname(cluster_file))
-                # Ensure frame number is stored as integer
-                frame_num = int(frame_dir[1:])
+                # Extract frame number from filename (format: frame{frame}_cluster{cluster}.gro)
+                frame_num = int(os.path.basename(cluster_file).split('_')[0][5:])
                 frame_clusters[frame_num].append(cluster_file)
 
             for frame_num, frame_cluster_files in sorted(frame_clusters.items()):
