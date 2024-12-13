@@ -4,6 +4,7 @@ from scipy.spatial import cKDTree
 import matplotlib.pyplot as plt
 import MDAnalysis as mda
 import os
+import sys
 from tqdm import tqdm
 import logging
 
@@ -184,6 +185,7 @@ def save_clusters(universe, clusters, unwrapped_positions, frame_num):
 def analyze_trajectory(topology, trajectory, first, last, stride, cutoff, output_dir, logger):
     """
     Analyze trajectory frames using PBC-aware clustering.
+    Only saves the largest cluster per frame.
     """
     logger.info("Starting cluster analysis with cutoff %.1f nm" % cutoff)
     try:
@@ -192,70 +194,76 @@ def analyze_trajectory(topology, trajectory, first, last, stride, cutoff, output
         logger.error(f"Error loading trajectory: {e}")
         return []
 
-    # Create base clusters directory
+    # Create clusters directory
     clusters_dir = os.path.join(output_dir, "clusters")
     os.makedirs(clusters_dir, exist_ok=True)
-    cluster_files = []
 
+    cluster_files = []
     min_dipeptides = 50
     dipeptide_length = 8  # Number of beads per dipeptide
 
-    for ts in tqdm(u.trajectory[first:last:stride]):
-        # Create frame-specific directory
-        frame_dir = os.path.join(clusters_dir, f"f{ts.frame}")
-        os.makedirs(frame_dir, exist_ok=True)
+    # Update tqdm configuration to match center.py style
+    progress_bar = tqdm(
+        u.trajectory[first:last:stride],
+        desc="Processing frames",
+        ncols=80,
+        bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt}',
+        ascii=True,
+        file=sys.stdout
+    )
 
+    for ts in progress_bar:
         positions = u.select_atoms('name BB SC1 SC2 SC3').positions
         box_size = u.dimensions[:3]
 
         # Perform cluster analysis
         cluster_sizes, clusters = cluster_analysis(positions, cutoff, box_size)
 
-        # Filter out clusters smaller than 50 dipeptides
-        clusters = [cluster for cluster in clusters if len(cluster) >= min_dipeptides * dipeptide_length]
+        # Filter clusters by minimum size
+        valid_clusters = [c for c in clusters if len(c) >= min_dipeptides * dipeptide_length]
 
-        if clusters:
-            logger.debug(f"Frame {ts.frame}: Found {len(cluster_sizes)} clusters with sizes: {cluster_sizes}")
+        if valid_clusters:
+            # Find the largest cluster
+            largest_cluster = max(valid_clusters, key=len)
+            cluster_size = len(largest_cluster)
 
-            # Unwrap coordinates for saving
+            # Get cluster atoms
+            cluster_atoms = u.select_atoms('name BB SC1 SC2 SC3')[largest_cluster]
+
+            # Unwrap the cluster
             unwrapped_positions = np.copy(positions)
-            for cluster in clusters:
-                ref_pos = positions[cluster[0]]
-                for i in cluster[1:]:
-                    diff = positions[i] - ref_pos
-                    diff = diff - box_size * np.round(diff / box_size)
-                    unwrapped_positions[i] = ref_pos + diff
+            ref_pos = positions[largest_cluster[0]]
+            for i in largest_cluster[1:]:
+                diff = positions[i] - ref_pos
+                diff = diff - box_size * np.round(diff / box_size)
+                unwrapped_positions[i] = ref_pos + diff
 
-            # Save clusters
-            for idx, cluster in enumerate(clusters):
-                cluster_atoms = u.select_atoms('name BB SC1 SC2 SC3')[cluster]
-                cluster_positions = unwrapped_positions[cluster]
+            cluster_positions = unwrapped_positions[largest_cluster]
 
-                # Calculate box with padding
-                min_coords = cluster_positions.min(axis=0)
-                max_coords = cluster_positions.max(axis=0)
-                padding = 2.0
-                box = max_coords - min_coords + 2 * padding
-                center = (max_coords + min_coords) / 2
+            # Calculate box with padding
+            min_coords = cluster_positions.min(axis=0)
+            max_coords = cluster_positions.max(axis=0)
+            padding = 2.0
+            box = max_coords - min_coords + 2 * padding
+            center = (max_coords + min_coords) / 2
 
-                # Center the cluster
-                centered_positions = cluster_positions - center + box/2
-                cluster_atoms.positions = centered_positions
+            # Center the cluster
+            centered_positions = cluster_positions - center + box/2
+            cluster_atoms.positions = centered_positions
 
-                # Save cluster in frame-specific directory
-                cluster_size = len(cluster)
-                dipeptide_count = cluster_size / dipeptide_length
-                filename = f"cluster{idx+1}_size{cluster_size}_dipeptides{int(dipeptide_count)}.gro"
-                filepath = os.path.join(frame_dir, filename)
+            # Save only the largest cluster with frame number and size
+            filename = f"frame{ts.frame}_size{cluster_size}.gro"
+            filepath = os.path.join(clusters_dir, filename)
 
-                with mda.Writer(filepath) as W:
-                    cluster_atoms.dimensions = np.concatenate((box, [90., 90., 90.]))
-                    W.write(cluster_atoms)
-                cluster_files.append(filepath)
+            with mda.Writer(filepath) as W:
+                cluster_atoms.dimensions = np.concatenate((box, [90., 90., 90.]))
+                W.write(cluster_atoms)
+                logger.debug(f"Saved largest cluster for frame {ts.frame}")
+            cluster_files.append(filepath)
 
-    total_clusters = len(cluster_files)
-    logger.info(f"Found {total_clusters} clusters with more than {min_dipeptides} dipeptides")
+    logger.info(f"Saved {len(cluster_files)} clusters")
     return cluster_files
+
 
 def main():
     args = parse_arguments()

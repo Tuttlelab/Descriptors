@@ -125,17 +125,27 @@ def load_and_process_trajectory(topology_path, trajectory_path, output_dir, dipe
     print(f"Processing frames: first={first}, last={last}, stride={stride}")
     print(f"Number of protein atoms: {len(protein)}")
 
+    # Update frame selection logic to match cluster.py
+    if last is not None:
+        last = min(last, total_frames)  # last frame is exclusive
+    else:
+        last = total_frames
+
+    frames_to_process = range(first, last, stride)  # Now last is exclusive
+    frames_list = list(frames_to_process)
+
+    if not frames_list:
+        logger.error("No frames to process with given range!")
+        return None, None
+
+    main_logger.info(f"Processing {len(frames_list)} frames")
+
     try:
         with mda.Writer(processed_gro, n_atoms=len(protein), reindex=True) as w_gro, \
              mda.Writer(processed_xtc, n_atoms=len(protein), reindex=True) as w_xtc:
 
-            frames = list(range(first, last + 1, stride))
-            main_logger.info(f"Processing {len(frames)} frames")
-
-            # Configure tqdm to be more minimal
             progress_bar = tqdm(
-                u.trajectory[first:last + 1:stride],
-                total=len(frames),
+                frames_list,
                 desc="Processing frames",
                 ncols=80,
                 bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt}',
@@ -143,7 +153,8 @@ def load_and_process_trajectory(topology_path, trajectory_path, output_dir, dipe
                 file=sys.stdout
             )
 
-            for ts in progress_bar:
+            for frame_idx in progress_bar:
+                ts = u.trajectory[frame_idx]
                 # Log frame progress only to file
                 logger.debug(f"Processing frame {ts.frame}")
 
