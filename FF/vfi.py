@@ -185,12 +185,13 @@ def analyze_clusters(cluster_files, min_peptides):
                 'total_beads': len(positions)
             }
 
-            # Determine if it's a vesicle based on criteria
+            # Must be strictly hollow for vesicle classification
             is_vesicle = bool(
                 sphericity >= SPHERICITY_THRESHOLD and
                 hollowness >= HOLLOWNESS_THRESHOLD and
                 asphericity <= ASPHERICITY_THRESHOLD and
-                acylindricity <= ACYLINDRICITY_THRESHOLD
+                acylindricity <= ACYLINDRICITY_THRESHOLD and
+                hollowness  # Must be explicitly hollow
             )
 
             results.append({

@@ -6,6 +6,7 @@ from scipy.signal import savgol_filter
 from scipy.stats import mode
 import seaborn as sns
 import os
+from scipy.ndimage import gaussian_filter1d
 
 def calculate_structure_fractions(df, window_size=10, confidence_threshold=0.15):
     """Calculate structure fractions with confidence filtering"""
@@ -298,86 +299,146 @@ def plot_raw_assembly_evolution(df, timestamp):
     plt.savefig(f'raw_assembly_evolution_{timestamp}.png', dpi=300, bbox_inches='tight')
     plt.close()
 
-def analyze_and_plot_evolution(frame_results, output_dir):
-    """Create evolution plots with both fractions and raw counts"""
-    # Convert frame numbers to integer type if they aren't already
-    frames = sorted(int(f) for f in frame_results.keys())
+def plot_aggregation_evolution(df, plots_dir, timestamp):
+    """Plot size evolution and aggregate count"""
+    fig, ax1 = plt.subplots(figsize=(12, 6))
 
-    # Prepare data arrays for both fractions and raw counts
-    fractions = np.zeros((len(frames), 4))
-    raw_counts = np.zeros((len(frames), 4))
+    # Smooth the cluster size data
+    size_smooth = gaussian_filter1d(df['LargestClusterSize'] / 8, sigma=3)  # Convert beads to dipeptides
 
-    for i, frame in enumerate(frames):
-        total = frame_results[frame]['total_peptides']
-        # Store raw counts
-        raw_counts[i, 0] = frame_results[frame]['sheets']
-        raw_counts[i, 1] = frame_results[frame]['fibers']
-        raw_counts[i, 2] = frame_results[frame]['vesicles']
-        raw_counts[i, 3] = frame_results[frame]['tubes']
+    # Plot average aggregate size on y1-axis
+    ax1.set_xlabel('Frame', fontsize=12)
+    ax1.set_ylabel('Dipeptides per Aggregate', color='tab:blue', fontsize=12)
+    ax1.plot(df['Frame'], size_smooth, color='tab:blue', alpha=0.6)
+    ax1.tick_params(axis='y', labelcolor='tab:blue')
 
-        # Calculate fractions
-        if total > 0:
-            fractions[i] = raw_counts[i] / total
-
-    # Create figure with three subplots
-    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 15), height_ratios=[2, 2, 1])
-
-    # Plot 1: Stacked fractions
-    labels = ['Sheets', 'Fibers', 'Vesicles', 'Tubes']
-    colors = ['blue', 'red', 'green', 'purple']
-    ax1.stackplot(frames, fractions.T, labels=labels, colors=colors)
-    ax1.set_ylabel('Population Fraction')
-    ax1.set_title('Structure Evolution (Fractions)')
-    ax1.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    ax1.grid(True, alpha=0.3)
-
-    # Plot 2: Raw counts
-    for i, (label, color) in enumerate(zip(labels, colors)):
-        ax2.plot(frames, raw_counts[:, i], label=label, color=color, linewidth=2)
-    ax2.set_ylabel('Number of Peptides')
-    ax2.set_title('Structure Evolution (Raw Counts)')
-    ax2.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    ax2.grid(True, alpha=0.3)
-
-    # Plot 3: Dominant structure
-    dominant_structures = []
-    for frame in frames:
-        counts = frame_results[frame]['shape_counts']
-        if not counts:
-            dominant_structures.append('none')
-        else:
-            dominant = max(counts.items(), key=lambda x: x[1])[0]
-            dominant_structures.append(dominant)
-
-    unique_structures = sorted(set(dominant_structures))
-    structure_to_y = {s: i for i, s in enumerate(unique_structures)}
-    y_vals = [structure_to_y[s] for s in dominant_structures]
-
-    ax3.scatter(frames, y_vals, c='black', s=10)
-    ax3.set_yticks(range(len(unique_structures)))
-    ax3.set_yticklabels([s.capitalize() for s in unique_structures])
-    ax3.set_xlabel('Frame')
-    ax3.set_ylabel('Dominant Structure')
-    ax3.grid(True, alpha=0.3)
-
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'structure_evolution.png'), dpi=300, bbox_inches='tight')
+    plt.title('Aggregation Evolution', fontsize=14)
+    plt.grid(True, alpha=0.3)
+    plt.savefig(os.path.join(plots_dir, f'aggregation_evolution_{timestamp}.png'), dpi=300, bbox_inches='tight')
     plt.close()
 
-    # Save numerical data to CSV
-    df_evolution = pd.DataFrame({
-        'Frame': frames,
-        'Sheets_Count': raw_counts[:, 0],
-        'Fibers_Count': raw_counts[:, 1],
-        'Vesicles_Count': raw_counts[:, 2],
-        'Tubes_Count': raw_counts[:, 3],
-        'Sheets_Fraction': fractions[:, 0],
-        'Fibers_Fraction': fractions[:, 1],
-        'Vesicles_Fraction': fractions[:, 2],
-        'Tubes_Fraction': fractions[:, 3],
-        'Dominant_Structure': dominant_structures
-    })
-    df_evolution.to_csv(os.path.join(output_dir, 'structure_evolution_data.csv'), index=False)
+def plot_shape_analysis(df, plots_dir, timestamp):
+    """Plot shape classification over time"""
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    # Create boolean masks for each shape
+    shapes = ['sheet', 'fiber', 'vesicle', 'tube', 'spherical_aggregate', 'non-aggregate']
+    colors = ['blue', 'red', 'green', 'purple', 'orange', 'gray']
+
+    for shape, color in zip(shapes, colors):
+        # Create mask for this shape (including when it's part of multiple detections)
+        mask = df['Shape'].str.contains(shape, case=False, na=False)
+        if mask.any():
+            ax.scatter(df[mask]['Frame'], [shapes.index(shape)] * mask.sum(),
+                      c=color, label=shape.capitalize(), alpha=0.6)
+
+    ax.set_yticks(range(len(shapes)))
+    ax.set_yticklabels([s.capitalize() for s in shapes])
+    ax.set_xlabel('Frame', fontsize=12)
+    plt.title('Shape Classification', fontsize=14)
+    plt.grid(True, alpha=0.3)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+
+    plt.savefig(os.path.join(plots_dir, f'shape_classification_{timestamp}.png'), dpi=300, bbox_inches='tight')
+    plt.close()
+
+def plot_shape_metrics(df, plots_dir, timestamp):
+    """Plot metrics for each shape type"""
+    # Sheet metrics
+    if 'sheet_planarity_rmsd' in df.columns:
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
+
+        ax1.plot(df['Frame'], df['sheet_planarity_rmsd'], label='Planarity RMSD')
+        ax1.plot(df['Frame'], df['sheet_curvature_rmsd'], label='Curvature RMSD')
+        ax1.set_ylabel('RMSD')
+        ax1.legend()
+        ax1.grid(True, alpha=0.3)
+
+        ax2.plot(df['Frame'], df['sheet_thickness_ratio'], label='Thickness Ratio')
+        ax2.plot(df['Frame'], df['sheet_elongation_ratio'], label='Elongation Ratio')
+        ax2.set_xlabel('Frame')
+        ax2.set_ylabel('Ratio')
+        ax2.legend()
+        ax2.grid(True, alpha=0.3)
+
+        plt.suptitle('Sheet Metrics Evolution', fontsize=14)
+        plt.tight_layout()
+        plt.savefig(os.path.join(plots_dir, f'sheet_metrics_{timestamp}.png'), dpi=300, bbox_inches='tight')
+        plt.close()
+
+    # Fiber metrics
+    if 'fiber_cylindrical_score' in df.columns:
+        plt.figure(figsize=(12, 6))
+        plt.plot(df['Frame'], df['fiber_cylindrical_score'], label='Cylindrical Score')
+        plt.plot(df['Frame'], df['fiber_cross_section_var'], label='Cross-section Variation')
+        plt.xlabel('Frame')
+        plt.ylabel('Score')
+        plt.title('Fiber Metrics Evolution')
+        plt.legend()
+        plt.grid(True, alpha=0.3)
+        plt.savefig(os.path.join(plots_dir, f'fiber_metrics_{timestamp}.png'), dpi=300, bbox_inches='tight')
+        plt.close()
+
+    # Vesicle metrics
+    if 'vesicle_sphericity' in df.columns:
+        plt.figure(figsize=(12, 6))
+        plt.plot(df['Frame'], df['vesicle_sphericity'], label='Sphericity')
+        plt.plot(df['Frame'], df['vesicle_asphericity'], label='Asphericity')
+        plt.xlabel('Frame')
+        plt.ylabel('Score')
+        plt.title('Vesicle Metrics Evolution')
+        plt.legend()
+        plt.grid(True, alpha=0.3)
+        plt.savefig(os.path.join(plots_dir, f'vesicle_metrics_{timestamp}.png'), dpi=300, bbox_inches='tight')
+        plt.close()
+
+    # Tube metrics
+    if 'tube_radial_std' in df.columns:
+        plt.figure(figsize=(12, 6))
+        plt.plot(df['Frame'], df['tube_radial_std'], label='Radial STD')
+        plt.plot(df['Frame'], df['tube_angular_uniformity'], label='Angular Uniformity')
+        plt.xlabel('Frame')
+        plt.ylabel('Score')
+        plt.title('Tube Metrics Evolution')
+        plt.legend()
+        plt.grid(True, alpha=0.3)
+        plt.savefig(os.path.join(plots_dir, f'tube_metrics_{timestamp}.png'), dpi=300, bbox_inches='tight')
+        plt.close()
+
+def analyze_and_plot_evolution(frame_results=None, output_dir='results'):
+    """Generate comprehensive plots from shape evolution CSV"""
+    analysis_dir = os.path.join(output_dir, 'analysis')
+    if not os.path.exists(analysis_dir):
+        print("No analysis directory found")
+        return
+
+    csv_files = [f for f in os.listdir(analysis_dir) if f.startswith('shape_evolution_') and f.endswith('.csv')]
+    if not csv_files:
+        print("No shape evolution CSV files found")
+        return
+
+    # Get most recent CSV file
+    latest_csv = max(csv_files)
+    csv_path = os.path.join(analysis_dir, latest_csv)
+
+    try:
+        # Read the CSV file
+        df = pd.read_csv(csv_path)
+
+        # Create plots directory
+        plots_dir = os.path.join(output_dir, 'plots')
+        os.makedirs(plots_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Generate all plots
+        plot_aggregation_evolution(df, plots_dir, timestamp)
+        plot_shape_analysis(df, plots_dir, timestamp)
+        plot_shape_metrics(df, plots_dir, timestamp)
+
+        print(f"Plots saved in {plots_dir}")
+
+    except Exception as e:
+        print(f"Error generating plots: {str(e)}")
 
 def main():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

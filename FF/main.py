@@ -90,6 +90,9 @@ def setup_logging(output_dir):
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Peptide Assembly Analysis Pipeline')
 
+    # Add single frame option
+    parser.add_argument('--frame', type=int, help='Single frame to process')
+
     # Main operation flags
     parser.add_argument('--center', action='store_true', help='Run centering step')
     parser.add_argument('--cluster', action='store_true', help='Run clustering step')
@@ -116,6 +119,12 @@ def parse_arguments():
 
     args = parser.parse_args()
 
+    # Handle single frame argument
+    if args.frame is not None:
+        args.first = args.frame
+        args.last = args.frame + 1  # Add 1 since we use exclusive end
+        args.stride = 1
+
     # Validate frame arguments
     if args.first < 0:
         raise ValueError("First frame must be non-negative")
@@ -136,7 +145,7 @@ def clean_clusters_directory(output_dir):
 
 def ensure_analysis_directories(output_dir):
     """Create necessary directories for analysis results"""
-    subdirs = ['clusters', 'logs', 'results']
+    subdirs = ['clusters', 'logs', 'analysis']  # Changed 'results' to 'analysis'
     for subdir in subdirs:
         os.makedirs(os.path.join(output_dir, subdir), exist_ok=True)
 
@@ -233,11 +242,11 @@ def find_cluster_files(output_dir, first_frame=None, last_frame=None):
 
 def save_shape_results(results, output_dir, frame_num, logger):
     """Save shape analysis results to a file"""
-    results_dir = os.path.join(output_dir, "results")
-    os.makedirs(results_dir, exist_ok=True)
+    analysis_dir = os.path.join(output_dir, "analysis")  # Changed from results to analysis
+    os.makedirs(analysis_dir, exist_ok=True)
 
     # Create a results file for this frame
-    output_file = os.path.join(results_dir, f'frame{frame_num}_clusters.txt')
+    output_file = os.path.join(analysis_dir, f'frame{frame_num}_clusters.txt')
 
     with open(output_file, 'w') as f:
         for result in results:
@@ -252,12 +261,18 @@ def save_shape_results(results, output_dir, frame_num, logger):
 
 def analyze_frame_clusters(frame_cluster_files, min_peptides, logger, args, frame_num):
     """Analyze all clusters in a single frame, focusing on the largest cluster"""
+    # Initialize results structure
     frame_results = {
         'sheets': 0, 'fibers': 0, 'vesicles': 0, 'tubes': 0,
         'total_peptides': 0, 'shape_counts': {},
-        'largest_cluster_shape': 'undetermined',
+        'largest_cluster_shape': 'non-aggregate',  # Default to non-aggregate
         'cluster_results': []
     }
+
+    # Check if there are any clusters
+    if not frame_cluster_files:
+        logger.info("No clusters found in frame - classified as non-aggregate")
+        return frame_results
 
     # First pass: find the largest cluster
     largest_cluster = None
@@ -351,12 +366,68 @@ def analyze_frame_clusters(frame_cluster_files, min_peptides, logger, args, fram
         for shape_type, metrics in all_metrics.items():
             logger.info(f"{shape_type.capitalize()} metrics: {metrics}")
 
+        # Update classification logic based on metrics
+        final_shape = "undetermined"
+        shapes = []  # List to collect all detected shapes
+
+        # Check Sheet
+        sheet_metrics = all_metrics.get('sheet', {})
+        if (sheet_metrics.get('planarity_rmsd', 100) < 12.0 or  # More lenient
+            sheet_metrics.get('curvature_rmsd', 100) < 9.0):    # Allow curved sheets
+            if sheet_metrics.get('thickness_ratio', 1.0) < 0.5:  # Must be relatively thin
+                shapes.append('sheet')
+
+        # Check Fiber
+        fiber_metrics = all_metrics.get('fiber', {})
+        if (fiber_metrics.get('cylindrical_score', 0) > 0.6 and
+            fiber_metrics.get('shape_ratio', 0) > 2.5 and
+            fiber_metrics.get('cross_section_var', 1.0) < 0.5 and
+            not all_metrics.get('tube', {}).get('hollow', False)):  # Not hollow inside
+            shapes.append('fiber')
+
+        # Check Tube
+        tube_metrics = all_metrics.get('tube', {})
+        if (tube_metrics.get('hollow', False) and
+            tube_metrics.get('radial_std', 100) < 15.0 and
+            tube_metrics.get('ratio', 1.0) < 0.3):
+            shapes.append('tube')
+
+        # Check Vesicle
+        vesicle_metrics = all_metrics.get('vesicle', {})
+        if (vesicle_metrics.get('sphericity', 0) >= 0.85):
+            if vesicle_metrics.get('hollowness', False):
+                shapes.append('vesicle')
+            elif len(shapes) == 0:  # Only if no other shape is detected
+                shapes.append('spherical_aggregate')
+
+        # Determine final classification
+        if len(shapes) > 0:
+            # Priority order based on confidence in metrics
+            if 'sheet' in shapes:
+                final_shape = "sheet"
+            elif 'tube' in shapes and tube_metrics.get('hollow', False):
+                final_shape = "tube"
+            elif 'fiber' in shapes:
+                final_shape = "fiber"
+            elif 'vesicle' in shapes:
+                final_shape = "vesicle"
+            elif 'spherical_aggregate' in shapes:
+                final_shape = "spherical_aggregate"
+
+            # If multiple shapes detected, show all
+            if len(shapes) > 1:
+                other_shapes = [s for s in shapes if s != final_shape]
+                if other_shapes:
+                    final_shape = f"{final_shape} (also detected: {', '.join(other_shapes)})"
+
+        logger.info(f"Final classification: {final_shape}")
+
         # Update frame results based on shapes
         for shape in shapes:
             frame_results[f'{shape}s'] = largest_size
             frame_results['shape_counts'][shape] = 1
 
-        frame_results['largest_cluster_shape'] = ', '.join(shapes) if shapes else 'undetermined'
+        frame_results['largest_cluster_shape'] = final_shape
         frame_results['total_peptides'] = largest_size
         frame_results['cluster_results'].append(cluster_result)
 
@@ -367,14 +438,18 @@ def analyze_frame_clusters(frame_cluster_files, min_peptides, logger, args, fram
 
 def save_analysis_data(frame_results, output_dir):
     """Save analysis data focusing on largest cluster per frame"""
-    results_dir = os.path.join(output_dir, "analysis")
-    os.makedirs(results_dir, exist_ok=True)
+    analysis_dir = os.path.join(output_dir, "analysis")  # Changed from results to analysis
+    os.makedirs(analysis_dir, exist_ok=True)
+
+    # Add timestamp to filename
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = os.path.join(analysis_dir, f'shape_evolution_{timestamp}.csv')
 
     # Convert all frame numbers to integers
     frame_results = {int(frame): results for frame, results in frame_results.items()}
 
     # Save frame-by-frame data
-    with open(os.path.join(results_dir, 'shape_evolution.csv'), 'w') as f:
+    with open(output_file, 'w') as f:
         # Write header
         f.write('Frame,LargestClusterSize,Shape')
         # Add metric headers dynamically based on first frame with metrics
@@ -416,6 +491,11 @@ def main():
     args = parse_arguments()
     ensure_analysis_directories(args.output)
     logger = setup_logging(args.output)
+
+    if args.frame is not None:
+        logger.info(f"Processing single frame {args.frame}")
+    else:
+        logger.info(f"Processing frames from {args.first} to {args.last} with stride {args.stride}")
 
     # Add frame range validation
     if args.last is not None:
@@ -472,22 +552,23 @@ def main():
             else:
                 logger.info("No trajectory file provided. Skipping centering step")
 
-        # Clustering step - only if no cluster files exist
+        # Clustering step
         if args.cluster or (args.analyze and not cluster_files):
             if centered_files[1]:
                 cluster_files = cluster_trajectory(
                     centered_files[0],
                     centered_files[1],
                     args.first,
-                    args.last,  # Using same exclusive last frame
+                    args.last,
                     args.stride,
                     args.cluster_cutoff,
                     args.output,
                     logger
                 )
-                logger.info("Clustering completed successfully")
-            else:
-                logger.info("No trajectory file provided. Skipping clustering step")
+                if cluster_files:
+                    logger.info("Clustering completed successfully")
+                else:
+                    logger.info("No clusters found - system is non-aggregated")
 
         frame_results = {}
 
@@ -496,46 +577,45 @@ def main():
             logger.info(f"Looking for clusters between frames {args.first} and {args.last}")
             cluster_files = find_cluster_files(args.output, args.first, args.last)
 
-            if not cluster_files:
-                # Try clustering if no files found and we have trajectory data
-                if args.trajectory and centered_files[1]:
-                    logger.info("No existing cluster files found, performing clustering...")
-                    cluster_files = cluster_trajectory(
-                        centered_files[0],
-                        centered_files[1],
-                        args.first,
-                        args.last,
-                        args.stride,
-                        args.cluster_cutoff,
-                        args.output,
-                        logger
-                    )
+            # Initialize frame_results even if no clusters found
+            frame_results = {}
 
-                if not cluster_files:
-                    logger.error("No cluster files found or generated for analysis!")
-                    sys.exit(1)
+            if not cluster_files and args.trajectory and centered_files[1]:
+                logger.info("No existing cluster files found, performing clustering...")
+                cluster_files = cluster_trajectory(
+                    centered_files[0],
+                    centered_files[1],
+                    args.first,
+                    args.last,
+                    args.stride,
+                    args.cluster_cutoff,
+                    args.output,
+                    logger
+                )
 
-            # Group clusters by frame and analyze
-            frame_clusters = defaultdict(list)
-            for cluster_file in cluster_files:
-                # Extract frame number from filename (format: frame{frame}_cluster{cluster}.gro)
-                frame_num = int(os.path.basename(cluster_file).split('_')[0][5:])
-                frame_clusters[frame_num].append(cluster_file)
+            # Get universe to determine frames to analyze
+            u = mda.Universe(centered_files[0], centered_files[1])
+            frames_to_analyze = range(args.first, args.last, args.stride)
 
-            for frame_num, frame_cluster_files in sorted(frame_clusters.items()):
+            for frame_num in frames_to_analyze:
                 logger.info(f"Analyzing frame {frame_num}")
+                frame_clusters = defaultdict(list)
+
+                # Find clusters for this frame
+                for cluster_file in cluster_files:
+                    if int(os.path.basename(cluster_file).split('_')[0][5:]) == frame_num:
+                        frame_clusters[frame_num].append(cluster_file)
+
+                # Analyze frame (will return non-aggregate if no clusters)
                 frame_results[frame_num] = analyze_frame_clusters(
-                    frame_cluster_files, args.min_peptides, logger, args, frame_num)
+                    frame_clusters[frame_num], args.min_peptides, logger, args, frame_num)
 
             # Save analysis data
             save_analysis_data(frame_results, args.output)
 
         # Plotting step
         if args.plot:
-            if not frame_results:
-                logger.error("No analysis results found for plotting!")
-                sys.exit(1)
-            analyze_and_plot(frame_results, args.output)
+            analyze_and_plot(None, args.output)  # Pass None for frame_results to read from CSV
 
     except Exception as e:
         logger.error(f"Pipeline failed: {str(e)}", exc_info=True)

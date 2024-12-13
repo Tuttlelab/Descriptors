@@ -13,15 +13,16 @@ import logging
 logger = logging.getLogger('ffi')
 
 # Constants
-SHAPE_RATIO_THRESHOLD = 1.2  # Rolled back from 2.0
-ALIGNMENT_STD_THRESHOLD = 70.0  # Rolled back from 45.0
+SHAPE_RATIO_THRESHOLD = 2.5  # Decreased to catch more potential fibers
+ALIGNMENT_STD_THRESHOLD = 25.0  # More strict alignment requirement
 CROSS_SECTION_THICKNESS = 5.0
 NUM_CROSS_SECTIONS = 10
 FOP_THRESHOLD_POSITIVE = 0.05  # Lowered to be less strict
 FOP_THRESHOLD_NEGATIVE = -0.1
-MIN_LENGTH_RATIO = 1.5  # Rolled back from 2.5
+MIN_LENGTH_RATIO = 4.0  # More elongated
 RADIUS_VARIATION_THRESHOLD = 0.3  # Rolled back from 0.2
-MIN_CYLINDRICAL_SCORE = 0.4  # Rolled back from 0.6
+MIN_CYLINDRICAL_SCORE = 0.6  # Keep relatively strict
+CROSS_SECTION_VAR_THRESHOLD = 0.5  # Consistency of cross-section
 
 def compute_moments_of_inertia(positions):
     """
@@ -256,7 +257,7 @@ def compute_sphericity(positions):
     return sphericity
 
 def analyze_clusters(cluster_files, min_peptides):
-    """Enhanced cluster analysis for fiber detection"""
+    """Enhanced cluster analysis for fiber detection with better sheet distinction"""
     results = []
     for cluster_file in cluster_files:
         try:
@@ -276,22 +277,33 @@ def analyze_clusters(cluster_files, min_peptides):
             mean_angle, std_angle, angles = analyze_orientation_distribution(orientations, principal_axis)
             fop = compute_fop(orientations, principal_axis)
 
-            # Simplified metrics reporting
+            # Calculate additional metrics for sheet vs fiber distinction
+            # Check if structure has consistent cross-sectional area (cylinder-like)
+            cross_sections = cross_sectional_profiling(positions - positions.mean(axis=0), principal_axis)
+            if len(cross_sections) > 2:
+                cross_section_variation = np.std(cross_sections) / np.mean(cross_sections)
+            else:
+                cross_section_variation = float('inf')
+
+            # Determine if it's a fiber based on updated criteria
+            is_fiber = bool(
+                cylindrical_score > MIN_CYLINDRICAL_SCORE and
+                shape_ratio1 >= SHAPE_RATIO_THRESHOLD and
+                std_angle < ALIGNMENT_STD_THRESHOLD and
+                length_ratio > MIN_LENGTH_RATIO and
+                cross_section_variation < CROSS_SECTION_VAR_THRESHOLD and  # Must have consistent cross-section
+                not is_hollow_tube(compute_radial_density(positions)[0])  # Should not be hollow inside
+            )
+
+            # Update metrics
             metrics = {
                 'shape_ratio': round(float(shape_ratio1), 1),
                 'alignment': round(float(std_angle), 1),
                 'cylindrical_score': round(float(cylindrical_score), 1),
                 'length_ratio': round(float(length_ratio), 1),
+                'cross_section_var': round(float(cross_section_variation), 2),
                 'total_beads': len(positions)
             }
-
-            # Determine if it's a fiber based on criteria
-            is_fiber = bool(
-                cylindrical_score > MIN_CYLINDRICAL_SCORE and
-                shape_ratio1 >= SHAPE_RATIO_THRESHOLD and
-                std_angle < ALIGNMENT_STD_THRESHOLD and
-                length_ratio > MIN_LENGTH_RATIO
-            )
 
             results.append({
                 'size': len(positions),

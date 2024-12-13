@@ -18,19 +18,20 @@ import logging
 logger = logging.getLogger('sfi')
 
 # Constants
-PLANARITY_THRESHOLD = 1.5  # Increased from 1.2
-CURVATURE_THRESHOLD = 4.0  # Increased from 3.0
+PLANARITY_THRESHOLD = 0.9   # Å, threshold for RMSD to classify as a sheet
+CURVATURE_THRESHOLD = 2.0   # Å, increased to detect more curved sheets
 LOCAL_THICKNESS_THRESHOLD = 2.5  # Increased from 2.0
-MIN_SURFACE_AREA = 80.0  # Decreased from 100.0
+MIN_SURFACE_AREA = 40.0  # Decreased from 100.0
 SURFACE_DENSITY_THRESHOLD = 0.5  # Decreased from 0.7
-SPATIAL_WEIGHT = 1.2
-ORIENTATION_WEIGHT = 1.0
-SPATIAL_CUTOFF = 15
-ANGLE_CUTOFF = 45
-MIN_SHEET_SIZE = 5
+SPATIAL_WEIGHT = 1.2        # Weight for spatial distance in clustering
+ORIENTATION_WEIGHT = 1.0    # Weight for orientation similarity in clustering
+SPATIAL_CUTOFF = 15        # nm, adjusted for smaller sheet detection
+ANGLE_CUTOFF = 45          # degrees, increased to allow for curvature
+MIN_SHEET_SIZE = 5         # Reduced to detect smaller sheets
 MIN_ATOMS_SPHERICITY = 10
 PERFECT_SPHERE_RATIO = 1.0
 MIN_VOLUME_SPHERICITY = 0.1  # Rolled back
+THICKNESS_RATIO_THRESHOLD = 0.3  # New constant: max thickness to width ratio for sheets
 
 def perform_pca(positions):
     """Perform PCA with robust error handling."""
@@ -66,12 +67,31 @@ def perform_pca(positions):
 
 def analyze_bb_sc_distribution(positions, atoms):
     """Analyze backbone and sidechain distribution to detect bilayer characteristics."""
-    # Placeholder implementation
-    bb_positions = positions[atoms.names == 'BB']
-    sc_positions = positions[atoms.names != 'BB']
-    bb_sc_separation = np.mean(np.linalg.norm(bb_positions - sc_positions, axis=1))
-    is_bilayer = bb_sc_separation > 5.0  # Example threshold
-    return is_bilayer, bb_sc_separation
+    try:
+        # Get BB and SC positions separately
+        bb_mask = atoms.names == 'BB'
+        sc_mask = atoms.names != 'BB'
+
+        bb_positions = positions[bb_mask]
+        sc_positions = positions[sc_mask]
+
+        # Ensure we have both BB and SC positions
+        if len(bb_positions) == 0 or len(sc_positions) == 0:
+            return False, 0.0
+
+        # Calculate minimum distances between BB and SC
+        from scipy.spatial.distance import cdist
+        distances = cdist(bb_positions, sc_positions)
+        min_distances = np.min(distances, axis=1)
+
+        bb_sc_separation = np.mean(min_distances)
+        is_bilayer = bb_sc_separation > 5.0
+
+        return is_bilayer, bb_sc_separation
+
+    except Exception as e:
+        logger.error(f"Error in analyze_bb_sc_distribution: {str(e)}")
+        return False, 0.0
 
 def analyze_local_structure(positions, k=10):
     """Analyze local planarity in smaller neighborhoods"""
@@ -216,7 +236,7 @@ def calculate_peptide_length(universe):
         return beads_per_res * 2
 
 def analyze_clusters(cluster_files, min_peptides):
-    """Analyze clusters with improved curved sheet detection"""
+    """Analyze clusters with improved sheet detection matching sfi_analysis.py"""
     results = []
     for cluster_file in cluster_files:
         try:
@@ -224,66 +244,50 @@ def analyze_clusters(cluster_files, min_peptides):
             filename = os.path.basename(cluster_file)
             cluster_num = int(''.join(filter(str.isdigit, filename.split('_')[0])))
 
-            if u.atoms is None:
+            if u.atoms is None or len(u.atoms) == 0:
                 continue
 
             positions = u.atoms.positions
-            if len(positions) < min_peptides * 8:  # Assuming 8 beads per peptide minimum
+            if len(positions) < min_peptides * 8:
                 continue
 
-            # Enhanced sheet analysis matching sfi_analysis.py
+            # Get metrics before shape determination
             normal_vector, orientation_vector, rmsd, _, eigenvalues = perform_pca(positions)
-
             if eigenvalues is None:
                 continue
 
             curvature_rmsd, params = fit_quadratic_surface(positions)
             sphericity = compute_sphericity(positions)
 
-            # Enhanced sheet criteria
+            # Calculate sheet-specific metrics
+            thickness = np.sqrt(eigenvalues[0])  # Smallest eigenvalue = thickness
+            width = np.sqrt(eigenvalues[1])      # Middle eigenvalue = width
+            length = np.sqrt(eigenvalues[2])     # Largest eigenvalue = length
+
+            thickness_ratio = thickness / width
+            elongation_ratio = length / width
+
+            # Sheet characteristics from reference implementation:
+            # 1. Must have low planarity RMSD OR acceptable curvature
+            # 2. Must be relatively thin
+            # 3. Must have reasonable aspect ratio
             is_sheet = bool(
-                is_sheet_like(eigenvalues, rmsd, positions, u.atoms) and
-                (sphericity < 0.95) and  # Not too spherical
-                any([  # Must meet at least one of these criteria
-                    rmsd < PLANARITY_THRESHOLD,  # Flat sheet
-                    (curvature_rmsd < CURVATURE_THRESHOLD and  # Curved sheet
-                     params is not None and
-                     max(abs(params[0]), abs(params[1])) > 0.05)
-                ])
+                (rmsd < PLANARITY_THRESHOLD or
+                 (curvature_rmsd < CURVATURE_THRESHOLD and
+                  params is not None)) and
+                thickness_ratio < 0.3 and  # Must be thin
+                elongation_ratio > 1.2 and  # Must be somewhat elongated
+                sphericity < 0.95  # Not too spherical
             )
 
-            is_curved = False
-            if params is not None:
-                a, b = params[0], params[1]
-                is_curved = (abs(a) > 0.1 and abs(b) < 0.05) or (abs(b) > 0.1 and abs(a) < 0.05)
-
-            # Simplified metrics reporting
             metrics = {
                 'planarity_rmsd': round(float(rmsd), 1),
                 'curvature_rmsd': round(float(curvature_rmsd), 1),
                 'sphericity': round(float(sphericity), 1),
+                'thickness_ratio': round(float(thickness_ratio), 2),
+                'elongation_ratio': round(float(elongation_ratio), 2),
                 'total_beads': len(positions)
             }
-
-            # Enhanced sheet detection criteria
-            is_sheet = bool(
-                (rmsd < PLANARITY_THRESHOLD or
-                 (curvature_rmsd < CURVATURE_THRESHOLD * 2.0 and  # More lenient for curved sheets
-                  params is not None and
-                  max(abs(params[0]), abs(params[1])) > 0.05)) and  # Check for curvature
-                sphericity < 0.95 and
-                eigenvalues is not None and
-                (np.sqrt(eigenvalues[0]/eigenvalues[1]) < 0.5 or  # Standard thickness ratio
-                 (params is not None and  # Alternative criterion for curved sheets
-                  max(abs(params[0]), abs(params[1])) > 0.05 and
-                  np.sqrt(eigenvalues[0]/eigenvalues[1]) < 0.7))  # More lenient for curved sheets
-            )
-
-            # Add bilayer check
-            if u.atoms is not None:
-                is_bilayer, bb_sc_sep = analyze_bb_sc_distribution(positions, u.atoms)
-                if is_bilayer:
-                    is_sheet = True  # Override if bilayer characteristics are detected
 
             results.append({
                 'size': len(positions),
@@ -301,7 +305,6 @@ def analyze_clusters(cluster_files, min_peptides):
 def compute_sphericity(positions):
     """Calculate sphericity using convex hull with enhanced criteria."""
     if len(positions) < MIN_ATOMS_SPHERICITY:
-
         return 0.0
 
     try:
@@ -310,13 +313,12 @@ def compute_sphericity(positions):
             return 0.0
 
         # Enhanced sphericity calculation
-        sphericity = PERFECT_SPHERE_RATIO * (hull.volume ** (2/3)) / hull.area
-        sphericity = max(sphericity, 0.0)
+        sphericity = (np.pi ** (1/3) * (6 * hull.volume) ** (2/3)) / hull.area
 
-        # Additional validation to exclude vesicle-like structures
-        if sphericity < 0.8:
-            return 0.0
+        # Normalize to [0, 1] range
+        sphericity = min(max(sphericity, 0.0), 1.0)
 
         return sphericity
-    except Exception:
+    except Exception as e:
+        logger.error(f"Error computing sphericity: {str(e)}")
         return 0.0
