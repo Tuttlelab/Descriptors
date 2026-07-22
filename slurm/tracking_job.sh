@@ -16,5 +16,5 @@ TRAJECTORY="${2:-data/trajectory.xtc}"
 OUTPUT_DIR="${3:-results/tracking_results}"
 
 echo "Starting Shape Tracking Analysis..."
-python shape_tracker.py -t "${TOPOLOGY}" -x "${TRAJECTORY}" -o "${OUTPUT_DIR}"
+python analysis/shape_tracker.py -t "${TOPOLOGY}" -x "${TRAJECTORY}" -o "${OUTPUT_DIR}"
 echo "Shape Tracking finished."

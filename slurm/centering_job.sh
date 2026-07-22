@@ -16,5 +16,5 @@ TRAJECTORY="${2:-data/trajectory.xtc}"
 OUTPUT_DIR="${3:-centered_files}"
 
 echo "Starting PBC Centering..."
-python centering.py -t "${TOPOLOGY}" -x "${TRAJECTORY}" -o "${OUTPUT_DIR}"
+python analysis/centering.py -t "${TOPOLOGY}" -x "${TRAJECTORY}" -o "${OUTPUT_DIR}"
 echo "Centering finished."

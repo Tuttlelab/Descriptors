@@ -23,26 +23,26 @@ pip install -e .
 *(Or create a Conda environment: `conda env create -f environment.yml && conda activate descriptors`)*
 
 ### Step 2: Run Analysis on Trajectories
-Run any of the 5 shape descriptors or the integrative shape tracker on your Gromacs topology (`.gro`) and trajectory (`.xtc`):
+Run any of the 5 shape descriptors or the integrative shape tracker from [`analysis/`](analysis/) on your Gromacs topology (`.gro`) and trajectory (`.xtc`):
 
 ```bash
 # 1. Aggregate Dynamics Index (ADI)
-python adi_analysis.py -t topology.gro -x trajectory.xtc -o results/adi
+python analysis/adi_analysis.py -t topology.gro -x trajectory.xtc -o results/adi
 
 # 2. Sheet Formation Index (SFI)
-python sfi_analysis.py -t topology.gro -x trajectory.xtc -o results/sfi
+python analysis/sfi_analysis.py -t topology.gro -x trajectory.xtc -o results/sfi
 
 # 3. Vesicle Formation Index (VFI)
-python vfi_analysis.py -t topology.gro -x trajectory.xtc -o results/vfi
+python analysis/vfi_analysis.py -t topology.gro -x trajectory.xtc -o results/vfi
 
 # 4. Tube Formation Index (TFI)
-python tfi_analysis.py -t topology.gro -x trajectory.xtc -o results/tfi
+python analysis/tfi_analysis.py -t topology.gro -x trajectory.xtc -o results/tfi
 
 # 5. Fiber Formation Index (FFI)
-python ffi_analysis.py -t topology.gro -x trajectory.xtc -o results/ffi
+python analysis/ffi_analysis.py -t topology.gro -x trajectory.xtc -o results/ffi
 
 # 6. Integrative Shape Tracker (Runs all descriptors & tracks temporal transitions)
-python shape_tracker.py -t topology.gro -x trajectory.xtc -o results/tracking
+python analysis/shape_tracker.py -t topology.gro -x trajectory.xtc -o results/tracking
 ```
 
 ### Step 3: Reproduce Paper Plotting & Figures
@@ -58,8 +58,8 @@ python analysis/evolution_WI.py
 ## Repository Structure
 
 - [`descriptors/`](descriptors/): Core Python library (`descriptors.adi`, `descriptors.sfi`, etc.).
+- [`analysis/`](analysis/): Descriptor entrypoint scripts (`adi_analysis.py`, `shape_tracker.py`) and paper figure plotting scripts.
 - [`slurm/`](slurm/): Slurm HPC batch submission scripts (`centering_job.sh`, `tracking_job.sh`).
-- [`analysis/`](analysis/): Paper trajectory post-processing and figure generation scripts.
 - [`tests/`](tests/): Test suite (`pytest tests/`).
 
 ---
