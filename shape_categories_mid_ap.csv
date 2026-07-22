@@ -1,0 +1,16 @@
+Shape Distribution,Datasets,Count
+"Vesicles(0.99), Sheets(0.01)","YW, SH, MW, WL, WY, YS, SY",7
+"Vesicles(0.95), Tubes(0.04), Sheets(0.01)","HF, FC, KD, RW",4
+"Vesicles(0.98), Sheets(0.02)","HS, YF, PW",3
+"Vesicles(0.93), Tubes(0.06), Sheets(0.01)","KW, WH",2
+"Vesicles(0.97), Tubes(0.03), Sheets(0.01)","RF, FH",2
+"Vesicles(0.94), Tubes(0.05), Sheets(0.01)","HT, HW",2
+"Vesicles(0.96), Tubes(0.03), Sheets(0.01)",FD,1
+"Vesicles(0.84), Tubes(0.16), Sheets(0.01)",YC,1
+"Sheets(1.00), Vesicles(0.00)",MF,1
+"Vesicles(0.97), Sheets(0.03)",FM,1
+"Vesicles(0.93), Tubes(0.06), Sheets(0.00)",WK,1
+"Vesicles(0.98), Tubes(0.02), Sheets(0.01)",KF,1
+"Vesicles(0.96), Tubes(0.03), Sheets(0.00)",RD,1
+"Vesicles(0.92), Tubes(0.08), Sheets(0.00)",WR,1
+"Sheets(0.96), Vesicles(0.04)",WM,1

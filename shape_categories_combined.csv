@@ -1,0 +1,16 @@
+Shape Distribution,High AP,Mid AP
+"Sheets(1.00), Vesicles(0.00)",-,MF
+"Vesicles(0.99), Sheets(0.01)","IF, FI, FL, FY, FT, FW, SF, CW, PF, WT, WW, LW, FF, FS, VW, FV, WC, WF, WS, WI, WV, LF, TW, IW, FP, SW, WP, TF","YW, SH, MW, WL, WY, YS, SY"
+"Vesicles(0.98), Sheets(0.02)","VF, CF","HS, YF, PW"
+"Vesicles(0.98), Tubes(0.02), Sheets(0.01)",-,KF
+"Vesicles(0.97), Sheets(0.03)",-,FM
+"Vesicles(0.97), Tubes(0.03), Sheets(0.01)",-,"RF, FH"
+"Vesicles(0.96), Tubes(0.03), Sheets(0.01)",-,FD
+"Sheets(0.96), Vesicles(0.04)",-,WM
+"Vesicles(0.96), Tubes(0.03), Sheets(0.00)",-,RD
+"Vesicles(0.95), Tubes(0.04), Sheets(0.01)",-,"HF, FC, KD, RW"
+"Vesicles(0.94), Tubes(0.05), Sheets(0.01)",-,"HT, HW"
+"Vesicles(0.93), Tubes(0.06), Sheets(0.00)",-,WK
+"Vesicles(0.93), Tubes(0.06), Sheets(0.01)",-,"KW, WH"
+"Vesicles(0.92), Tubes(0.08), Sheets(0.00)",-,WR
+"Vesicles(0.84), Tubes(0.16), Sheets(0.01)",-,YC

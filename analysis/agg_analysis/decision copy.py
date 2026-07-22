@@ -73,8 +73,8 @@ def plot_aggregation_analysis(df, timestamp):
 
     ax1.set_ylabel('Relative Abundance')
     ax1.set_title('Structure Evolution')
-    ax1.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    ax1.grid(True, alpha=0.3)
+    ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4)
+    ax1.grid(False)  # Remove background grid lines
 
     # State transitions
     unique_states = sorted(df['dominant_state'].unique())
@@ -86,7 +86,7 @@ def plot_aggregation_analysis(df, timestamp):
     ax2.set_yticklabels(unique_states)
     ax2.set_xlabel('Frame')
     ax2.set_ylabel('Dominant Structure')
-    ax2.grid(True, alpha=0.3)
+    ax2.grid(False)  # Remove background grid lines
 
     plt.tight_layout()
     plt.savefig(f'aggregation_evolution_{timestamp}.png', dpi=300, bbox_inches='tight')

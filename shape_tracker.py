@@ -59,6 +59,10 @@ def ensure_output_directory(base_dir, subdir):
 
 def setup_logging(output_dir):
     """Setup logging configuration"""
+    # Ensure the output directory exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     log_file = os.path.join(output_dir, f'shape_tracker_{timestamp}.log')
 

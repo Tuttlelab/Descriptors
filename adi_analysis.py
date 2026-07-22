@@ -36,8 +36,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 # Constants
 DEFAULT_MIN_PERSISTENCE = 5  # Minimum number of frames a contact must persist
-DEFAULT_RDF_RANGE = (4.0, 15.0)  # Range for RDF calculation in Angstroms
-DEFAULT_NBINS = 50  # Number of bins for RDF
+STATIC_CUTOFF = 4.5  # Static cutoff distance in Angstroms
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Aggregate Detection Index (ADI) Analysis')
@@ -46,9 +45,6 @@ def parse_arguments():
     parser.add_argument('-o', '--output', default='adi_results', help='Output directory for results')
     parser.add_argument('-p', '--persistence', type=int, default=DEFAULT_MIN_PERSISTENCE,
                         help='Minimum persistence (in frames) for a contact to be considered stable')
-    parser.add_argument('--rdf_range', type=float, nargs=2, default=DEFAULT_RDF_RANGE,
-                        help='Range for RDF calculation (start, end)')
-    parser.add_argument('--nbins', type=int, default=DEFAULT_NBINS, help='Number of bins for RDF')
     parser.add_argument('--skip', type=int, default=1, help='Process every nth frame (default is every frame)')
     parser.add_argument('--first', type=int, default=0, help='Only analyze the first N frames (default is all frames)')
     parser.add_argument('--last', type=int, default=None, help='Only analyze the last N frames (default is all frames)')
@@ -121,63 +117,6 @@ def load_and_crop_trajectory(topology, trajectory, first, last, skip, selection=
     cropped_u = mda.Universe(temp_gro, temp_xtc)
     return cropped_u
 '''
-
-def calculate_adaptive_cutoff(universe, selection_string, rdf_range, nbins, output_dir, first, last, skip):
-    """
-    Calculate an adaptive cutoff distance based on the first minimum after the first peak in the RDF.
-    Uses the same frame range as specified in command line arguments.
-    """
-    print("Calculating adaptive cutoff distance based on RDF...")
-    print()
-    peptides = universe.select_atoms(selection_string)
-    print(f'{len(peptides)} peptide beads selected for RDF analysis.')
-    print()
-
-    # Use the same frame range as main analysis
-    if last is None or last > len(universe.trajectory):
-        last = len(universe.trajectory)
-    print(f"Using frames {first} to {last} with step {skip} for RDF calculation...")
-    print()
-
-    start_time = datetime.now()
-    rdf_analysis = rdf.InterRDF(peptides, peptides, nbins=nbins, range=rdf_range)
-
-    # Run RDF analysis over specified frames
-    rdf_analysis.run(start=first, stop=last, step=skip)
-
-    end_time = datetime.now()
-    print(f"RDF calculation completed in {end_time - start_time}.")
-    print()
-
-    # Save RDF plot
-    plt.figure()
-    plt.plot(rdf_analysis.results.bins, rdf_analysis.results.rdf)
-    plt.xlabel('Distance (Å)')
-    plt.ylabel('g(r)')
-    plt.title('Radial Distribution Function')
-    timestamp = datetime.now().strftime("%m%d_%H%M")
-    plt.savefig(os.path.join(output_dir, f'rdf_plot_{timestamp}.png'))
-    print("RDF plot saved.")
-    print()
-    # plt.show()
-    plt.close()
-
-    # Identify the first minimum after the first peak
-    rdf_values = rdf_analysis.results.rdf
-    bins = rdf_analysis.results.bins
-    peaks = (np.diff(np.sign(np.diff(rdf_values))) < 0).nonzero()[0] + 1
-    if peaks.size > 0:
-        first_peak = peaks[0]
-        minima = (np.diff(np.sign(np.diff(rdf_values[first_peak:]))) > 0).nonzero()[0] + first_peak + 1
-        if minima.size > 0:
-            cutoff_distance = bins[minima[0]]
-            print(f"Adaptive cutoff distance determined: {cutoff_distance:.2f} Å")
-            print()
-        else:
-            raise ValueError("No minimum found in RDF after the first peak. Please check your RDF or specify a manual cutoff.")
-    else:
-        raise ValueError("No peaks found in RDF. Please check your RDF or specify a manual cutoff.")
-    return cutoff_distance
 
 def identify_clusters(peptides, cutoff_distance, min_peptides=50):
     """
@@ -272,6 +211,7 @@ def main():
     logger.info("Starting ADI analysis")
     logger.info(f"Input topology: {args.topology}")
     logger.info(f"Input trajectory: {args.trajectory}")
+    logger.info(f"Using static cutoff distance: {STATIC_CUTOFF} Å")
 
     # Load trajectory
     logger.info("Loading trajectory...")
@@ -281,11 +221,6 @@ def main():
     logger.info(f"  - Total atoms: {len(peptides)}")
     logger.info(f"  - Total frames: {len(u.trajectory)}")
     logger.info(f"  - Time step: {u.trajectory.dt} ps")
-
-    # Calculate adaptive cutoff distance based on RDF using specified frame range
-    cutoff_distance = calculate_adaptive_cutoff(u, 'all', args.rdf_range, args.nbins,
-                                              args.output, args.first, args.last, args.skip)
-    logger.info(f"Determined adaptive cutoff distance: {cutoff_distance:.2f} Å")
 
     # Initialize variables for analysis
     cluster_records = defaultdict(list)  # {cluster_id: [frame_numbers]}
@@ -307,7 +242,7 @@ def main():
                 print(f"Processing frame {frame_number}...")
 
                 # Identify clusters
-                current_clusters = identify_clusters(peptides, cutoff_distance, min_peptides=50)
+                current_clusters = identify_clusters(peptides, STATIC_CUTOFF, min_peptides=50)
                 cluster_sizes = [len(cluster) for cluster in current_clusters]
                 logger.info(f"Frame {frame_number}: Found clusters with sizes: {cluster_sizes}")
                 print(f"Found clusters with sizes: {cluster_sizes}")
@@ -348,7 +283,7 @@ def main():
                         try:
                             logger.info(f"Processing cluster {cluster_idx} with size {len(cluster)}")
                             print(f"Processing cluster {cluster_idx} with size {len(cluster)}")
-                            cluster_pairs = process_cluster_contacts(peptides, cluster, cutoff_distance)
+                            cluster_pairs = process_cluster_contacts(peptides, cluster, STATIC_CUTOFF)
                             current_contacts.update(cluster_pairs)
                             logger.info(f"Cluster {cluster_idx} generated {len(cluster_pairs)} contact pairs")
                             print(f"Cluster {cluster_idx} generated {len(cluster_pairs)} contact pairs")

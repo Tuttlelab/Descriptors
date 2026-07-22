@@ -6,12 +6,12 @@ from scipy.signal import savgol_filter
 from scipy.stats import mode
 import seaborn as sns
 
-def calculate_structure_fractions(df, window_size=10, confidence_threshold=0.15):
+def calculate_structure_fractions(df, confidence_threshold=0.15):
     """Calculate structure fractions with confidence filtering"""
     total_peptides = (df['total_peptides_in_sheets'] +
-                     df['total_peptides_in_fibers'] +
-                     df['total_peptides_in_vesicles'] +
-                     df['total_peptides_in_tubes'])
+                      df['total_peptides_in_fibers'] +
+                      df['total_peptides_in_vesicles'] +
+                      df['total_peptides_in_tubes'])
 
     structures = ['sheets', 'fibers', 'vesicles', 'tubes']
 
@@ -19,16 +19,12 @@ def calculate_structure_fractions(df, window_size=10, confidence_threshold=0.15)
     for structure in structures:
         df[f'{structure}_fraction'] = df[f'total_peptides_in_{structure}'] / total_peptides
 
-        # Apply Savitzky-Golay filter for smooth trend
-        df[f'{structure}_smooth'] = savgol_filter(
-            df[f'{structure}_fraction'],
-            window_length=window_size*2+1,
-            polyorder=3
-        )
+    # Remove smoothing
+    # ...removed code related to smoothing...
 
-    # Mark low confidence predictions
+    # Mark low confidence predictions using fractions directly
     df['confident_classification'] = (
-        df[[f'{s}_smooth' for s in structures]].max(axis=1) > confidence_threshold
+        df[[f'{s}_fraction' for s in structures]].max(axis=1) > confidence_threshold
     )
 
     return df
@@ -36,19 +32,39 @@ def calculate_structure_fractions(df, window_size=10, confidence_threshold=0.15)
 def identify_stable_transitions(df, min_stable_frames=20):
     """Identify genuine structure transitions, filtering out noise"""
     structures = ['sheets', 'fibers', 'vesicles', 'tubes']
-    smooth_cols = [f'{structure}_smooth' for structure in structures]
+    fraction_cols = [f'{structure}_fraction' for structure in structures]
 
-    # Get dominant structure at each frame
+    # Get dominant structure at each frame using fractions
     df['dominant_structure'] = pd.DataFrame(
-        [df[col] for col in smooth_cols],
+        [df[col] for col in fraction_cols],
         index=structures
     ).idxmax()
 
-    # Apply temporal mode filter to remove spurious transitions
-    df['stable_structure'] = df['dominant_structure'].rolling(
-        window=min_stable_frames,
-        center=True
-    ).apply(lambda x: mode(x)[0][0])
+    # Convert dominant_structure to categorical codes
+    df['dominant_structure_code'] = df['dominant_structure'].astype('category').cat.codes
+
+    # Define a safe mode function that handles empty arrays
+    def safe_mode(x):
+        if len(x) == 0 or pd.isna(x).all():
+            return 0
+        try:
+            # Use stats.mode and handle the case when mode is empty
+            mode_result = mode(x, keepdims=False)
+            return mode_result if isinstance(mode_result, (int, float)) else mode_result[0]
+        except:
+            # If mode fails, return the first value or 0
+            return x[0] if len(x) > 0 else 0
+
+    # Apply rolling mode with the safe function
+    df['stable_structure_code'] = (
+        df['dominant_structure_code']
+        .rolling(window=min_stable_frames, center=True, min_periods=1)
+        .apply(safe_mode)
+    ).fillna(0).astype(int)
+
+    # Map codes back to structure names
+    category_mapping = dict(enumerate(df['dominant_structure'].astype('category').cat.categories))
+    df['stable_structure'] = df['stable_structure_code'].map(category_mapping)
 
     # Find significant transitions
     transitions = []
@@ -60,61 +76,47 @@ def identify_stable_transitions(df, min_stable_frames=20):
                 'frame': df['Frame'].iloc[idx],
                 'from_state': prev_state,
                 'to_state': state,
-                'confidence': df[f'{state}_smooth'].iloc[idx]
+                'confidence': df[f'{state}_fraction'].iloc[idx]
             })
             prev_state = state
 
     return transitions
 
 def plot_multi_scale_evolution(df, transitions, timestamp):
-    """Create dual-view evolution plot showing both micro and macro trends"""
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 12), height_ratios=[2, 1])
+    """Create evolution plot showing single view of structure populations"""
+    plt.figure(figsize=(8, 5))
 
     colors = sns.color_palette("husl", 4)
     structures = ['sheets', 'fibers', 'vesicles', 'tubes']
     labels = [s.capitalize() for s in structures]
 
-    # Top plot: Detailed view with all structures
+    # Plot structure fractions
     for i, structure in enumerate(structures):
-        ax1.plot(df['Frame'], df[f'{structure}_smooth'],
+        plt.plot(df['Frame'], df[f'{structure}_fraction'],
                 label=labels[i], color=colors[i], linewidth=2)
-
-        # Add confidence bands
-        ax1.fill_between(
-            df['Frame'],
-            df[f'{structure}_smooth'] - df[f'{structure}_fraction'].std(),
-            df[f'{structure}_smooth'] + df[f'{structure}_fraction'].std(),
-            color=colors[i], alpha=0.1
-        )
 
     # Mark low confidence regions
     low_conf_regions = ~df['confident_classification']
     if low_conf_regions.any():
-        ax1.fill_between(df['Frame'], 0, 1,
+        plt.fill_between(df['Frame'], 0, 1,
                         where=low_conf_regions,
                         color='gray', alpha=0.1, label='Low Confidence')
 
-    # Bottom plot: Simplified state transitions
-    ax2.scatter(df['Frame'], df['stable_structure'],
-               c=df['confident_classification'].map({True: 'blue', False: 'gray'}),
-               alpha=0.5, s=5)
-
     # Add transition markers
     for t in transitions:
-        ax1.axvline(x=t['frame'], color='gray', linestyle='--', alpha=0.3)
-        ax2.axvline(x=t['frame'], color='gray', linestyle='--', alpha=0.3)
+        if t['frame'] > 200:  # Only show transitions after transient period
+            plt.axvline(x=t['frame'], color='gray', linestyle='--', alpha=0.3)
 
     # Styling
-    ax1.set_ylabel('Structure Population Fraction')
-    ax1.set_title('Detailed Structure Evolution')
-    ax1.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    ax1.grid(True, alpha=0.3)
+    plt.ylabel('Structure Population Fraction')
+    plt.xlabel('Time (ns)')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=5)
+    plt.grid(False)
+    plt.ylim(bottom=0)
 
-    ax2.set_ylabel('Dominant Structure')
-    ax2.set_xlabel('Simulation Time (frames)')
-    ax2.set_yticks(range(len(structures)))
-    ax2.set_yticklabels(labels)
-    ax2.grid(True, alpha=0.3)
+    # Set x-axis limits and ticks
+    plt.xlim(0, 1500)
+    plt.xticks([0, 250, 500, 750, 1000, 1250, 1500])
 
     plt.tight_layout()
     plt.savefig(f'assembly_evolution_{timestamp}.png', dpi=300, bbox_inches='tight')
