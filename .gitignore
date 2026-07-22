@@ -40,6 +40,7 @@ shape/
 slurm*
 
 # High-resolution Media, Videos & PDF Publications
+*.png
 *.tiff
 *.mp4
 Faraday_Discussions_no_red.pdf
