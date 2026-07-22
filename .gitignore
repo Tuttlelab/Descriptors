@@ -29,15 +29,18 @@ test_folder/
 centered_clusters/
 centered_files/
 peptide_analysis/
-descriptors/
 clusters/
 **/clusters/
 shape/
 **/shape/
 
+# Graphify Cache
+graphify-out/cache/
+
 # Logs & Job Output
 *.log
-slurm*
+slurm-*.out
+slurm-*.err
 
 # High-resolution Media, Videos & PDF Publications
 *.png

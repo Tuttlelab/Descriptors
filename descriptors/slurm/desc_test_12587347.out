@@ -1,0 +1,24 @@
+===================================================================================
+SLURM Job ID:            12587347
+Submit time:             Thu Sep 18 10:11:03 BST 2025 (Unix Epoch time: 1758186663)
+Start time:              Thu Sep 18 10:11:56 BST 2025 (Unix Epoch time: 1758186716)
+No. nodes:               1
+No. tasks:               1
+Job name:                desc_test
+Account:                 tuttle-rmss
+QoS:                     normal
+Partition (queue):       standard
+Submit directory:        /users/mib23220/Documents/Descriptors/descriptors/slurm
+Script name:             /users/mib23220/Documents/Descriptors/descriptors/slurm/test.sh
+Master node:             node033
+Nodes used:              node033
+Task distribution:       
+===================================================================================
+
+Processing frame 5000
+/users/mib23220/micromamba/envs/md_analysis/bin/python3: Error while finding module specification for 'descriptors.pipeline.run_frame' (ModuleNotFoundError: No module named 'descriptors')
+===================================================================================
+SLURM job 12587347 ended:     Thu Sep 18 10:12:06 BST 2025 (Unix Epoch time: 1758186726)
+This is an estimated end time using the 'date' command from node node033.hpc.strath.ac.uk
+For accurate timings, use 'sacct -j 12587347 -X --format=Submit,Start,End,Elapsed'
+======================================================================================

@@ -1,0 +1,23 @@
+===================================================================================
+SLURM Job ID:            12587348
+Submit time:             Thu Sep 18 10:16:22 BST 2025 (Unix Epoch time: 1758186982)
+Start time:              Thu Sep 18 10:17:56 BST 2025 (Unix Epoch time: 1758187076)
+No. nodes:               1
+No. tasks:               1
+Job name:                desc_test
+Account:                 tuttle-rmss
+QoS:                     normal
+Partition (queue):       standard
+Submit directory:        /users/mib23220/Documents/Descriptors/descriptors/slurm
+Script name:             /users/mib23220/Documents/Descriptors/descriptors/slurm/test.sh
+Master node:             node033
+Nodes used:              node033
+Task distribution:       
+===================================================================================
+
+Processing frame 5000
+===================================================================================
+SLURM job 12587348 ended:     Thu Sep 18 10:18:18 BST 2025 (Unix Epoch time: 1758187098)
+This is an estimated end time using the 'date' command from node node033.hpc.strath.ac.uk
+For accurate timings, use 'sacct -j 12587348 -X --format=Submit,Start,End,Elapsed'
+======================================================================================

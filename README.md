@@ -1,57 +1,174 @@
-# Shape Descriptor Toolkit
+# Shape Descriptor Toolkit for Peptide Self-Assembly
 
-This toolkit provides Python scripts for analyzing peptide self-assembly simulations.
+[![Publication](https://img.shields.io/badge/Faraday--Discussions-2025-blue.svg)](https://pubs.rsc.org/en/content/articlelanding/2025/fd/d4fd00201f)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-## Scripts
+An open-source Python toolkit for analyzing, quantifying, and tracking morphological transformations in peptide self-assembly molecular dynamics simulations.
 
-    adi_analysis.py: Aggregate Dynamics Index (ADI)
-    sfi_analysis.py: Sheet Formation Index (SFI)
-    vfi_analysis.py: Vesicle Formation Index (VFI)
-    tfi_analysis.py: Tube Formation Index (TFI)
-    ffi_analysis.py: Fiber Formation Index (FFI)
-    shape_tracker.py: Tracks structural changes over time
+> **Publication Citation:**  
+> Baskaran et al., *"Shape Descriptors for Peptide Self-Assembly"*, *Faraday Discussions*, 2025.  
+> [Read Paper on Royal Society of Chemistry](https://pubs.rsc.org/en/content/articlelanding/2025/fd/d4fd00201f) | **DOI:** [10.1039/D4FD00201F](https://doi.org/10.1039/D4FD00201F)
+
+---
+
+## Overview
+
+Peptide self-assembly leads to diverse supramolecular architectures such as oligomeric aggregates, sheets, hollow vesicles, nanotubes, and fibrillar networks. The **Shape Descriptor Toolkit** provides mathematically rigorous, automated metrics to classify and track these morphological transitions directly from Gromacs trajectory files (`.gro`, `.xtc`, `.pdb`).
+
+---
+
+## Available Descriptors
+
+| Descriptor | Full Name | Target Morphology | Key Metric / Method |
+| :--- | :--- | :--- | :--- |
+| **ADI** | Aggregate Dynamics Index | General Aggregates | RDF adaptive cutoffs & contact persistence |
+| **SFI** | Sheet Formation Index | Planar $\beta$-Sheets | Planarity RMSD & orientational alignment |
+| **VFI** | Vesicle Formation Index | Hollow Vesicles | Convex hull sphericity & radial density void check |
+| **TFI** | Tube Formation Index | Cylindrical Tubes | Gyration tensor asphericity & radial uniformity |
+| **FFI** | Fiber Formation Index | Fibrillar Networks | Elongation ratio & Fibrillar Order Parameter (FOP) |
+| **Tracker** | Multi-Descriptor Tracker | Morphological Transitions | Integrated multi-descriptor temporal tracking |
+
+---
 
 ## Installation
-### Using Conda
 
-    conda env create -f environment.yml
-    conda activate descriptors
+### Option 1: Conda Environment (Recommended)
 
-### Using pip
+```bash
+git clone https://github.com/Tuttlelab/Descriptors.git
+cd Descriptors
+conda env create -f environment.yml
+conda activate descriptors
+pip install -e .
+```
 
-    pip install -r requirements.txt
+### Option 2: Pip / Virtual Environment
 
-## Usage
+```bash
+pip install -r requirements.txt
+pip install -e .
+```
 
-Place your topology and trajectory files in the data/ directory.
+---
 
-### Run Analysis Scripts
+## Quickstart & Usage
 
-    python adi_analysis.py -t data/your_topology.gro -x data/your_trajectory.xtc -s 'resname PEP' -o results/adi_results
-    python sfi_analysis.py -t data/your_topology.gro -x data/your_trajectory.xtc -s 'resname PEP' -o results/sfi_results
-    python vfi_analysis.py -t data/your_topology.gro -x data/your_trajectory.xtc -s 'resname PEP' -o results/vfi_results
-    python tfi_analysis.py -t data/your_topology.gro -x data/your_trajectory.xtc -s 'resname PEP' -o results/tfi_results
-    python ffi_analysis.py -t data/your_topology.gro -x data/your_trajectory.xtc -s 'resname PEP' -o results/ffi_results
+### 1. Command Line Interface (CLI)
 
-### Run Tracking Script
+Run individual descriptor analyses on your simulation topology (`.gro`) and trajectory (`.xtc`):
 
-    python shape_tracker.py \
-    -adi results/adi_results \
-    -sfi results/sfi_results \
-    -vfi results/vfi_results \
-    -tfi results/tfi_results \
-    -ffi results/ffi_results \
-    -o results/tracking_results
+```bash
+# Aggregate Dynamics Index (ADI)
+descriptors-adi -t data/topology.gro -x data/trajectory.xtc -o results/adi_results
 
-## Requirements
+# Sheet Formation Index (SFI)
+descriptors-sfi -t data/topology.gro -x data/trajectory.xtc -o results/sfi_results
 
-Install the required Python packages:
+# Vesicle Formation Index (VFI)
+descriptors-vfi -t data/topology.gro -x data/trajectory.xtc -o results/vfi_results
 
-    numpy
-    scipy
-    pandas
-    matplotlib
-    MDAnalysis
-    scikit-image
+# Tube Formation Index (TFI)
+descriptors-tfi -t data/topology.gro -x data/trajectory.xtc -o results/tfi_results
 
-These are listed in requirements.txt and environment.yml.
+# Fiber Formation Index (FFI)
+descriptors-ffi -t data/topology.gro -x data/trajectory.xtc -o results/ffi_results
+```
+
+### 2. Integrative Multi-Descriptor Tracking
+
+Track structural evolution and morphological transitions over the entire trajectory:
+
+```bash
+descriptors-tracker -t data/topology.gro -x data/trajectory.xtc -o results/tracking_results
+```
+
+Alternatively, run using the standard Python script entry point:
+
+```bash
+python shape_tracker.py -t data/topology.gro -x data/trajectory.xtc -o results/tracking_results
+```
+
+### 3. Programmatic Python API
+
+You can also import and execute descriptors directly within Python scripts or Jupyter Notebooks:
+
+```python
+from descriptors import calculate_adi, calculate_sfi, track_shapes
+
+# Run ADI analysis programmatically
+adi_results = calculate_adi(
+    topology="data/topology.gro",
+    trajectory="data/trajectory.xtc",
+    output_dir="results/adi_results"
+)
+
+# Run full multi-descriptor tracking
+track_shapes(
+    topology="data/topology.gro",
+    trajectory="data/trajectory.xtc",
+    output_dir="results/tracking_results"
+)
+```
+
+---
+
+## Repository Structure
+
+```
+Descriptors/
+├── README.md                      # Documentation and publication reference
+├── pyproject.toml                 # Package configuration & CLI scripts
+├── environment.yml                # Conda environment definition
+├── requirements.txt               # Dependencies list
+├── descriptors/                   # Core Python library
+│   ├── __init__.py                # Package exports & metadata
+│   ├── adi.py                     # Aggregate Dynamics Index
+│   ├── sfi.py                     # Sheet Formation Index
+│   ├── vfi.py                     # Vesicle Formation Index
+│   ├── tfi.py                     # Tube Formation Index
+│   ├── ffi.py                     # Fiber Formation Index
+│   ├── tracker.py                 # Integrative Shape Tracker
+│   ├── centering.py               # PBC centering tools
+│   └── utils.py                   # Shared utilities & logging
+├── scripts/                       # Command-line runner scripts
+├── examples/                      # Automated pipeline runner
+│   └── run_full_pipeline.sh
+├── slurm/                         # HPC batch submission templates
+├── analysis/                      # Post-processing & figure generation
+└── tests/                         # Unit tests suite
+```
+
+---
+
+## Testing
+
+Run unit tests to verify mathematical descriptor implementations:
+
+```bash
+pytest tests/
+```
+
+---
+
+## Citation
+
+If you use this toolkit in your research, please cite our paper:
+
+```bibtex
+@article{Baskaran2025Descriptors,
+  title     = {Shape Descriptors for Peptide Self-Assembly},
+  author    = {Baskaran, Raj Kumar Rajaram and Tuttle, Tell},
+  journal   = {Faraday Discussions},
+  year      = {2025},
+  publisher = {Royal Society of Chemistry},
+  doi       = {10.1039/D4FD00201F},
+  url       = {https://pubs.rsc.org/en/content/articlelanding/2025/fd/d4fd00201f}
+}
+```
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shape-descriptors"
+version = "0.2.0"
+description = "Shape Descriptor Toolkit for analyzing peptide self-assembly molecular dynamics simulations."
+readme = "README.md"
+authors = [
+    { name = "Raj Kumar Rajaram Baskaran", email = "rajkumarrb@users.noreply.github.com" }
+]
+license = { text = "MIT" }
+keywords = ["molecular-dynamics", "peptide-self-assembly", "shape-descriptors", "biophysics", "gromacs"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "numpy>=1.20.0",
+    "scipy>=1.7.0",
+    "pandas>=1.3.0",
+    "matplotlib>=3.4.0",
+    "MDAnalysis>=2.0.0",
+    "scikit-image>=0.18.0",
+    "scikit-learn>=1.0.0",
+    "networkx>=2.5",
+    "psutil>=5.8.0",
+    "tqdm>=4.60.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0.0",
+    "graphify-cli"
+]
+
+[project.urls]
+Homepage = "https://pubs.rsc.org/en/content/articlelanding/2025/fd/d4fd00201f"
+Publication = "https://pubs.rsc.org/en/content/articlelanding/2025/fd/d4fd00201f"
+
+[project.scripts]
+descriptors-adi = "descriptors.adi:main"
+descriptors-sfi = "descriptors.sfi:main"
+descriptors-vfi = "descriptors.vfi:main"
+descriptors-tfi = "descriptors.tfi:main"
+descriptors-ffi = "descriptors.ffi:main"
+descriptors-tracker = "descriptors.tracker:main"
+descriptors-center = "descriptors.centering:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["descriptors*"]
