@@ -1,7 +1,0 @@
-Sheet: Planarity RMSD < 1.2, Curvature RMSD < 3.0, Sphericity < 0.95
-
-Fiber: Shape Ratio ≥ 1.2, Alignment < 70.0, Cylindrical Score > 0.4, Length Ratio > 1.5
-
-Vesicle: Sphericity ≥ 0.85, Hollowness ≥ 0.2, Asphericity ≤ 0.3, Acylindricity ≤ 1.0
-
-Tube: Radial Std < 12.0, Angular Uniformity > 0.04, Tube Segment Ratio ≥ 0.5, Hollow, Asphericity > 0.5, Ratio < 0.3
