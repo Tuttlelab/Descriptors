@@ -62,46 +62,46 @@
       "descriptors_adi_save_frame_results"
     ],
     "3": [
-      "analysis_evolution_ff",
-      "analysis_evolution_ff_analyze_evolution_confidence",
-      "analysis_evolution_ff_calculate_structure_fractions",
-      "analysis_evolution_ff_identify_stable_transitions",
-      "analysis_evolution_ff_load_structure_data",
-      "analysis_evolution_ff_main",
-      "analysis_evolution_ff_plot_multi_scale_evolution",
-      "analysis_evolution_ff_rationale_10",
-      "analysis_evolution_ff_rationale_103",
-      "analysis_evolution_ff_rationale_158",
-      "analysis_evolution_ff_rationale_169",
-      "analysis_evolution_ff_rationale_53"
+      "analysis_paper_figures_evolution_ff",
+      "analysis_paper_figures_evolution_ff_analyze_evolution_confidence",
+      "analysis_paper_figures_evolution_ff_calculate_structure_fractions",
+      "analysis_paper_figures_evolution_ff_identify_stable_transitions",
+      "analysis_paper_figures_evolution_ff_load_structure_data",
+      "analysis_paper_figures_evolution_ff_main",
+      "analysis_paper_figures_evolution_ff_plot_multi_scale_evolution",
+      "analysis_paper_figures_evolution_ff_rationale_10",
+      "analysis_paper_figures_evolution_ff_rationale_103",
+      "analysis_paper_figures_evolution_ff_rationale_158",
+      "analysis_paper_figures_evolution_ff_rationale_169",
+      "analysis_paper_figures_evolution_ff_rationale_53"
     ],
     "4": [
-      "analysis_evolution_rf",
-      "analysis_evolution_rf_analyze_evolution_confidence",
-      "analysis_evolution_rf_calculate_structure_fractions",
-      "analysis_evolution_rf_identify_stable_transitions",
-      "analysis_evolution_rf_load_structure_data",
-      "analysis_evolution_rf_main",
-      "analysis_evolution_rf_plot_multi_scale_evolution",
-      "analysis_evolution_rf_rationale_10",
-      "analysis_evolution_rf_rationale_103",
-      "analysis_evolution_rf_rationale_158",
-      "analysis_evolution_rf_rationale_169",
-      "analysis_evolution_rf_rationale_53"
+      "analysis_paper_figures_evolution_rf",
+      "analysis_paper_figures_evolution_rf_analyze_evolution_confidence",
+      "analysis_paper_figures_evolution_rf_calculate_structure_fractions",
+      "analysis_paper_figures_evolution_rf_identify_stable_transitions",
+      "analysis_paper_figures_evolution_rf_load_structure_data",
+      "analysis_paper_figures_evolution_rf_main",
+      "analysis_paper_figures_evolution_rf_plot_multi_scale_evolution",
+      "analysis_paper_figures_evolution_rf_rationale_10",
+      "analysis_paper_figures_evolution_rf_rationale_103",
+      "analysis_paper_figures_evolution_rf_rationale_158",
+      "analysis_paper_figures_evolution_rf_rationale_169",
+      "analysis_paper_figures_evolution_rf_rationale_53"
     ],
     "5": [
-      "analysis_evolution_wi",
-      "analysis_evolution_wi_analyze_evolution_confidence",
-      "analysis_evolution_wi_calculate_structure_fractions",
-      "analysis_evolution_wi_identify_stable_transitions",
-      "analysis_evolution_wi_load_structure_data",
-      "analysis_evolution_wi_main",
-      "analysis_evolution_wi_plot_multi_scale_evolution",
-      "analysis_evolution_wi_rationale_10",
-      "analysis_evolution_wi_rationale_103",
-      "analysis_evolution_wi_rationale_158",
-      "analysis_evolution_wi_rationale_169",
-      "analysis_evolution_wi_rationale_53"
+      "analysis_paper_figures_evolution_wi",
+      "analysis_paper_figures_evolution_wi_analyze_evolution_confidence",
+      "analysis_paper_figures_evolution_wi_calculate_structure_fractions",
+      "analysis_paper_figures_evolution_wi_identify_stable_transitions",
+      "analysis_paper_figures_evolution_wi_load_structure_data",
+      "analysis_paper_figures_evolution_wi_main",
+      "analysis_paper_figures_evolution_wi_plot_multi_scale_evolution",
+      "analysis_paper_figures_evolution_wi_rationale_10",
+      "analysis_paper_figures_evolution_wi_rationale_103",
+      "analysis_paper_figures_evolution_wi_rationale_158",
+      "analysis_paper_figures_evolution_wi_rationale_169",
+      "analysis_paper_figures_evolution_wi_rationale_53"
     ],
     "6": [
       "analysis_vfi_analysis",
@@ -136,36 +136,36 @@
       "tests_test_descriptors_test_sphericity_too_few_points"
     ],
     "9": [
-      "analysis_dominant_ff",
-      "analysis_dominant_ff_analyze_state_transitions",
-      "analysis_dominant_ff_load_all_descriptors",
-      "analysis_dominant_ff_main",
-      "analysis_dominant_ff_plot_aggregation_analysis",
-      "analysis_dominant_ff_rationale_30"
+      "analysis_paper_figures_dominant_ff",
+      "analysis_paper_figures_dominant_ff_analyze_state_transitions",
+      "analysis_paper_figures_dominant_ff_load_all_descriptors",
+      "analysis_paper_figures_dominant_ff_main",
+      "analysis_paper_figures_dominant_ff_plot_aggregation_analysis",
+      "analysis_paper_figures_dominant_ff_rationale_30"
     ],
     "10": [
-      "analysis_dominant_rf",
-      "analysis_dominant_rf_analyze_state_transitions",
-      "analysis_dominant_rf_load_all_descriptors",
-      "analysis_dominant_rf_main",
-      "analysis_dominant_rf_plot_aggregation_analysis",
-      "analysis_dominant_rf_rationale_30"
+      "analysis_paper_figures_dominant_rf",
+      "analysis_paper_figures_dominant_rf_analyze_state_transitions",
+      "analysis_paper_figures_dominant_rf_load_all_descriptors",
+      "analysis_paper_figures_dominant_rf_main",
+      "analysis_paper_figures_dominant_rf_plot_aggregation_analysis",
+      "analysis_paper_figures_dominant_rf_rationale_30"
     ],
     "11": [
-      "analysis_dominant_rf2",
-      "analysis_dominant_rf2_analyze_state_transitions",
-      "analysis_dominant_rf2_load_all_descriptors",
-      "analysis_dominant_rf2_main",
-      "analysis_dominant_rf2_plot_aggregation_analysis",
-      "analysis_dominant_rf2_rationale_30"
+      "analysis_paper_figures_dominant_rf2",
+      "analysis_paper_figures_dominant_rf2_analyze_state_transitions",
+      "analysis_paper_figures_dominant_rf2_load_all_descriptors",
+      "analysis_paper_figures_dominant_rf2_main",
+      "analysis_paper_figures_dominant_rf2_plot_aggregation_analysis",
+      "analysis_paper_figures_dominant_rf2_rationale_30"
     ],
     "12": [
-      "analysis_dominant_wi",
-      "analysis_dominant_wi_analyze_state_transitions",
-      "analysis_dominant_wi_load_all_descriptors",
-      "analysis_dominant_wi_main",
-      "analysis_dominant_wi_plot_aggregation_analysis",
-      "analysis_dominant_wi_rationale_30"
+      "analysis_paper_figures_dominant_wi",
+      "analysis_paper_figures_dominant_wi_analyze_state_transitions",
+      "analysis_paper_figures_dominant_wi_load_all_descriptors",
+      "analysis_paper_figures_dominant_wi_main",
+      "analysis_paper_figures_dominant_wi_plot_aggregation_analysis",
+      "analysis_paper_figures_dominant_wi_rationale_30"
     ],
     "13": [
       "slurm_centering_job",
@@ -245,7 +245,7 @@
       "degree": 9
     },
     {
-      "id": "analysis_evolution_ff_main",
+      "id": "analysis_paper_figures_evolution_ff_main",
       "label": "main()",
       "degree": 6
     }

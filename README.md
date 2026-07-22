@@ -26,31 +26,23 @@ pip install -e .
 Run any of the 5 shape descriptors or the integrative shape tracker from [`analysis/`](analysis/) on your Gromacs topology (`.gro`) and trajectory (`.xtc`):
 
 ```bash
-# 1. Aggregate Dynamics Index (ADI)
-python analysis/adi_analysis.py -t topology.gro -x trajectory.xtc -o results/adi
-
-# 2. Sheet Formation Index (SFI)
-python analysis/sfi_analysis.py -t topology.gro -x trajectory.xtc -o results/sfi
-
-# 3. Vesicle Formation Index (VFI)
-python analysis/vfi_analysis.py -t topology.gro -x trajectory.xtc -o results/vfi
-
-# 4. Tube Formation Index (TFI)
-python analysis/tfi_analysis.py -t topology.gro -x trajectory.xtc -o results/tfi
-
-# 5. Fiber Formation Index (FFI)
-python analysis/ffi_analysis.py -t topology.gro -x trajectory.xtc -o results/ffi
-
-# 6. Integrative Shape Tracker (Runs all descriptors & tracks temporal transitions)
+# 1. Integrative Shape Tracker (Runs all descriptors & tracks temporal transitions)
 python analysis/shape_tracker.py -t topology.gro -x trajectory.xtc -o results/tracking
+
+# 2. Individual Descriptors
+python analysis/adi_analysis.py -t topology.gro -x trajectory.xtc -o results/adi
+python analysis/sfi_analysis.py -t topology.gro -x trajectory.xtc -o results/sfi
+python analysis/vfi_analysis.py -t topology.gro -x trajectory.xtc -o results/vfi
+python analysis/tfi_analysis.py -t topology.gro -x trajectory.xtc -o results/tfi
+python analysis/ffi_analysis.py -t topology.gro -x trajectory.xtc -o results/ffi
 ```
 
 ### Step 3: Reproduce Paper Plotting & Figures
-Post-processing figure scripts from the paper are located in [`analysis/`](analysis/):
+System-specific paper figure scripts are located in [`analysis/paper_figures/`](analysis/paper_figures/):
 ```bash
-python analysis/evolution_FF.py
-python analysis/evolution_RF.py
-python analysis/evolution_WI.py
+python analysis/paper_figures/evolution_FF.py
+python analysis/paper_figures/evolution_RF.py
+python analysis/paper_figures/evolution_WI.py
 ```
 
 ---
@@ -58,7 +50,7 @@ python analysis/evolution_WI.py
 ## Repository Structure
 
 - [`descriptors/`](descriptors/): Core Python library (`descriptors.adi`, `descriptors.sfi`, etc.).
-- [`analysis/`](analysis/): Descriptor entrypoint scripts (`adi_analysis.py`, `shape_tracker.py`) and paper figure plotting scripts.
+- [`analysis/`](analysis/): Descriptor entrypoints (`shape_tracker.py`, `adi_analysis.py`) and paper plotting scripts ([`analysis/paper_figures/`](analysis/paper_figures/)).
 - [`slurm/`](slurm/): Slurm HPC batch submission scripts (`centering_job.sh`, `tracking_job.sh`).
 - [`tests/`](tests/): Test suite (`pytest tests/`).
 

@@ -4,606 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "dominant_FF.py",
-      "file_type": "code",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "dominant_ff.py",
-      "id": "analysis_dominant_ff"
-    },
-    {
-      "label": "load_all_descriptors()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "load_all_descriptors()",
-      "id": "analysis_dominant_ff_load_all_descriptors"
-    },
-    {
-      "label": "analyze_state_transitions()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "analyze_state_transitions()",
-      "id": "analysis_dominant_ff_analyze_state_transitions"
-    },
-    {
-      "label": "plot_aggregation_analysis()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "plot_aggregation_analysis()",
-      "id": "analysis_dominant_ff_plot_aggregation_analysis"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L133",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "main()",
-      "id": "analysis_dominant_ff_main"
-    },
-    {
-      "label": "Analyze transitions with thresholds",
-      "file_type": "rationale",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L30",
-      "_origin": "ast",
-      "community": 9,
-      "norm_label": "analyze transitions with thresholds",
-      "id": "analysis_dominant_ff_rationale_30"
-    },
-    {
-      "label": "dominant_RF.py",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 10,
-      "norm_label": "dominant_rf.py",
-      "id": "analysis_dominant_rf"
-    },
-    {
-      "label": "load_all_descriptors()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 10,
-      "norm_label": "load_all_descriptors()",
-      "id": "analysis_dominant_rf_load_all_descriptors"
-    },
-    {
-      "label": "analyze_state_transitions()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 10,
-      "norm_label": "analyze_state_transitions()",
-      "id": "analysis_dominant_rf_analyze_state_transitions"
-    },
-    {
-      "label": "plot_aggregation_analysis()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "community": 10,
-      "norm_label": "plot_aggregation_analysis()",
-      "id": "analysis_dominant_rf_plot_aggregation_analysis"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L133",
-      "_origin": "ast",
-      "community": 10,
-      "norm_label": "main()",
-      "id": "analysis_dominant_rf_main"
-    },
-    {
-      "label": "Analyze transitions with thresholds",
-      "file_type": "rationale",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L30",
-      "_origin": "ast",
-      "community": 10,
-      "norm_label": "analyze transitions with thresholds",
-      "id": "analysis_dominant_rf_rationale_30"
-    },
-    {
-      "label": "dominant_RF2.py",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "dominant_rf2.py",
-      "id": "analysis_dominant_rf2"
-    },
-    {
-      "label": "load_all_descriptors()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "load_all_descriptors()",
-      "id": "analysis_dominant_rf2_load_all_descriptors"
-    },
-    {
-      "label": "analyze_state_transitions()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "analyze_state_transitions()",
-      "id": "analysis_dominant_rf2_analyze_state_transitions"
-    },
-    {
-      "label": "plot_aggregation_analysis()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "plot_aggregation_analysis()",
-      "id": "analysis_dominant_rf2_plot_aggregation_analysis"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L115",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "main()",
-      "id": "analysis_dominant_rf2_main"
-    },
-    {
-      "label": "Analyze transitions with thresholds",
-      "file_type": "rationale",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L30",
-      "_origin": "ast",
-      "community": 11,
-      "norm_label": "analyze transitions with thresholds",
-      "id": "analysis_dominant_rf2_rationale_30"
-    },
-    {
-      "label": "dominant_WI.py",
-      "file_type": "code",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 12,
-      "norm_label": "dominant_wi.py",
-      "id": "analysis_dominant_wi"
-    },
-    {
-      "label": "load_all_descriptors()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 12,
-      "norm_label": "load_all_descriptors()",
-      "id": "analysis_dominant_wi_load_all_descriptors"
-    },
-    {
-      "label": "analyze_state_transitions()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 12,
-      "norm_label": "analyze_state_transitions()",
-      "id": "analysis_dominant_wi_analyze_state_transitions"
-    },
-    {
-      "label": "plot_aggregation_analysis()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "community": 12,
-      "norm_label": "plot_aggregation_analysis()",
-      "id": "analysis_dominant_wi_plot_aggregation_analysis"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L133",
-      "_origin": "ast",
-      "community": 12,
-      "norm_label": "main()",
-      "id": "analysis_dominant_wi_main"
-    },
-    {
-      "label": "Analyze transitions with thresholds",
-      "file_type": "rationale",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L30",
-      "_origin": "ast",
-      "community": 12,
-      "norm_label": "analyze transitions with thresholds",
-      "id": "analysis_dominant_wi_rationale_30"
-    },
-    {
-      "label": "evolution_FF.py",
-      "file_type": "code",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "evolution_ff.py",
-      "id": "analysis_evolution_ff"
-    },
-    {
-      "label": "calculate_structure_fractions()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "calculate_structure_fractions()",
-      "id": "analysis_evolution_ff_calculate_structure_fractions"
-    },
-    {
-      "label": "identify_stable_transitions()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L52",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "identify_stable_transitions()",
-      "id": "analysis_evolution_ff_identify_stable_transitions"
-    },
-    {
-      "label": "plot_multi_scale_evolution()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L102",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "plot_multi_scale_evolution()",
-      "id": "analysis_evolution_ff_plot_multi_scale_evolution"
-    },
-    {
-      "label": "analyze_evolution_confidence()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L157",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "analyze_evolution_confidence()",
-      "id": "analysis_evolution_ff_analyze_evolution_confidence"
-    },
-    {
-      "label": "load_structure_data()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L168",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "load_structure_data()",
-      "id": "analysis_evolution_ff_load_structure_data"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L203",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "main()",
-      "id": "analysis_evolution_ff_main"
-    },
-    {
-      "label": "Calculate structure fractions with thresholds and smoothing",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L10",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "calculate structure fractions with thresholds and smoothing",
-      "id": "analysis_evolution_ff_rationale_10"
-    },
-    {
-      "label": "Identify genuine structure transitions, filtering out noise",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L53",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "identify genuine structure transitions, filtering out noise",
-      "id": "analysis_evolution_ff_rationale_53"
-    },
-    {
-      "label": "Create evolution plot showing smoothed structure populations",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L103",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "create evolution plot showing smoothed structure populations",
-      "id": "analysis_evolution_ff_rationale_103"
-    },
-    {
-      "label": "Generate analysis summary with confidence metrics",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L158",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "generate analysis summary with confidence metrics",
-      "id": "analysis_evolution_ff_rationale_158"
-    },
-    {
-      "label": "Load structure data from multiple CSV files",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L169",
-      "_origin": "ast",
-      "community": 3,
-      "norm_label": "load structure data from multiple csv files",
-      "id": "analysis_evolution_ff_rationale_169"
-    },
-    {
-      "label": "evolution_RF.py",
-      "file_type": "code",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "evolution_rf.py",
-      "id": "analysis_evolution_rf"
-    },
-    {
-      "label": "calculate_structure_fractions()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "calculate_structure_fractions()",
-      "id": "analysis_evolution_rf_calculate_structure_fractions"
-    },
-    {
-      "label": "identify_stable_transitions()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L52",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "identify_stable_transitions()",
-      "id": "analysis_evolution_rf_identify_stable_transitions"
-    },
-    {
-      "label": "plot_multi_scale_evolution()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L102",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "plot_multi_scale_evolution()",
-      "id": "analysis_evolution_rf_plot_multi_scale_evolution"
-    },
-    {
-      "label": "analyze_evolution_confidence()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L157",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "analyze_evolution_confidence()",
-      "id": "analysis_evolution_rf_analyze_evolution_confidence"
-    },
-    {
-      "label": "load_structure_data()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L168",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "load_structure_data()",
-      "id": "analysis_evolution_rf_load_structure_data"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L203",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "main()",
-      "id": "analysis_evolution_rf_main"
-    },
-    {
-      "label": "Calculate structure fractions with thresholds and smoothing",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L10",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "calculate structure fractions with thresholds and smoothing",
-      "id": "analysis_evolution_rf_rationale_10"
-    },
-    {
-      "label": "Identify genuine structure transitions, filtering out noise",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L53",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "identify genuine structure transitions, filtering out noise",
-      "id": "analysis_evolution_rf_rationale_53"
-    },
-    {
-      "label": "Create evolution plot showing smoothed structure populations",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L103",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "create evolution plot showing smoothed structure populations",
-      "id": "analysis_evolution_rf_rationale_103"
-    },
-    {
-      "label": "Generate analysis summary with confidence metrics",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L158",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "generate analysis summary with confidence metrics",
-      "id": "analysis_evolution_rf_rationale_158"
-    },
-    {
-      "label": "Load structure data from multiple CSV files",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L169",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "load structure data from multiple csv files",
-      "id": "analysis_evolution_rf_rationale_169"
-    },
-    {
-      "label": "evolution_WI.py",
-      "file_type": "code",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "evolution_wi.py",
-      "id": "analysis_evolution_wi"
-    },
-    {
-      "label": "calculate_structure_fractions()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "calculate_structure_fractions()",
-      "id": "analysis_evolution_wi_calculate_structure_fractions"
-    },
-    {
-      "label": "identify_stable_transitions()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L52",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "identify_stable_transitions()",
-      "id": "analysis_evolution_wi_identify_stable_transitions"
-    },
-    {
-      "label": "plot_multi_scale_evolution()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L102",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "plot_multi_scale_evolution()",
-      "id": "analysis_evolution_wi_plot_multi_scale_evolution"
-    },
-    {
-      "label": "analyze_evolution_confidence()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L157",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "analyze_evolution_confidence()",
-      "id": "analysis_evolution_wi_analyze_evolution_confidence"
-    },
-    {
-      "label": "load_structure_data()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L168",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "load_structure_data()",
-      "id": "analysis_evolution_wi_load_structure_data"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L203",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "main()",
-      "id": "analysis_evolution_wi_main"
-    },
-    {
-      "label": "Calculate structure fractions with thresholds and smoothing",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L10",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "calculate structure fractions with thresholds and smoothing",
-      "id": "analysis_evolution_wi_rationale_10"
-    },
-    {
-      "label": "Identify genuine structure transitions, filtering out noise",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L53",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "identify genuine structure transitions, filtering out noise",
-      "id": "analysis_evolution_wi_rationale_53"
-    },
-    {
-      "label": "Create evolution plot showing smoothed structure populations",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L103",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "create evolution plot showing smoothed structure populations",
-      "id": "analysis_evolution_wi_rationale_103"
-    },
-    {
-      "label": "Generate analysis summary with confidence metrics",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L158",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "generate analysis summary with confidence metrics",
-      "id": "analysis_evolution_wi_rationale_158"
-    },
-    {
-      "label": "Load structure data from multiple CSV files",
-      "file_type": "rationale",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L169",
-      "_origin": "ast",
-      "community": 5,
-      "norm_label": "load structure data from multiple csv files",
-      "id": "analysis_evolution_wi_rationale_169"
-    },
-    {
       "label": "test_descriptors.py",
       "file_type": "code",
       "source_file": "tests/test_descriptors.py",
@@ -1349,9 +749,9 @@
       "source_file": "analysis/adi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "analysis_adi_analysis",
       "community": 2,
-      "norm_label": "adi_analysis.py"
+      "norm_label": "adi_analysis.py",
+      "id": "analysis_adi_analysis"
     },
     {
       "label": "centering.py",
@@ -1359,9 +759,9 @@
       "source_file": "analysis/centering.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "analysis_centering",
       "community": 1,
-      "norm_label": "centering.py"
+      "norm_label": "centering.py",
+      "id": "analysis_centering"
     },
     {
       "label": "ffi_analysis.py",
@@ -1369,9 +769,9 @@
       "source_file": "analysis/ffi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "analysis_ffi_analysis",
       "community": 0,
-      "norm_label": "ffi_analysis.py"
+      "norm_label": "ffi_analysis.py",
+      "id": "analysis_ffi_analysis"
     },
     {
       "label": "sfi_analysis.py",
@@ -1379,9 +779,9 @@
       "source_file": "analysis/sfi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "analysis_sfi_analysis",
       "community": 0,
-      "norm_label": "sfi_analysis.py"
+      "norm_label": "sfi_analysis.py",
+      "id": "analysis_sfi_analysis"
     },
     {
       "label": "shape_tracker.py",
@@ -1389,9 +789,9 @@
       "source_file": "analysis/shape_tracker.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "analysis_shape_tracker",
       "community": 0,
-      "norm_label": "shape_tracker.py"
+      "norm_label": "shape_tracker.py",
+      "id": "analysis_shape_tracker"
     },
     {
       "label": "tfi_analysis.py",
@@ -1399,9 +799,9 @@
       "source_file": "analysis/tfi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "analysis_tfi_analysis",
       "community": 7,
-      "norm_label": "tfi_analysis.py"
+      "norm_label": "tfi_analysis.py",
+      "id": "analysis_tfi_analysis"
     },
     {
       "label": "vfi_analysis.py",
@@ -1409,9 +809,9 @@
       "source_file": "analysis/vfi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "analysis_vfi_analysis",
       "community": 6,
-      "norm_label": "vfi_analysis.py"
+      "norm_label": "vfi_analysis.py",
+      "id": "analysis_vfi_analysis"
     },
     {
       "label": "centering_job.sh",
@@ -1423,9 +823,9 @@
         "kind": "file"
       },
       "_origin": "ast",
-      "id": "slurm_centering_job",
       "community": 13,
-      "norm_label": "centering_job.sh"
+      "norm_label": "centering_job.sh",
+      "id": "slurm_centering_job"
     },
     {
       "label": "centering_job.sh script",
@@ -1437,9 +837,9 @@
         "kind": "bash_entrypoint"
       },
       "_origin": "ast",
-      "id": "slurm_centering_job_sh__entry",
       "community": 13,
-      "norm_label": "centering_job.sh script"
+      "norm_label": "centering_job.sh script",
+      "id": "slurm_centering_job_sh__entry"
     },
     {
       "label": "csv_job.sh",
@@ -1451,9 +851,9 @@
         "kind": "file"
       },
       "_origin": "ast",
-      "id": "slurm_csv_job",
       "community": 14,
-      "norm_label": "csv_job.sh"
+      "norm_label": "csv_job.sh",
+      "id": "slurm_csv_job"
     },
     {
       "label": "csv_job.sh script",
@@ -1465,9 +865,9 @@
         "kind": "bash_entrypoint"
       },
       "_origin": "ast",
-      "id": "slurm_csv_job_sh__entry",
       "community": 14,
-      "norm_label": "csv_job.sh script"
+      "norm_label": "csv_job.sh script",
+      "id": "slurm_csv_job_sh__entry"
     },
     {
       "label": "tracking_job.sh",
@@ -1479,9 +879,9 @@
         "kind": "file"
       },
       "_origin": "ast",
-      "id": "slurm_tracking_job",
       "community": 15,
-      "norm_label": "tracking_job.sh"
+      "norm_label": "tracking_job.sh",
+      "id": "slurm_tracking_job"
     },
     {
       "label": "tracking_job.sh script",
@@ -1493,919 +893,612 @@
         "kind": "bash_entrypoint"
       },
       "_origin": "ast",
-      "id": "slurm_tracking_job_sh__entry",
       "community": 15,
-      "norm_label": "tracking_job.sh script"
+      "norm_label": "tracking_job.sh script",
+      "id": "slurm_tracking_job_sh__entry"
+    },
+    {
+      "label": "dominant_FF.py",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_ff",
+      "community": 9,
+      "norm_label": "dominant_ff.py"
+    },
+    {
+      "label": "load_all_descriptors()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_ff_load_all_descriptors",
+      "community": 9,
+      "norm_label": "load_all_descriptors()"
+    },
+    {
+      "label": "analyze_state_transitions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_ff_analyze_state_transitions",
+      "community": 9,
+      "norm_label": "analyze_state_transitions()"
+    },
+    {
+      "label": "plot_aggregation_analysis()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_ff_plot_aggregation_analysis",
+      "community": 9,
+      "norm_label": "plot_aggregation_analysis()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_ff_main",
+      "community": 9,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Analyze transitions with thresholds",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_ff_rationale_30",
+      "community": 9,
+      "norm_label": "analyze transitions with thresholds"
+    },
+    {
+      "label": "dominant_RF.py",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf",
+      "community": 10,
+      "norm_label": "dominant_rf.py"
+    },
+    {
+      "label": "load_all_descriptors()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf_load_all_descriptors",
+      "community": 10,
+      "norm_label": "load_all_descriptors()"
+    },
+    {
+      "label": "analyze_state_transitions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf_analyze_state_transitions",
+      "community": 10,
+      "norm_label": "analyze_state_transitions()"
+    },
+    {
+      "label": "plot_aggregation_analysis()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf_plot_aggregation_analysis",
+      "community": 10,
+      "norm_label": "plot_aggregation_analysis()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf_main",
+      "community": 10,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Analyze transitions with thresholds",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf_rationale_30",
+      "community": 10,
+      "norm_label": "analyze transitions with thresholds"
+    },
+    {
+      "label": "dominant_RF2.py",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf2",
+      "community": 11,
+      "norm_label": "dominant_rf2.py"
+    },
+    {
+      "label": "load_all_descriptors()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf2_load_all_descriptors",
+      "community": 11,
+      "norm_label": "load_all_descriptors()"
+    },
+    {
+      "label": "analyze_state_transitions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf2_analyze_state_transitions",
+      "community": 11,
+      "norm_label": "analyze_state_transitions()"
+    },
+    {
+      "label": "plot_aggregation_analysis()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf2_plot_aggregation_analysis",
+      "community": 11,
+      "norm_label": "plot_aggregation_analysis()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L115",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf2_main",
+      "community": 11,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Analyze transitions with thresholds",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_rf2_rationale_30",
+      "community": 11,
+      "norm_label": "analyze transitions with thresholds"
+    },
+    {
+      "label": "dominant_WI.py",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_wi",
+      "community": 12,
+      "norm_label": "dominant_wi.py"
+    },
+    {
+      "label": "load_all_descriptors()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_wi_load_all_descriptors",
+      "community": 12,
+      "norm_label": "load_all_descriptors()"
+    },
+    {
+      "label": "analyze_state_transitions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_wi_analyze_state_transitions",
+      "community": 12,
+      "norm_label": "analyze_state_transitions()"
+    },
+    {
+      "label": "plot_aggregation_analysis()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_wi_plot_aggregation_analysis",
+      "community": 12,
+      "norm_label": "plot_aggregation_analysis()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_wi_main",
+      "community": 12,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Analyze transitions with thresholds",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_dominant_wi_rationale_30",
+      "community": 12,
+      "norm_label": "analyze transitions with thresholds"
+    },
+    {
+      "label": "evolution_FF.py",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff",
+      "community": 3,
+      "norm_label": "evolution_ff.py"
+    },
+    {
+      "label": "calculate_structure_fractions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_calculate_structure_fractions",
+      "community": 3,
+      "norm_label": "calculate_structure_fractions()"
+    },
+    {
+      "label": "identify_stable_transitions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_identify_stable_transitions",
+      "community": 3,
+      "norm_label": "identify_stable_transitions()"
+    },
+    {
+      "label": "plot_multi_scale_evolution()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L102",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_plot_multi_scale_evolution",
+      "community": 3,
+      "norm_label": "plot_multi_scale_evolution()"
+    },
+    {
+      "label": "analyze_evolution_confidence()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L157",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_analyze_evolution_confidence",
+      "community": 3,
+      "norm_label": "analyze_evolution_confidence()"
+    },
+    {
+      "label": "load_structure_data()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L168",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_load_structure_data",
+      "community": 3,
+      "norm_label": "load_structure_data()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L203",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_main",
+      "community": 3,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Calculate structure fractions with thresholds and smoothing",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_rationale_10",
+      "community": 3,
+      "norm_label": "calculate structure fractions with thresholds and smoothing"
+    },
+    {
+      "label": "Identify genuine structure transitions, filtering out noise",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_rationale_53",
+      "community": 3,
+      "norm_label": "identify genuine structure transitions, filtering out noise"
+    },
+    {
+      "label": "Create evolution plot showing smoothed structure populations",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L103",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_rationale_103",
+      "community": 3,
+      "norm_label": "create evolution plot showing smoothed structure populations"
+    },
+    {
+      "label": "Generate analysis summary with confidence metrics",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L158",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_rationale_158",
+      "community": 3,
+      "norm_label": "generate analysis summary with confidence metrics"
+    },
+    {
+      "label": "Load structure data from multiple CSV files",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L169",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_ff_rationale_169",
+      "community": 3,
+      "norm_label": "load structure data from multiple csv files"
+    },
+    {
+      "label": "evolution_RF.py",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf",
+      "community": 4,
+      "norm_label": "evolution_rf.py"
+    },
+    {
+      "label": "calculate_structure_fractions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_calculate_structure_fractions",
+      "community": 4,
+      "norm_label": "calculate_structure_fractions()"
+    },
+    {
+      "label": "identify_stable_transitions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_identify_stable_transitions",
+      "community": 4,
+      "norm_label": "identify_stable_transitions()"
+    },
+    {
+      "label": "plot_multi_scale_evolution()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L102",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_plot_multi_scale_evolution",
+      "community": 4,
+      "norm_label": "plot_multi_scale_evolution()"
+    },
+    {
+      "label": "analyze_evolution_confidence()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L157",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_analyze_evolution_confidence",
+      "community": 4,
+      "norm_label": "analyze_evolution_confidence()"
+    },
+    {
+      "label": "load_structure_data()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L168",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_load_structure_data",
+      "community": 4,
+      "norm_label": "load_structure_data()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L203",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_main",
+      "community": 4,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Calculate structure fractions with thresholds and smoothing",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_rationale_10",
+      "community": 4,
+      "norm_label": "calculate structure fractions with thresholds and smoothing"
+    },
+    {
+      "label": "Identify genuine structure transitions, filtering out noise",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_rationale_53",
+      "community": 4,
+      "norm_label": "identify genuine structure transitions, filtering out noise"
+    },
+    {
+      "label": "Create evolution plot showing smoothed structure populations",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L103",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_rationale_103",
+      "community": 4,
+      "norm_label": "create evolution plot showing smoothed structure populations"
+    },
+    {
+      "label": "Generate analysis summary with confidence metrics",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L158",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_rationale_158",
+      "community": 4,
+      "norm_label": "generate analysis summary with confidence metrics"
+    },
+    {
+      "label": "Load structure data from multiple CSV files",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L169",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_rf_rationale_169",
+      "community": 4,
+      "norm_label": "load structure data from multiple csv files"
+    },
+    {
+      "label": "evolution_WI.py",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi",
+      "community": 5,
+      "norm_label": "evolution_wi.py"
+    },
+    {
+      "label": "calculate_structure_fractions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_calculate_structure_fractions",
+      "community": 5,
+      "norm_label": "calculate_structure_fractions()"
+    },
+    {
+      "label": "identify_stable_transitions()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_identify_stable_transitions",
+      "community": 5,
+      "norm_label": "identify_stable_transitions()"
+    },
+    {
+      "label": "plot_multi_scale_evolution()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L102",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_plot_multi_scale_evolution",
+      "community": 5,
+      "norm_label": "plot_multi_scale_evolution()"
+    },
+    {
+      "label": "analyze_evolution_confidence()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L157",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_analyze_evolution_confidence",
+      "community": 5,
+      "norm_label": "analyze_evolution_confidence()"
+    },
+    {
+      "label": "load_structure_data()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L168",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_load_structure_data",
+      "community": 5,
+      "norm_label": "load_structure_data()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L203",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_main",
+      "community": 5,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Calculate structure fractions with thresholds and smoothing",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_rationale_10",
+      "community": 5,
+      "norm_label": "calculate structure fractions with thresholds and smoothing"
+    },
+    {
+      "label": "Identify genuine structure transitions, filtering out noise",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_rationale_53",
+      "community": 5,
+      "norm_label": "identify genuine structure transitions, filtering out noise"
+    },
+    {
+      "label": "Create evolution plot showing smoothed structure populations",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L103",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_rationale_103",
+      "community": 5,
+      "norm_label": "create evolution plot showing smoothed structure populations"
+    },
+    {
+      "label": "Generate analysis summary with confidence metrics",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L158",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_rationale_158",
+      "community": 5,
+      "norm_label": "generate analysis summary with confidence metrics"
+    },
+    {
+      "label": "Load structure data from multiple CSV files",
+      "file_type": "rationale",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L169",
+      "_origin": "ast",
+      "id": "analysis_paper_figures_evolution_wi_rationale_169",
+      "community": 5,
+      "norm_label": "load structure data from multiple csv files"
     }
   ],
   "links": [
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_ff",
-      "target": "analysis_dominant_ff_analyze_state_transitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_ff",
-      "target": "analysis_dominant_ff_load_all_descriptors"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L133",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_ff",
-      "target": "analysis_dominant_ff_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_ff",
-      "target": "analysis_dominant_ff_plot_aggregation_analysis"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L137",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_ff_main",
-      "target": "analysis_dominant_ff_load_all_descriptors"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L138",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_ff_main",
-      "target": "analysis_dominant_ff_analyze_state_transitions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_ff_rationale_30",
-      "target": "analysis_dominant_ff_analyze_state_transitions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_FF.py",
-      "source_location": "L141",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_ff_main",
-      "target": "analysis_dominant_ff_plot_aggregation_analysis"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf",
-      "target": "analysis_dominant_rf_analyze_state_transitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf",
-      "target": "analysis_dominant_rf_load_all_descriptors"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L133",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf",
-      "target": "analysis_dominant_rf_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf",
-      "target": "analysis_dominant_rf_plot_aggregation_analysis"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L137",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf_main",
-      "target": "analysis_dominant_rf_load_all_descriptors"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L138",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf_main",
-      "target": "analysis_dominant_rf_analyze_state_transitions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf_rationale_30",
-      "target": "analysis_dominant_rf_analyze_state_transitions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF.py",
-      "source_location": "L141",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf_main",
-      "target": "analysis_dominant_rf_plot_aggregation_analysis"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf2",
-      "target": "analysis_dominant_rf2_analyze_state_transitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf2",
-      "target": "analysis_dominant_rf2_load_all_descriptors"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L115",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf2",
-      "target": "analysis_dominant_rf2_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf2",
-      "target": "analysis_dominant_rf2_plot_aggregation_analysis"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf2_main",
-      "target": "analysis_dominant_rf2_load_all_descriptors"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L120",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf2_main",
-      "target": "analysis_dominant_rf2_analyze_state_transitions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf2_rationale_30",
-      "target": "analysis_dominant_rf2_analyze_state_transitions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_RF2.py",
-      "source_location": "L123",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_rf2_main",
-      "target": "analysis_dominant_rf2_plot_aggregation_analysis"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_wi",
-      "target": "analysis_dominant_wi_analyze_state_transitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_wi",
-      "target": "analysis_dominant_wi_load_all_descriptors"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L133",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_wi",
-      "target": "analysis_dominant_wi_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_wi",
-      "target": "analysis_dominant_wi_plot_aggregation_analysis"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L137",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_wi_main",
-      "target": "analysis_dominant_wi_load_all_descriptors"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L138",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_wi_main",
-      "target": "analysis_dominant_wi_analyze_state_transitions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_wi_rationale_30",
-      "target": "analysis_dominant_wi_analyze_state_transitions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/dominant_WI.py",
-      "source_location": "L141",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_dominant_wi_main",
-      "target": "analysis_dominant_wi_plot_aggregation_analysis"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L157",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff",
-      "target": "analysis_evolution_ff_analyze_evolution_confidence"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff",
-      "target": "analysis_evolution_ff_calculate_structure_fractions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L52",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff",
-      "target": "analysis_evolution_ff_identify_stable_transitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L168",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff",
-      "target": "analysis_evolution_ff_load_structure_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L203",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff",
-      "target": "analysis_evolution_ff_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L102",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff",
-      "target": "analysis_evolution_ff_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L214",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_main",
-      "target": "analysis_evolution_ff_calculate_structure_fractions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_rationale_10",
-      "target": "analysis_evolution_ff_calculate_structure_fractions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L217",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_main",
-      "target": "analysis_evolution_ff_identify_stable_transitions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_rationale_53",
-      "target": "analysis_evolution_ff_identify_stable_transitions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L221",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_main",
-      "target": "analysis_evolution_ff_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L103",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_rationale_103",
-      "target": "analysis_evolution_ff_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L224",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_main",
-      "target": "analysis_evolution_ff_analyze_evolution_confidence"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L158",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_rationale_158",
-      "target": "analysis_evolution_ff_analyze_evolution_confidence"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L208",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_main",
-      "target": "analysis_evolution_ff_load_structure_data"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_FF.py",
-      "source_location": "L169",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_ff_rationale_169",
-      "target": "analysis_evolution_ff_load_structure_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L157",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf",
-      "target": "analysis_evolution_rf_analyze_evolution_confidence"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf",
-      "target": "analysis_evolution_rf_calculate_structure_fractions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L52",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf",
-      "target": "analysis_evolution_rf_identify_stable_transitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L168",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf",
-      "target": "analysis_evolution_rf_load_structure_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L203",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf",
-      "target": "analysis_evolution_rf_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L102",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf",
-      "target": "analysis_evolution_rf_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L214",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_main",
-      "target": "analysis_evolution_rf_calculate_structure_fractions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_rationale_10",
-      "target": "analysis_evolution_rf_calculate_structure_fractions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L217",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_main",
-      "target": "analysis_evolution_rf_identify_stable_transitions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_rationale_53",
-      "target": "analysis_evolution_rf_identify_stable_transitions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L221",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_main",
-      "target": "analysis_evolution_rf_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L103",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_rationale_103",
-      "target": "analysis_evolution_rf_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L224",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_main",
-      "target": "analysis_evolution_rf_analyze_evolution_confidence"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L158",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_rationale_158",
-      "target": "analysis_evolution_rf_analyze_evolution_confidence"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L208",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_main",
-      "target": "analysis_evolution_rf_load_structure_data"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_RF.py",
-      "source_location": "L169",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_rf_rationale_169",
-      "target": "analysis_evolution_rf_load_structure_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L157",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi",
-      "target": "analysis_evolution_wi_analyze_evolution_confidence"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi",
-      "target": "analysis_evolution_wi_calculate_structure_fractions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L52",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi",
-      "target": "analysis_evolution_wi_identify_stable_transitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L168",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi",
-      "target": "analysis_evolution_wi_load_structure_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L203",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi",
-      "target": "analysis_evolution_wi_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L102",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi",
-      "target": "analysis_evolution_wi_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L214",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_main",
-      "target": "analysis_evolution_wi_calculate_structure_fractions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_rationale_10",
-      "target": "analysis_evolution_wi_calculate_structure_fractions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L217",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_main",
-      "target": "analysis_evolution_wi_identify_stable_transitions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_rationale_53",
-      "target": "analysis_evolution_wi_identify_stable_transitions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L221",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_main",
-      "target": "analysis_evolution_wi_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L103",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_rationale_103",
-      "target": "analysis_evolution_wi_plot_multi_scale_evolution"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L224",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_main",
-      "target": "analysis_evolution_wi_analyze_evolution_confidence"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L158",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_rationale_158",
-      "target": "analysis_evolution_wi_analyze_evolution_confidence"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L208",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_main",
-      "target": "analysis_evolution_wi_load_structure_data"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "analysis/evolution_WI.py",
-      "source_location": "L169",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "analysis_evolution_wi_rationale_169",
-      "target": "analysis_evolution_wi_load_structure_data"
-    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -2646,9 +1739,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "analysis_adi_analysis",
-      "target": "descriptors_adi",
-      "confidence_score": 1.0
+      "target": "descriptors_adi"
     },
     {
       "relation": "contains",
@@ -2948,9 +2041,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "analysis_centering",
-      "target": "descriptors_centering",
-      "confidence_score": 1.0
+      "target": "descriptors_centering"
     },
     {
       "relation": "contains",
@@ -3086,9 +2179,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "analysis_ffi_analysis",
-      "target": "descriptors_ffi",
-      "confidence_score": 1.0
+      "target": "descriptors_ffi"
     },
     {
       "relation": "contains",
@@ -3308,9 +2401,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "analysis_sfi_analysis",
-      "target": "descriptors_sfi",
-      "confidence_score": 1.0
+      "target": "descriptors_sfi"
     },
     {
       "relation": "contains",
@@ -3530,9 +2623,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "analysis_tfi_analysis",
-      "target": "descriptors_tfi",
-      "confidence_score": 1.0
+      "target": "descriptors_tfi"
     },
     {
       "relation": "contains",
@@ -3752,9 +2845,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "analysis_shape_tracker",
-      "target": "descriptors_tracker",
-      "confidence_score": 1.0
+      "target": "descriptors_tracker"
     },
     {
       "relation": "contains",
@@ -4134,9 +3227,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "analysis_vfi_analysis",
-      "target": "descriptors_vfi",
-      "confidence_score": 1.0
+      "target": "descriptors_vfi"
     },
     {
       "relation": "contains",
@@ -4281,9 +3374,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "slurm_centering_job",
-      "target": "slurm_centering_job_sh__entry",
-      "confidence_score": 1.0
+      "target": "slurm_centering_job_sh__entry"
     },
     {
       "relation": "contains",
@@ -4292,9 +3385,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "slurm_csv_job",
-      "target": "slurm_csv_job_sh__entry",
-      "confidence_score": 1.0
+      "target": "slurm_csv_job_sh__entry"
     },
     {
       "relation": "contains",
@@ -4303,11 +3396,918 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "slurm_tracking_job",
-      "target": "slurm_tracking_job_sh__entry",
+      "target": "slurm_tracking_job_sh__entry"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_ff",
+      "target": "analysis_paper_figures_dominant_ff_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_ff",
+      "target": "analysis_paper_figures_dominant_ff_load_all_descriptors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_ff",
+      "target": "analysis_paper_figures_dominant_ff_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_ff",
+      "target": "analysis_paper_figures_dominant_ff_plot_aggregation_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_ff_main",
+      "target": "analysis_paper_figures_dominant_ff_load_all_descriptors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_ff_main",
+      "target": "analysis_paper_figures_dominant_ff_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_ff_rationale_30",
+      "target": "analysis_paper_figures_dominant_ff_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_FF.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_ff_main",
+      "target": "analysis_paper_figures_dominant_ff_plot_aggregation_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf",
+      "target": "analysis_paper_figures_dominant_rf_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf",
+      "target": "analysis_paper_figures_dominant_rf_load_all_descriptors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf",
+      "target": "analysis_paper_figures_dominant_rf_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf",
+      "target": "analysis_paper_figures_dominant_rf_plot_aggregation_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf_main",
+      "target": "analysis_paper_figures_dominant_rf_load_all_descriptors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf_main",
+      "target": "analysis_paper_figures_dominant_rf_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf_rationale_30",
+      "target": "analysis_paper_figures_dominant_rf_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf_main",
+      "target": "analysis_paper_figures_dominant_rf_plot_aggregation_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf2",
+      "target": "analysis_paper_figures_dominant_rf2_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf2",
+      "target": "analysis_paper_figures_dominant_rf2_load_all_descriptors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf2",
+      "target": "analysis_paper_figures_dominant_rf2_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf2",
+      "target": "analysis_paper_figures_dominant_rf2_plot_aggregation_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf2_main",
+      "target": "analysis_paper_figures_dominant_rf2_load_all_descriptors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf2_main",
+      "target": "analysis_paper_figures_dominant_rf2_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf2_rationale_30",
+      "target": "analysis_paper_figures_dominant_rf2_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_RF2.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_rf2_main",
+      "target": "analysis_paper_figures_dominant_rf2_plot_aggregation_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_wi",
+      "target": "analysis_paper_figures_dominant_wi_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_wi",
+      "target": "analysis_paper_figures_dominant_wi_load_all_descriptors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_wi",
+      "target": "analysis_paper_figures_dominant_wi_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_wi",
+      "target": "analysis_paper_figures_dominant_wi_plot_aggregation_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_wi_main",
+      "target": "analysis_paper_figures_dominant_wi_load_all_descriptors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_wi_main",
+      "target": "analysis_paper_figures_dominant_wi_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_wi_rationale_30",
+      "target": "analysis_paper_figures_dominant_wi_analyze_state_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/dominant_WI.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_dominant_wi_main",
+      "target": "analysis_paper_figures_dominant_wi_plot_aggregation_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L157",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff",
+      "target": "analysis_paper_figures_evolution_ff_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff",
+      "target": "analysis_paper_figures_evolution_ff_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff",
+      "target": "analysis_paper_figures_evolution_ff_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff",
+      "target": "analysis_paper_figures_evolution_ff_load_structure_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L203",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff",
+      "target": "analysis_paper_figures_evolution_ff_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff",
+      "target": "analysis_paper_figures_evolution_ff_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_main",
+      "target": "analysis_paper_figures_evolution_ff_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_rationale_10",
+      "target": "analysis_paper_figures_evolution_ff_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_main",
+      "target": "analysis_paper_figures_evolution_ff_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_rationale_53",
+      "target": "analysis_paper_figures_evolution_ff_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_main",
+      "target": "analysis_paper_figures_evolution_ff_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_rationale_103",
+      "target": "analysis_paper_figures_evolution_ff_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_main",
+      "target": "analysis_paper_figures_evolution_ff_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_rationale_158",
+      "target": "analysis_paper_figures_evolution_ff_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_main",
+      "target": "analysis_paper_figures_evolution_ff_load_structure_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_FF.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_ff_rationale_169",
+      "target": "analysis_paper_figures_evolution_ff_load_structure_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L157",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf",
+      "target": "analysis_paper_figures_evolution_rf_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf",
+      "target": "analysis_paper_figures_evolution_rf_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf",
+      "target": "analysis_paper_figures_evolution_rf_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf",
+      "target": "analysis_paper_figures_evolution_rf_load_structure_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L203",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf",
+      "target": "analysis_paper_figures_evolution_rf_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf",
+      "target": "analysis_paper_figures_evolution_rf_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_main",
+      "target": "analysis_paper_figures_evolution_rf_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_rationale_10",
+      "target": "analysis_paper_figures_evolution_rf_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_main",
+      "target": "analysis_paper_figures_evolution_rf_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_rationale_53",
+      "target": "analysis_paper_figures_evolution_rf_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_main",
+      "target": "analysis_paper_figures_evolution_rf_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_rationale_103",
+      "target": "analysis_paper_figures_evolution_rf_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_main",
+      "target": "analysis_paper_figures_evolution_rf_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_rationale_158",
+      "target": "analysis_paper_figures_evolution_rf_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_main",
+      "target": "analysis_paper_figures_evolution_rf_load_structure_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_RF.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_rf_rationale_169",
+      "target": "analysis_paper_figures_evolution_rf_load_structure_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L157",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi",
+      "target": "analysis_paper_figures_evolution_wi_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi",
+      "target": "analysis_paper_figures_evolution_wi_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi",
+      "target": "analysis_paper_figures_evolution_wi_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi",
+      "target": "analysis_paper_figures_evolution_wi_load_structure_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L203",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi",
+      "target": "analysis_paper_figures_evolution_wi_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi",
+      "target": "analysis_paper_figures_evolution_wi_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_main",
+      "target": "analysis_paper_figures_evolution_wi_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_rationale_10",
+      "target": "analysis_paper_figures_evolution_wi_calculate_structure_fractions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_main",
+      "target": "analysis_paper_figures_evolution_wi_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_rationale_53",
+      "target": "analysis_paper_figures_evolution_wi_identify_stable_transitions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_main",
+      "target": "analysis_paper_figures_evolution_wi_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_rationale_103",
+      "target": "analysis_paper_figures_evolution_wi_plot_multi_scale_evolution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_main",
+      "target": "analysis_paper_figures_evolution_wi_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_rationale_158",
+      "target": "analysis_paper_figures_evolution_wi_analyze_evolution_confidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_main",
+      "target": "analysis_paper_figures_evolution_wi_load_structure_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "analysis/paper_figures/evolution_WI.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "analysis_paper_figures_evolution_wi_rationale_169",
+      "target": "analysis_paper_figures_evolution_wi_load_structure_data",
       "confidence_score": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e63d9ca0b0c6cf055d77f9ddb3e69552c58352ca"
+  "built_at_commit": "759e9e16d4e2a1dfcddb8482bff2a835d101d703"
 }
