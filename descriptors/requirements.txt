@@ -1,7 +1,0 @@
-MDAnalysis
-numpy
-scipy
-networkx
-pandas
-pyarrow
-click
