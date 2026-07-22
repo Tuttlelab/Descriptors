@@ -1,6 +1,101 @@
 {
   "communities": {
     "0": [
+      "descriptors_adi",
+      "descriptors_adi_calculate_adi",
+      "descriptors_adi_identify_clusters",
+      "descriptors_adi_main",
+      "descriptors_adi_parse_arguments",
+      "descriptors_adi_plot_cluster_size_distribution",
+      "descriptors_adi_process_cluster_contacts",
+      "descriptors_adi_rationale_1",
+      "descriptors_adi_rationale_74",
+      "descriptors_adi_save_cluster_size_distribution",
+      "descriptors_adi_save_frame_results",
+      "descriptors_centering",
+      "descriptors_centering_center_trajectory",
+      "descriptors_centering_find_largest_cluster",
+      "descriptors_centering_main",
+      "descriptors_centering_rationale_1",
+      "descriptors_centering_rationale_20",
+      "descriptors_centering_rationale_35",
+      "descriptors_ffi",
+      "descriptors_ffi_calculate_ffi",
+      "descriptors_ffi_main",
+      "descriptors_ffi_parse_arguments",
+      "descriptors_ffi_rationale_1",
+      "descriptors_ffi_rationale_38",
+      "descriptors_ffi_save_ffi_results",
+      "descriptors_init",
+      "descriptors_init_rationale_1",
+      "descriptors_sfi",
+      "descriptors_sfi_calculate_sfi",
+      "descriptors_sfi_main",
+      "descriptors_sfi_parse_arguments",
+      "descriptors_sfi_rationale_1",
+      "descriptors_sfi_rationale_45",
+      "descriptors_sfi_save_sfi_results",
+      "descriptors_tfi",
+      "descriptors_tfi_calculate_tfi",
+      "descriptors_tfi_main",
+      "descriptors_tfi_parse_arguments",
+      "descriptors_tfi_rationale_1",
+      "descriptors_tfi_rationale_39",
+      "descriptors_tfi_save_tfi_results",
+      "descriptors_tracker",
+      "descriptors_tracker_main",
+      "descriptors_tracker_parse_arguments",
+      "descriptors_tracker_rationale_1",
+      "descriptors_tracker_rationale_40",
+      "descriptors_tracker_track_shapes",
+      "descriptors_utils",
+      "descriptors_utils_ensure_output_directory",
+      "descriptors_utils_load_universe",
+      "descriptors_utils_rationale_1",
+      "descriptors_utils_rationale_15",
+      "descriptors_utils_rationale_21",
+      "descriptors_utils_rationale_27",
+      "descriptors_utils_rationale_35",
+      "descriptors_utils_setup_logger",
+      "descriptors_utils_suppress_warnings",
+      "descriptors_vfi",
+      "descriptors_vfi_calculate_sphericity",
+      "descriptors_vfi_calculate_vfi",
+      "descriptors_vfi_main",
+      "descriptors_vfi_parse_arguments",
+      "descriptors_vfi_rationale_1",
+      "descriptors_vfi_rationale_35",
+      "descriptors_vfi_rationale_50",
+      "descriptors_vfi_save_vfi_results"
+    ],
+    "1": [
+      "ff_center",
+      "ff_center_ensure_output_directory",
+      "ff_center_find_largest_cluster",
+      "ff_center_load_and_process_trajectory",
+      "ff_center_main",
+      "ff_center_parse_arguments",
+      "ff_main_analyze_frame_clusters",
+      "ff_main_classify_frame_aggregates",
+      "ff_main_clean_clusters_directory",
+      "ff_main_ensure_analysis_directories",
+      "ff_main_find_cluster_files",
+      "ff_main_main",
+      "ff_main_parse_arguments",
+      "ff_main_py_ff_main",
+      "ff_main_rationale_139",
+      "ff_main_rationale_147",
+      "ff_main_rationale_153",
+      "ff_main_rationale_206",
+      "ff_main_rationale_244",
+      "ff_main_rationale_263",
+      "ff_main_rationale_440",
+      "ff_main_rationale_57",
+      "ff_main_save_analysis_data",
+      "ff_main_save_shape_results",
+      "ff_main_setup_logging"
+    ],
+    "2": [
       "ff_ffi",
       "ff_ffi_analyze_clusters",
       "ff_ffi_analyze_orientation_distribution",
@@ -26,7 +121,7 @@
       "ff_ffi_rationale_87",
       "ff_ffi_rationale_99"
     ],
-    "1": [
+    "3": [
       "ff_plot",
       "ff_plot_analyze_and_plot_evolution",
       "ff_plot_analyze_evolution_confidence",
@@ -52,7 +147,7 @@
       "ff_plot_rationale_46",
       "ff_plot_rationale_94"
     ],
-    "2": [
+    "4": [
       "adi_graph",
       "adi_graph_analyze_aggregate_persistence",
       "adi_graph_calculate_adaptive_cutoff",
@@ -74,7 +169,7 @@
       "adi_graph_save_frame_results",
       "adi_graph_save_persistent_aggregates"
     ],
-    "3": [
+    "5": [
       "ff_sfi",
       "ff_sfi_analyze_bb_sc_distribution",
       "ff_sfi_analyze_clusters",
@@ -95,49 +190,6 @@
       "ff_sfi_rationale_37",
       "ff_sfi_rationale_69",
       "ff_sfi_rationale_97"
-    ],
-    "4": [
-      "tfi_analysis_test",
-      "tfi_analysis_test_analyze_aggregate",
-      "tfi_analysis_test_compute_angular_uniformity",
-      "tfi_analysis_test_compute_radial_density",
-      "tfi_analysis_test_compute_shape_anisotropy",
-      "tfi_analysis_test_connected_components",
-      "tfi_analysis_test_ensure_output_directory",
-      "tfi_analysis_test_identify_aggregates",
-      "tfi_analysis_test_is_hollow_tube",
-      "tfi_analysis_test_main",
-      "tfi_analysis_test_parse_arguments",
-      "tfi_analysis_test_perform_cylindrical_analysis",
-      "tfi_analysis_test_rationale_173",
-      "tfi_analysis_test_rationale_209",
-      "tfi_analysis_test_rationale_321",
-      "tfi_analysis_test_rationale_60",
-      "tfi_analysis_test_rationale_75",
-      "tfi_analysis_test_save_frame_results",
-      "tfi_analysis_test_segment_based_analysis",
-      "tfi_analysis_test_setup_logging"
-    ],
-    "5": [
-      "ff_main_analyze_frame_clusters",
-      "ff_main_classify_frame_aggregates",
-      "ff_main_clean_clusters_directory",
-      "ff_main_ensure_analysis_directories",
-      "ff_main_find_cluster_files",
-      "ff_main_main",
-      "ff_main_parse_arguments",
-      "ff_main_py_ff_main",
-      "ff_main_rationale_139",
-      "ff_main_rationale_147",
-      "ff_main_rationale_153",
-      "ff_main_rationale_206",
-      "ff_main_rationale_244",
-      "ff_main_rationale_263",
-      "ff_main_rationale_440",
-      "ff_main_rationale_57",
-      "ff_main_save_analysis_data",
-      "ff_main_save_shape_results",
-      "ff_main_setup_logging"
     ],
     "6": [
       "ff_vfi",
@@ -303,16 +355,6 @@
       "analysis_agg_analysis_decision_copy_train_state_classifier"
     ],
     "18": [
-      "evolution",
-      "evolution_load_and_process_data",
-      "evolution_main",
-      "evolution_plot_evolution",
-      "evolution_rationale_20",
-      "evolution_rationale_61",
-      "evolution_rationale_8",
-      "evolution_validate_fractions"
-    ],
-    "19": [
       "tests_test_descriptors",
       "tests_test_descriptors_rationale_1",
       "tests_test_descriptors_rationale_13",
@@ -322,7 +364,7 @@
       "tests_test_descriptors_test_sphericity_sphere",
       "tests_test_descriptors_test_sphericity_too_few_points"
     ],
-    "20": [
+    "19": [
       "analysis_agg_analysis_decision",
       "analysis_agg_analysis_decision_analyze_state_transitions",
       "analysis_agg_analysis_decision_load_all_descriptors",
@@ -330,7 +372,7 @@
       "analysis_agg_analysis_decision_plot_aggregation_analysis",
       "analysis_agg_analysis_decision_rationale_30"
     ],
-    "21": [
+    "20": [
       "analysis_dominant_ff",
       "analysis_dominant_ff_analyze_state_transitions",
       "analysis_dominant_ff_load_all_descriptors",
@@ -338,7 +380,7 @@
       "analysis_dominant_ff_plot_aggregation_analysis",
       "analysis_dominant_ff_rationale_30"
     ],
-    "22": [
+    "21": [
       "analysis_dominant_rf",
       "analysis_dominant_rf_analyze_state_transitions",
       "analysis_dominant_rf_load_all_descriptors",
@@ -346,7 +388,7 @@
       "analysis_dominant_rf_plot_aggregation_analysis",
       "analysis_dominant_rf_rationale_30"
     ],
-    "23": [
+    "22": [
       "analysis_dominant_rf2",
       "analysis_dominant_rf2_analyze_state_transitions",
       "analysis_dominant_rf2_load_all_descriptors",
@@ -354,7 +396,7 @@
       "analysis_dominant_rf2_plot_aggregation_analysis",
       "analysis_dominant_rf2_rationale_30"
     ],
-    "24": [
+    "23": [
       "analysis_dominant_wi",
       "analysis_dominant_wi_analyze_state_transitions",
       "analysis_dominant_wi_load_all_descriptors",
@@ -362,7 +404,7 @@
       "analysis_dominant_wi_plot_aggregation_analysis",
       "analysis_dominant_wi_rationale_30"
     ],
-    "25": [
+    "24": [
       "analysis_rf_dominant_rf2",
       "analysis_rf_dominant_rf2_analyze_state_transitions",
       "analysis_rf_dominant_rf2_load_all_descriptors",
@@ -370,139 +412,62 @@
       "analysis_rf_dominant_rf2_plot_aggregation_analysis",
       "analysis_rf_dominant_rf2_rationale_30"
     ],
-    "26": [
-      "csv_python_job",
-      "csv_python_job_check_job_status",
-      "csv_python_job_get_all_dirs",
-      "csv_python_job_main",
-      "csv_python_job_setup_logging",
-      "csv_python_job_submit_job"
-    ],
-    "27": [
-      "ff_center",
-      "ff_center_ensure_output_directory",
-      "ff_center_find_largest_cluster",
-      "ff_center_load_and_process_trajectory",
-      "ff_center_main",
-      "ff_center_parse_arguments"
-    ],
-    "28": [
-      "tracking_python_job",
-      "tracking_python_job_check_job_status",
-      "tracking_python_job_get_all_dirs",
-      "tracking_python_job_main",
-      "tracking_python_job_setup_logging",
-      "tracking_python_job_submit_job"
-    ],
-    "29": [
-      "centering_python_job",
-      "centering_python_job_check_job_status",
-      "centering_python_job_get_dipep_dirs",
-      "centering_python_job_main",
-      "centering_python_job_submit_job"
-    ],
-    "30": [
-      "combined_evolution",
-      "combined_evolution_create_heat_map",
-      "combined_evolution_determine_dominant_shape",
-      "combined_evolution_load_descriptors",
-      "combined_evolution_main"
-    ],
-    "31": [
-      "combined_evolution_final",
-      "combined_evolution_final_categorize_by_final_shape",
-      "combined_evolution_final_get_detected_shapes",
-      "combined_evolution_final_load_descriptors",
-      "combined_evolution_final_rationale_51"
-    ],
-    "32": [
-      "csv_script",
-      "csv_script_log",
-      "csv_script_sh__entry"
-    ],
-    "33": [
+    "25": [
       "extract_largest_clusters",
       "extract_largest_clusters_extract_largest_clusters",
       "extract_largest_clusters_unwrap_positions"
     ],
-    "34": [
-      "tracking_script",
-      "tracking_script_log",
-      "tracking_script_sh__entry"
-    ],
-    "35": [
-      "centering_script",
-      "centering_script_sh__entry"
-    ],
-    "36": [
-      "examples_run_full_pipeline",
-      "examples_run_full_pipeline_sh__entry"
-    ],
-    "37": [
+    "26": [
       "ff_main_sh__entry",
       "ff_main_sh_ff_main"
     ],
-    "38": [
-      "load_csv_head_tail",
-      "load_csv_head_tail_load_csv_preview"
+    "27": [
+      "slurm_centering_job",
+      "slurm_centering_job_sh__entry"
     ],
-    "39": [
-      "tracking2",
-      "tracking2_sh__entry"
+    "28": [
+      "slurm_csv_job",
+      "slurm_csv_job_sh__entry"
     ],
-    "40": [
+    "29": [
+      "slurm_tracking_job",
+      "slurm_tracking_job_sh__entry"
+    ],
+    "30": [
       "adi_analysis"
     ],
-    "41": [
+    "31": [
       "analysis_agg_analysis_csv_results"
     ],
-    "42": [
+    "32": [
       "analysis_combined_plot_wi"
     ],
-    "43": [
+    "33": [
       "centering"
     ],
-    "44": [
+    "34": [
       "ffi_analysis"
     ],
-    "45": [
-      "scripts_run_adi"
-    ],
-    "46": [
-      "scripts_run_ffi"
-    ],
-    "47": [
-      "scripts_run_sfi"
-    ],
-    "48": [
-      "scripts_run_tfi"
-    ],
-    "49": [
-      "scripts_run_tracker"
-    ],
-    "50": [
-      "scripts_run_vfi"
-    ],
-    "51": [
+    "35": [
       "sfi_analysis"
     ],
-    "52": [
+    "36": [
       "shape_tracker"
     ],
-    "53": [
+    "37": [
       "tfi_analysis"
     ],
-    "54": [
+    "38": [
       "vfi_analysis"
     ]
   },
   "cohesion": {
-    "0": 0.11594202898550725,
-    "1": 0.10144927536231885,
-    "2": 0.15789473684210525,
-    "3": 0.12631578947368421,
-    "4": 0.16842105263157894,
-    "5": 0.14619883040935672,
+    "0": 0.06853146853146853,
+    "1": 0.11666666666666667,
+    "2": 0.11594202898550725,
+    "3": 0.10144927536231885,
+    "4": 0.15789473684210525,
+    "5": 0.12631578947368421,
     "6": 0.2087912087912088,
     "7": 0.19230769230769232,
     "8": 0.24242424242424243,
@@ -515,48 +480,47 @@
     "15": 0.2727272727272727,
     "16": 0.35714285714285715,
     "17": 0.39285714285714285,
-    "18": 0.35714285714285715,
-    "19": 0.25,
+    "18": 0.25,
+    "19": 0.5333333333333333,
     "20": 0.5333333333333333,
     "21": 0.5333333333333333,
     "22": 0.5333333333333333,
     "23": 0.5333333333333333,
     "24": 0.5333333333333333,
-    "25": 0.5333333333333333,
-    "26": 0.5333333333333333,
-    "27": 0.6,
-    "28": 0.5333333333333333,
-    "29": 0.7,
-    "30": 0.7,
-    "31": 0.5,
+    "25": 0.6666666666666666,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
     "32": 1.0,
-    "33": 0.6666666666666666,
+    "33": 1.0,
     "34": 1.0,
     "35": 1.0,
     "36": 1.0,
     "37": 1.0,
-    "38": 1.0,
-    "39": 1.0,
-    "40": 1.0,
-    "41": 1.0,
-    "42": 1.0,
-    "43": 1.0,
-    "44": 1.0,
-    "45": 1.0,
-    "46": 1.0,
-    "47": 1.0,
-    "48": 1.0,
-    "49": 1.0,
-    "50": 1.0,
-    "51": 1.0,
-    "52": 1.0,
-    "53": 1.0,
-    "54": 1.0
+    "38": 1.0
   },
   "gods": [
     {
+      "id": "descriptors_utils_ensure_output_directory",
+      "label": "ensure_output_directory()",
+      "degree": 17
+    },
+    {
+      "id": "descriptors_utils_setup_logger",
+      "label": "setup_logger()",
+      "degree": 15
+    },
+    {
       "id": "adi_graph_main",
       "label": "main()",
+      "degree": 12
+    },
+    {
+      "id": "descriptors_adi_calculate_adi",
+      "label": "calculate_adi()",
       "degree": 12
     },
     {
@@ -565,47 +529,88 @@
       "degree": 11
     },
     {
-      "id": "ff_main_main",
-      "label": "main()",
-      "degree": 8
+      "id": "descriptors_tracker_track_shapes",
+      "label": "track_shapes()",
+      "degree": 11
     },
     {
-      "id": "tfi_analysis_test_analyze_aggregate",
-      "label": "analyze_aggregate()",
-      "degree": 8
+      "id": "descriptors_vfi_calculate_vfi",
+      "label": "calculate_vfi()",
+      "degree": 10
     },
     {
-      "id": "ff_tfi_analyze_clusters",
-      "label": "analyze_clusters()",
-      "degree": 7
+      "id": "descriptors_ffi_calculate_ffi",
+      "label": "calculate_ffi()",
+      "degree": 9
     },
     {
-      "id": "ff_vfi_analyze_clusters",
-      "label": "analyze_clusters()",
-      "degree": 7
+      "id": "descriptors_sfi_calculate_sfi",
+      "label": "calculate_sfi()",
+      "degree": 9
     },
     {
-      "id": "tfi_analysis_test_main",
-      "label": "main()",
-      "degree": 7
-    },
-    {
-      "id": "analysis_rf_evolution_rf2_main",
-      "label": "main()",
-      "degree": 6
-    },
-    {
-      "id": "analysis_agg_analysis_evolution_main",
-      "label": "main()",
-      "degree": 6
-    },
-    {
-      "id": "analysis_agg_analysis_evolution_ff_main",
-      "label": "main()",
-      "degree": 6
+      "id": "descriptors_tfi_calculate_tfi",
+      "label": "calculate_tfi()",
+      "degree": 9
     }
   ],
-  "surprises": [],
+  "surprises": [
+    {
+      "source": "calculate_adi()",
+      "target": "ensure_output_directory()",
+      "source_files": [
+        "descriptors/adi.py",
+        "descriptors/utils.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "calculate_adi()",
+      "target": "setup_logger()",
+      "source_files": [
+        "descriptors/adi.py",
+        "descriptors/utils.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "track_shapes()",
+      "target": "calculate_adi()",
+      "source_files": [
+        "descriptors/tracker.py",
+        "descriptors/adi.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "center_trajectory()",
+      "target": "ensure_output_directory()",
+      "source_files": [
+        "descriptors/centering.py",
+        "descriptors/utils.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "calculate_ffi()",
+      "target": "ensure_output_directory()",
+      "source_files": [
+        "descriptors/ffi.py",
+        "descriptors/utils.py"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    }
+  ],
   "tokens": {
     "input": 0,
     "output": 0

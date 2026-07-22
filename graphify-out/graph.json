@@ -9,7 +9,7 @@
       "source_file": "FF/center.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 27,
+      "community": 1,
       "norm_label": "center.py",
       "id": "ff_center"
     },
@@ -19,7 +19,7 @@
       "source_file": "FF/center.py",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 27,
+      "community": 1,
       "norm_label": "ensure_output_directory()",
       "id": "ff_center_ensure_output_directory"
     },
@@ -29,7 +29,7 @@
       "source_file": "FF/center.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 27,
+      "community": 1,
       "norm_label": "find_largest_cluster()",
       "id": "ff_center_find_largest_cluster"
     },
@@ -39,7 +39,7 @@
       "source_file": "FF/center.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 27,
+      "community": 1,
       "norm_label": "load_and_process_trajectory()",
       "id": "ff_center_load_and_process_trajectory"
     },
@@ -49,7 +49,7 @@
       "source_file": "FF/center.py",
       "source_location": "L200",
       "_origin": "ast",
-      "community": 27,
+      "community": 1,
       "norm_label": "parse_arguments()",
       "id": "ff_center_parse_arguments"
     },
@@ -59,7 +59,7 @@
       "source_file": "FF/center.py",
       "source_location": "L214",
       "_origin": "ast",
-      "community": 27,
+      "community": 1,
       "norm_label": "main()",
       "id": "ff_center_main"
     },
@@ -199,7 +199,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "ffi.py",
       "id": "ff_ffi"
     },
@@ -209,7 +209,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute_moments_of_inertia()",
       "id": "ff_ffi_compute_moments_of_inertia"
     },
@@ -219,7 +219,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "get_peptide_orientations()",
       "id": "ff_ffi_get_peptide_orientations"
     },
@@ -229,7 +229,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "analyze_orientation_distribution()",
       "id": "ff_ffi_analyze_orientation_distribution"
     },
@@ -239,7 +239,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L86",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute_fop()",
       "id": "ff_ffi_compute_fop"
     },
@@ -249,7 +249,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "cross_sectional_profiling()",
       "id": "ff_ffi_cross_sectional_profiling"
     },
@@ -259,7 +259,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L120",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "check_cylindrical_geometry()",
       "id": "ff_ffi_check_cylindrical_geometry"
     },
@@ -269,7 +269,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L158",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute_cylindrical_score()",
       "id": "ff_ffi_compute_cylindrical_score"
     },
@@ -279,7 +279,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L201",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute_radial_density()",
       "id": "ff_ffi_compute_radial_density"
     },
@@ -289,7 +289,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L229",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "is_hollow_tube()",
       "id": "ff_ffi_is_hollow_tube"
     },
@@ -299,7 +299,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L249",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute_sphericity()",
       "id": "ff_ffi_compute_sphericity"
     },
@@ -309,7 +309,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L259",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "analyze_clusters()",
       "id": "ff_ffi_analyze_clusters"
     },
@@ -319,7 +319,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "module for analyzing fiber characteristics in peptide clusters.",
       "id": "ff_ffi_rationale_1"
     },
@@ -329,7 +329,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute the moments of inertia and shape ratios of an aggregate.",
       "id": "ff_ffi_rationale_28"
     },
@@ -339,7 +339,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "calculate the orientation vectors for each dipeptide.",
       "id": "ff_ffi_rationale_45"
     },
@@ -349,7 +349,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "analyze the distribution of peptide orientations relative to the principal axis.",
       "id": "ff_ffi_rationale_66"
     },
@@ -359,7 +359,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L87",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute the fibrillar order parameter (fop).",
       "id": "ff_ffi_rationale_87"
     },
@@ -369,7 +369,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L99",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "perform cross-sectional profiling along the fiber.",
       "id": "ff_ffi_rationale_99"
     },
@@ -379,7 +379,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "enhanced check for fiber-like cylindrical geometry.",
       "id": "ff_ffi_rationale_121"
     },
@@ -389,7 +389,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L159",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "rolled back to original cylindrical score calculation",
       "id": "ff_ffi_rationale_159"
     },
@@ -399,7 +399,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L202",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute the radial density profile from the center.              args:",
       "id": "ff_ffi_rationale_202"
     },
@@ -409,7 +409,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L230",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "determine if structure has a hollow core based on radial density.",
       "id": "ff_ffi_rationale_230"
     },
@@ -419,7 +419,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L250",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "compute the sphericity of a set of positions.",
       "id": "ff_ffi_rationale_250"
     },
@@ -429,7 +429,7 @@
       "source_file": "FF/ffi.py",
       "source_location": "L260",
       "_origin": "ast",
-      "community": 0,
+      "community": 2,
       "norm_label": "enhanced cluster analysis for fiber detection with better sheet distinction",
       "id": "ff_ffi_rationale_260"
     },
@@ -439,7 +439,7 @@
       "source_file": "FF/main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "main.py",
       "id": "ff_main_py_ff_main"
     },
@@ -449,7 +449,7 @@
       "source_file": "FF/main.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "setup_logging()",
       "id": "ff_main_setup_logging"
     },
@@ -459,7 +459,7 @@
       "source_file": "FF/main.py",
       "source_location": "L90",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "parse_arguments()",
       "id": "ff_main_parse_arguments"
     },
@@ -469,7 +469,7 @@
       "source_file": "FF/main.py",
       "source_location": "L138",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "clean_clusters_directory()",
       "id": "ff_main_clean_clusters_directory"
     },
@@ -479,7 +479,7 @@
       "source_file": "FF/main.py",
       "source_location": "L146",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "ensure_analysis_directories()",
       "id": "ff_main_ensure_analysis_directories"
     },
@@ -489,7 +489,7 @@
       "source_file": "FF/main.py",
       "source_location": "L152",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "classify_frame_aggregates()",
       "id": "ff_main_classify_frame_aggregates"
     },
@@ -499,7 +499,7 @@
       "source_file": "FF/main.py",
       "source_location": "L205",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "find_cluster_files()",
       "id": "ff_main_find_cluster_files"
     },
@@ -509,7 +509,7 @@
       "source_file": "FF/main.py",
       "source_location": "L243",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "save_shape_results()",
       "id": "ff_main_save_shape_results"
     },
@@ -519,7 +519,7 @@
       "source_file": "FF/main.py",
       "source_location": "L262",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "analyze_frame_clusters()",
       "id": "ff_main_analyze_frame_clusters"
     },
@@ -529,7 +529,7 @@
       "source_file": "FF/main.py",
       "source_location": "L439",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "save_analysis_data()",
       "id": "ff_main_save_analysis_data"
     },
@@ -539,7 +539,7 @@
       "source_file": "FF/main.py",
       "source_location": "L490",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "main()",
       "id": "ff_main_main"
     },
@@ -549,7 +549,7 @@
       "source_file": "FF/main.py",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "setup logging with timestamp",
       "id": "ff_main_rationale_57"
     },
@@ -559,7 +559,7 @@
       "source_file": "FF/main.py",
       "source_location": "L139",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "clean up old cluster files before new analysis",
       "id": "ff_main_rationale_139"
     },
@@ -569,7 +569,7 @@
       "source_file": "FF/main.py",
       "source_location": "L147",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "create necessary directories for analysis results",
       "id": "ff_main_rationale_147"
     },
@@ -579,7 +579,7 @@
       "source_file": "FF/main.py",
       "source_location": "L153",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "analyze clusters with mutual exclusion",
       "id": "ff_main_rationale_153"
     },
@@ -589,7 +589,7 @@
       "source_file": "FF/main.py",
       "source_location": "L206",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "find all cluster files in clusters directory",
       "id": "ff_main_rationale_206"
     },
@@ -599,7 +599,7 @@
       "source_file": "FF/main.py",
       "source_location": "L244",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "save shape analysis results to a file",
       "id": "ff_main_rationale_244"
     },
@@ -609,7 +609,7 @@
       "source_file": "FF/main.py",
       "source_location": "L263",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "analyze all clusters in a single frame, focusing on the largest cluster",
       "id": "ff_main_rationale_263"
     },
@@ -619,7 +619,7 @@
       "source_file": "FF/main.py",
       "source_location": "L440",
       "_origin": "ast",
-      "community": 5,
+      "community": 1,
       "norm_label": "save analysis data focusing on largest cluster per frame",
       "id": "ff_main_rationale_440"
     },
@@ -633,7 +633,7 @@
         "kind": "file"
       },
       "_origin": "ast",
-      "community": 37,
+      "community": 26,
       "norm_label": "main.sh",
       "id": "ff_main_sh_ff_main"
     },
@@ -647,7 +647,7 @@
         "kind": "bash_entrypoint"
       },
       "_origin": "ast",
-      "community": 37,
+      "community": 26,
       "norm_label": "main.sh script",
       "id": "ff_main_sh__entry"
     },
@@ -657,7 +657,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot.py",
       "id": "ff_plot"
     },
@@ -667,7 +667,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "calculate_structure_fractions()",
       "id": "ff_plot_calculate_structure_fractions"
     },
@@ -677,7 +677,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "identify_stable_transitions()",
       "id": "ff_plot_identify_stable_transitions"
     },
@@ -687,7 +687,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot_multi_scale_evolution()",
       "id": "ff_plot_plot_multi_scale_evolution"
     },
@@ -697,7 +697,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L147",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot_aggregation_analysis()",
       "id": "ff_plot_plot_aggregation_analysis"
     },
@@ -707,7 +707,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L189",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "analyze_evolution_confidence()",
       "id": "ff_plot_analyze_evolution_confidence"
     },
@@ -717,7 +717,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L200",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "load_structure_data()",
       "id": "ff_plot_load_structure_data"
     },
@@ -727,7 +727,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot_raw_assembly_evolution()",
       "id": "ff_plot_plot_raw_assembly_evolution"
     },
@@ -737,7 +737,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L302",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot_aggregation_evolution()",
       "id": "ff_plot_plot_aggregation_evolution"
     },
@@ -747,7 +747,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L320",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot_shape_analysis()",
       "id": "ff_plot_plot_shape_analysis"
     },
@@ -757,7 +757,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L345",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot_shape_metrics()",
       "id": "ff_plot_plot_shape_metrics"
     },
@@ -767,7 +767,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L408",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "analyze_and_plot_evolution()",
       "id": "ff_plot_analyze_and_plot_evolution"
     },
@@ -777,7 +777,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L443",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "main()",
       "id": "ff_plot_main"
     },
@@ -787,7 +787,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "calculate structure fractions with confidence filtering",
       "id": "ff_plot_rationale_12"
     },
@@ -797,7 +797,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "identify genuine structure transitions using manual window",
       "id": "ff_plot_rationale_46"
     },
@@ -807,7 +807,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L94",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "create dual-view evolution plot showing both micro and macro trends",
       "id": "ff_plot_rationale_94"
     },
@@ -817,7 +817,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L148",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "create stacked area plot showing relative structure abundance",
       "id": "ff_plot_rationale_148"
     },
@@ -827,7 +827,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L190",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "generate analysis summary with confidence metrics",
       "id": "ff_plot_rationale_190"
     },
@@ -837,7 +837,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L201",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "load structure data from multiple csv files",
       "id": "ff_plot_rationale_201"
     },
@@ -847,7 +847,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L239",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "create simple two-panel plot showing raw structure fractions and dominant states",
       "id": "ff_plot_rationale_239"
     },
@@ -857,7 +857,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L303",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot size evolution and aggregate count",
       "id": "ff_plot_rationale_303"
     },
@@ -867,7 +867,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L321",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot shape classification over time",
       "id": "ff_plot_rationale_321"
     },
@@ -877,7 +877,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L346",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "plot metrics for each shape type",
       "id": "ff_plot_rationale_346"
     },
@@ -887,7 +887,7 @@
       "source_file": "FF/plot.py",
       "source_location": "L409",
       "_origin": "ast",
-      "community": 1,
+      "community": 3,
       "norm_label": "generate comprehensive plots from shape evolution csv",
       "id": "ff_plot_rationale_409"
     },
@@ -897,7 +897,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "sfi.py",
       "id": "ff_sfi"
     },
@@ -907,7 +907,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "perform_pca()",
       "id": "ff_sfi_perform_pca"
     },
@@ -917,7 +917,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "analyze_bb_sc_distribution()",
       "id": "ff_sfi_analyze_bb_sc_distribution"
     },
@@ -927,7 +927,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "analyze_local_structure()",
       "id": "ff_sfi_analyze_local_structure"
     },
@@ -937,7 +937,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L117",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "is_sheet_like()",
       "id": "ff_sfi_is_sheet_like"
     },
@@ -947,7 +947,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "compute_thickness_variation()",
       "id": "ff_sfi_compute_thickness_variation"
     },
@@ -957,7 +957,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L160",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "fit_quadratic_surface()",
       "id": "ff_sfi_fit_quadratic_surface"
     },
@@ -967,7 +967,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L206",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "compute_angle_matrix()",
       "id": "ff_sfi_compute_angle_matrix"
     },
@@ -977,7 +977,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L216",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "calculate_peptide_length()",
       "id": "ff_sfi_calculate_peptide_length"
     },
@@ -987,7 +987,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L238",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "analyze_clusters()",
       "id": "ff_sfi_analyze_clusters"
     },
@@ -997,7 +997,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L305",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "compute_sphericity()",
       "id": "ff_sfi_compute_sphericity"
     },
@@ -1007,7 +1007,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "perform pca with robust error handling.",
       "id": "ff_sfi_rationale_37"
     },
@@ -1017,7 +1017,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "analyze backbone and sidechain distribution to detect bilayer characteristics.",
       "id": "ff_sfi_rationale_69"
     },
@@ -1027,7 +1027,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "analyze local planarity in smaller neighborhoods",
       "id": "ff_sfi_rationale_97"
     },
@@ -1037,7 +1037,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "enhanced sheet detection with more lenient criteria",
       "id": "ff_sfi_rationale_118"
     },
@@ -1047,7 +1047,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L156",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "compute the variation in thickness of the sheet.",
       "id": "ff_sfi_rationale_156"
     },
@@ -1057,7 +1057,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L161",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "enhanced surface fitting for curved bilayer detection",
       "id": "ff_sfi_rationale_161"
     },
@@ -1067,7 +1067,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L217",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "calculate the number of beads per peptide from the universe",
       "id": "ff_sfi_rationale_217"
     },
@@ -1077,7 +1077,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L239",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "analyze clusters with improved sheet detection matching sfi_analysis.py",
       "id": "ff_sfi_rationale_239"
     },
@@ -1087,7 +1087,7 @@
       "source_file": "FF/sfi.py",
       "source_location": "L306",
       "_origin": "ast",
-      "community": 3,
+      "community": 5,
       "norm_label": "calculate sphericity using convex hull with enhanced criteria.",
       "id": "ff_sfi_rationale_306"
     },
@@ -1357,7 +1357,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "adi_graph.py",
       "id": "adi_graph"
     },
@@ -1367,7 +1367,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "parse_arguments()",
       "id": "adi_graph_parse_arguments"
     },
@@ -1377,7 +1377,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "ensure_output_directory()",
       "id": "adi_graph_ensure_output_directory"
     },
@@ -1387,7 +1387,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "load_and_crop_trajectory()",
       "id": "adi_graph_load_and_crop_trajectory"
     },
@@ -1397,7 +1397,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "calculate_adaptive_cutoff()",
       "id": "adi_graph_calculate_adaptive_cutoff"
     },
@@ -1407,7 +1407,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "identify_clusters()",
       "id": "adi_graph_identify_clusters"
     },
@@ -1417,7 +1417,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L194",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "analyze_aggregate_persistence()",
       "id": "adi_graph_analyze_aggregate_persistence"
     },
@@ -1427,7 +1427,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L224",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "main()",
       "id": "adi_graph_main"
     },
@@ -1437,7 +1437,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L380",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "save_cluster_size_distribution()",
       "id": "adi_graph_save_cluster_size_distribution"
     },
@@ -1447,7 +1447,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L393",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "save_frame_results()",
       "id": "adi_graph_save_frame_results"
     },
@@ -1457,7 +1457,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L410",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "save_persistent_aggregates()",
       "id": "adi_graph_save_persistent_aggregates"
     },
@@ -1467,7 +1467,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L423",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "plot_cluster_size_distribution()",
       "id": "adi_graph_plot_cluster_size_distribution"
     },
@@ -1477,7 +1477,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L471",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "plot_persistent_aggregates()",
       "id": "adi_graph_plot_persistent_aggregates"
     },
@@ -1487,7 +1487,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L99",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "calculate adaptive cutoff distance based on rdf, optimized for martini cg beads.",
       "id": "adi_graph_rationale_99"
     },
@@ -1497,7 +1497,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L195",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "apply persistence criteria to filter out transient aggregates.",
       "id": "adi_graph_rationale_195"
     },
@@ -1507,7 +1507,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L381",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "save cluster size distribution data to a file.",
       "id": "adi_graph_rationale_381"
     },
@@ -1517,7 +1517,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L394",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "save frame results to a csv file.",
       "id": "adi_graph_rationale_394"
     },
@@ -1527,7 +1527,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L411",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "save information about persistent aggregates.",
       "id": "adi_graph_rationale_411"
     },
@@ -1537,7 +1537,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L424",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "plot the number of clusters per frame with circle sizes proportional to the aver",
       "id": "adi_graph_rationale_424"
     },
@@ -1547,7 +1547,7 @@
       "source_file": "adi_graph.py",
       "source_location": "L472",
       "_origin": "ast",
-      "community": 2,
+      "community": 4,
       "norm_label": "plot the number of persistent aggregates over time.",
       "id": "adi_graph_rationale_472"
     },
@@ -1557,7 +1557,7 @@
       "source_file": "analysis/RF/dominant_RF2.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 25,
+      "community": 24,
       "norm_label": "dominant_rf2.py",
       "id": "analysis_rf_dominant_rf2"
     },
@@ -1567,7 +1567,7 @@
       "source_file": "analysis/RF/dominant_RF2.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 25,
+      "community": 24,
       "norm_label": "load_all_descriptors()",
       "id": "analysis_rf_dominant_rf2_load_all_descriptors"
     },
@@ -1577,7 +1577,7 @@
       "source_file": "analysis/RF/dominant_RF2.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 25,
+      "community": 24,
       "norm_label": "analyze_state_transitions()",
       "id": "analysis_rf_dominant_rf2_analyze_state_transitions"
     },
@@ -1587,7 +1587,7 @@
       "source_file": "analysis/RF/dominant_RF2.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 25,
+      "community": 24,
       "norm_label": "plot_aggregation_analysis()",
       "id": "analysis_rf_dominant_rf2_plot_aggregation_analysis"
     },
@@ -1597,7 +1597,7 @@
       "source_file": "analysis/RF/dominant_RF2.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 25,
+      "community": 24,
       "norm_label": "main()",
       "id": "analysis_rf_dominant_rf2_main"
     },
@@ -1607,7 +1607,7 @@
       "source_file": "analysis/RF/dominant_RF2.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 25,
+      "community": 24,
       "norm_label": "analyze transitions with thresholds",
       "id": "analysis_rf_dominant_rf2_rationale_30"
     },
@@ -1817,7 +1817,7 @@
       "source_file": "analysis/agg_analysis/csv_results.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 41,
+      "community": 31,
       "norm_label": "csv_results.py",
       "id": "analysis_agg_analysis_csv_results"
     },
@@ -1907,7 +1907,7 @@
       "source_file": "analysis/agg_analysis/decision.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 20,
+      "community": 19,
       "norm_label": "decision.py",
       "id": "analysis_agg_analysis_decision"
     },
@@ -1917,7 +1917,7 @@
       "source_file": "analysis/agg_analysis/decision.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 20,
+      "community": 19,
       "norm_label": "load_all_descriptors()",
       "id": "analysis_agg_analysis_decision_load_all_descriptors"
     },
@@ -1927,7 +1927,7 @@
       "source_file": "analysis/agg_analysis/decision.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 20,
+      "community": 19,
       "norm_label": "analyze_state_transitions()",
       "id": "analysis_agg_analysis_decision_analyze_state_transitions"
     },
@@ -1937,7 +1937,7 @@
       "source_file": "analysis/agg_analysis/decision.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 20,
+      "community": 19,
       "norm_label": "plot_aggregation_analysis()",
       "id": "analysis_agg_analysis_decision_plot_aggregation_analysis"
     },
@@ -1947,7 +1947,7 @@
       "source_file": "analysis/agg_analysis/decision.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 20,
+      "community": 19,
       "norm_label": "main()",
       "id": "analysis_agg_analysis_decision_main"
     },
@@ -1957,7 +1957,7 @@
       "source_file": "analysis/agg_analysis/decision.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 20,
+      "community": 19,
       "norm_label": "analyze transitions with thresholds",
       "id": "analysis_agg_analysis_decision_rationale_30"
     },
@@ -2327,7 +2327,7 @@
       "source_file": "analysis/combined_plot_WI.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 32,
       "norm_label": "combined_plot_wi.py",
       "id": "analysis_combined_plot_wi"
     },
@@ -2337,7 +2337,7 @@
       "source_file": "analysis/dominant_FF.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 21,
+      "community": 20,
       "norm_label": "dominant_ff.py",
       "id": "analysis_dominant_ff"
     },
@@ -2347,7 +2347,7 @@
       "source_file": "analysis/dominant_FF.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 21,
+      "community": 20,
       "norm_label": "load_all_descriptors()",
       "id": "analysis_dominant_ff_load_all_descriptors"
     },
@@ -2357,7 +2357,7 @@
       "source_file": "analysis/dominant_FF.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 21,
+      "community": 20,
       "norm_label": "analyze_state_transitions()",
       "id": "analysis_dominant_ff_analyze_state_transitions"
     },
@@ -2367,7 +2367,7 @@
       "source_file": "analysis/dominant_FF.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 21,
+      "community": 20,
       "norm_label": "plot_aggregation_analysis()",
       "id": "analysis_dominant_ff_plot_aggregation_analysis"
     },
@@ -2377,7 +2377,7 @@
       "source_file": "analysis/dominant_FF.py",
       "source_location": "L133",
       "_origin": "ast",
-      "community": 21,
+      "community": 20,
       "norm_label": "main()",
       "id": "analysis_dominant_ff_main"
     },
@@ -2387,7 +2387,7 @@
       "source_file": "analysis/dominant_FF.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 21,
+      "community": 20,
       "norm_label": "analyze transitions with thresholds",
       "id": "analysis_dominant_ff_rationale_30"
     },
@@ -2397,7 +2397,7 @@
       "source_file": "analysis/dominant_RF.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 22,
+      "community": 21,
       "norm_label": "dominant_rf.py",
       "id": "analysis_dominant_rf"
     },
@@ -2407,7 +2407,7 @@
       "source_file": "analysis/dominant_RF.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 22,
+      "community": 21,
       "norm_label": "load_all_descriptors()",
       "id": "analysis_dominant_rf_load_all_descriptors"
     },
@@ -2417,7 +2417,7 @@
       "source_file": "analysis/dominant_RF.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 22,
+      "community": 21,
       "norm_label": "analyze_state_transitions()",
       "id": "analysis_dominant_rf_analyze_state_transitions"
     },
@@ -2427,7 +2427,7 @@
       "source_file": "analysis/dominant_RF.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 22,
+      "community": 21,
       "norm_label": "plot_aggregation_analysis()",
       "id": "analysis_dominant_rf_plot_aggregation_analysis"
     },
@@ -2437,7 +2437,7 @@
       "source_file": "analysis/dominant_RF.py",
       "source_location": "L133",
       "_origin": "ast",
-      "community": 22,
+      "community": 21,
       "norm_label": "main()",
       "id": "analysis_dominant_rf_main"
     },
@@ -2447,7 +2447,7 @@
       "source_file": "analysis/dominant_RF.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 22,
+      "community": 21,
       "norm_label": "analyze transitions with thresholds",
       "id": "analysis_dominant_rf_rationale_30"
     },
@@ -2457,7 +2457,7 @@
       "source_file": "analysis/dominant_RF2.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 22,
       "norm_label": "dominant_rf2.py",
       "id": "analysis_dominant_rf2"
     },
@@ -2467,7 +2467,7 @@
       "source_file": "analysis/dominant_RF2.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 23,
+      "community": 22,
       "norm_label": "load_all_descriptors()",
       "id": "analysis_dominant_rf2_load_all_descriptors"
     },
@@ -2477,7 +2477,7 @@
       "source_file": "analysis/dominant_RF2.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 23,
+      "community": 22,
       "norm_label": "analyze_state_transitions()",
       "id": "analysis_dominant_rf2_analyze_state_transitions"
     },
@@ -2487,7 +2487,7 @@
       "source_file": "analysis/dominant_RF2.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 23,
+      "community": 22,
       "norm_label": "plot_aggregation_analysis()",
       "id": "analysis_dominant_rf2_plot_aggregation_analysis"
     },
@@ -2497,7 +2497,7 @@
       "source_file": "analysis/dominant_RF2.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 23,
+      "community": 22,
       "norm_label": "main()",
       "id": "analysis_dominant_rf2_main"
     },
@@ -2507,7 +2507,7 @@
       "source_file": "analysis/dominant_RF2.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 23,
+      "community": 22,
       "norm_label": "analyze transitions with thresholds",
       "id": "analysis_dominant_rf2_rationale_30"
     },
@@ -2517,7 +2517,7 @@
       "source_file": "analysis/dominant_WI.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 24,
+      "community": 23,
       "norm_label": "dominant_wi.py",
       "id": "analysis_dominant_wi"
     },
@@ -2527,7 +2527,7 @@
       "source_file": "analysis/dominant_WI.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 24,
+      "community": 23,
       "norm_label": "load_all_descriptors()",
       "id": "analysis_dominant_wi_load_all_descriptors"
     },
@@ -2537,7 +2537,7 @@
       "source_file": "analysis/dominant_WI.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 24,
+      "community": 23,
       "norm_label": "analyze_state_transitions()",
       "id": "analysis_dominant_wi_analyze_state_transitions"
     },
@@ -2547,7 +2547,7 @@
       "source_file": "analysis/dominant_WI.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 24,
+      "community": 23,
       "norm_label": "plot_aggregation_analysis()",
       "id": "analysis_dominant_wi_plot_aggregation_analysis"
     },
@@ -2557,7 +2557,7 @@
       "source_file": "analysis/dominant_WI.py",
       "source_location": "L133",
       "_origin": "ast",
-      "community": 24,
+      "community": 23,
       "norm_label": "main()",
       "id": "analysis_dominant_wi_main"
     },
@@ -2567,7 +2567,7 @@
       "source_file": "analysis/dominant_WI.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 24,
+      "community": 23,
       "norm_label": "analyze transitions with thresholds",
       "id": "analysis_dominant_wi_rationale_30"
     },
@@ -2932,372 +2932,12 @@
       "id": "analysis_evolution_wi_rationale_169"
     },
     {
-      "label": "centering_python_job.py",
-      "file_type": "code",
-      "source_file": "centering_python_job.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 29,
-      "norm_label": "centering_python_job.py",
-      "id": "centering_python_job"
-    },
-    {
-      "label": "submit_job()",
-      "file_type": "code",
-      "source_file": "centering_python_job.py",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 29,
-      "norm_label": "submit_job()",
-      "id": "centering_python_job_submit_job"
-    },
-    {
-      "label": "check_job_status()",
-      "file_type": "code",
-      "source_file": "centering_python_job.py",
-      "source_location": "L18",
-      "_origin": "ast",
-      "community": 29,
-      "norm_label": "check_job_status()",
-      "id": "centering_python_job_check_job_status"
-    },
-    {
-      "label": "get_dipep_dirs()",
-      "file_type": "code",
-      "source_file": "centering_python_job.py",
-      "source_location": "L25",
-      "_origin": "ast",
-      "community": 29,
-      "norm_label": "get_dipep_dirs()",
-      "id": "centering_python_job_get_dipep_dirs"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "centering_python_job.py",
-      "source_location": "L30",
-      "_origin": "ast",
-      "community": 29,
-      "norm_label": "main()",
-      "id": "centering_python_job_main"
-    },
-    {
-      "label": "centering_script.sh",
-      "file_type": "code",
-      "source_file": "centering_script.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "file"
-      },
-      "_origin": "ast",
-      "community": 35,
-      "norm_label": "centering_script.sh",
-      "id": "centering_script"
-    },
-    {
-      "label": "centering_script.sh script",
-      "file_type": "code",
-      "source_file": "centering_script.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_entrypoint"
-      },
-      "_origin": "ast",
-      "community": 35,
-      "norm_label": "centering_script.sh script",
-      "id": "centering_script_sh__entry"
-    },
-    {
-      "label": "combined_evolution.py",
-      "file_type": "code",
-      "source_file": "combined_evolution.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 30,
-      "norm_label": "combined_evolution.py",
-      "id": "combined_evolution"
-    },
-    {
-      "label": "load_descriptors()",
-      "file_type": "code",
-      "source_file": "combined_evolution.py",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 30,
-      "norm_label": "load_descriptors()",
-      "id": "combined_evolution_load_descriptors"
-    },
-    {
-      "label": "determine_dominant_shape()",
-      "file_type": "code",
-      "source_file": "combined_evolution.py",
-      "source_location": "L53",
-      "_origin": "ast",
-      "community": 30,
-      "norm_label": "determine_dominant_shape()",
-      "id": "combined_evolution_determine_dominant_shape"
-    },
-    {
-      "label": "create_heat_map()",
-      "file_type": "code",
-      "source_file": "combined_evolution.py",
-      "source_location": "L77",
-      "_origin": "ast",
-      "community": 30,
-      "norm_label": "create_heat_map()",
-      "id": "combined_evolution_create_heat_map"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "combined_evolution.py",
-      "source_location": "L104",
-      "_origin": "ast",
-      "community": 30,
-      "norm_label": "main()",
-      "id": "combined_evolution_main"
-    },
-    {
-      "label": "combined_evolution_final.py",
-      "file_type": "code",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 31,
-      "norm_label": "combined_evolution_final.py",
-      "id": "combined_evolution_final"
-    },
-    {
-      "label": "load_descriptors()",
-      "file_type": "code",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 31,
-      "norm_label": "load_descriptors()",
-      "id": "combined_evolution_final_load_descriptors"
-    },
-    {
-      "label": "get_detected_shapes()",
-      "file_type": "code",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L50",
-      "_origin": "ast",
-      "community": 31,
-      "norm_label": "get_detected_shapes()",
-      "id": "combined_evolution_final_get_detected_shapes"
-    },
-    {
-      "label": "categorize_by_final_shape()",
-      "file_type": "code",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L86",
-      "_origin": "ast",
-      "community": 31,
-      "norm_label": "categorize_by_final_shape()",
-      "id": "combined_evolution_final_categorize_by_final_shape"
-    },
-    {
-      "label": "Calculate normalized shape scores averaged over the last n frames",
-      "file_type": "rationale",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L51",
-      "_origin": "ast",
-      "community": 31,
-      "norm_label": "calculate normalized shape scores averaged over the last n frames",
-      "id": "combined_evolution_final_rationale_51"
-    },
-    {
-      "label": "csv_python_job.py",
-      "file_type": "code",
-      "source_file": "csv_python_job.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "csv_python_job.py",
-      "id": "csv_python_job"
-    },
-    {
-      "label": "setup_logging()",
-      "file_type": "code",
-      "source_file": "csv_python_job.py",
-      "source_location": "L6",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "setup_logging()",
-      "id": "csv_python_job_setup_logging"
-    },
-    {
-      "label": "submit_job()",
-      "file_type": "code",
-      "source_file": "csv_python_job.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "submit_job()",
-      "id": "csv_python_job_submit_job"
-    },
-    {
-      "label": "check_job_status()",
-      "file_type": "code",
-      "source_file": "csv_python_job.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "check_job_status()",
-      "id": "csv_python_job_check_job_status"
-    },
-    {
-      "label": "get_all_dirs()",
-      "file_type": "code",
-      "source_file": "csv_python_job.py",
-      "source_location": "L36",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "get_all_dirs()",
-      "id": "csv_python_job_get_all_dirs"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "csv_python_job.py",
-      "source_location": "L76",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "main()",
-      "id": "csv_python_job_main"
-    },
-    {
-      "label": "csv_script.sh",
-      "file_type": "code",
-      "source_file": "csv_script.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "file"
-      },
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": "csv_script.sh",
-      "id": "csv_script"
-    },
-    {
-      "label": "csv_script.sh script",
-      "file_type": "code",
-      "source_file": "csv_script.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_entrypoint"
-      },
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": "csv_script.sh script",
-      "id": "csv_script_sh__entry"
-    },
-    {
-      "label": "log()",
-      "file_type": "code",
-      "source_file": "csv_script.sh",
-      "source_location": "L50",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_function"
-      },
-      "_origin": "ast",
-      "community": 32,
-      "norm_label": "log()",
-      "id": "csv_script_log"
-    },
-    {
-      "label": "evolution.py",
-      "file_type": "code",
-      "source_file": "evolution.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "evolution.py",
-      "id": "evolution"
-    },
-    {
-      "label": "validate_fractions()",
-      "file_type": "code",
-      "source_file": "evolution.py",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "validate_fractions()",
-      "id": "evolution_validate_fractions"
-    },
-    {
-      "label": "load_and_process_data()",
-      "file_type": "code",
-      "source_file": "evolution.py",
-      "source_location": "L19",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "load_and_process_data()",
-      "id": "evolution_load_and_process_data"
-    },
-    {
-      "label": "plot_evolution()",
-      "file_type": "code",
-      "source_file": "evolution.py",
-      "source_location": "L60",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "plot_evolution()",
-      "id": "evolution_plot_evolution"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "evolution.py",
-      "source_location": "L110",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "main()",
-      "id": "evolution_main"
-    },
-    {
-      "label": "Validate that fractions sum to approximately 1",
-      "file_type": "rationale",
-      "source_file": "evolution.py",
-      "source_location": "L8",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "validate that fractions sum to approximately 1",
-      "id": "evolution_rationale_8"
-    },
-    {
-      "label": "Load structure data and calculate fractions",
-      "file_type": "rationale",
-      "source_file": "evolution.py",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "load structure data and calculate fractions",
-      "id": "evolution_rationale_20"
-    },
-    {
-      "label": "Create interactive visualization of structure evolution",
-      "file_type": "rationale",
-      "source_file": "evolution.py",
-      "source_location": "L61",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "create interactive visualization of structure evolution",
-      "id": "evolution_rationale_61"
-    },
-    {
       "label": "extract_largest_clusters.py",
       "file_type": "code",
       "source_file": "extract_largest_clusters.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 25,
       "norm_label": "extract_largest_clusters.py",
       "id": "extract_largest_clusters"
     },
@@ -3307,7 +2947,7 @@
       "source_file": "extract_largest_clusters.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 33,
+      "community": 25,
       "norm_label": "unwrap_positions()",
       "id": "extract_largest_clusters_unwrap_positions"
     },
@@ -3317,359 +2957,9 @@
       "source_file": "extract_largest_clusters.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 33,
+      "community": 25,
       "norm_label": "extract_largest_clusters()",
       "id": "extract_largest_clusters_extract_largest_clusters"
-    },
-    {
-      "label": "load_csv_head_tail.py",
-      "file_type": "code",
-      "source_file": "load_csv_head_tail.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 38,
-      "norm_label": "load_csv_head_tail.py",
-      "id": "load_csv_head_tail"
-    },
-    {
-      "label": "load_csv_preview()",
-      "file_type": "code",
-      "source_file": "load_csv_head_tail.py",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 38,
-      "norm_label": "load_csv_preview()",
-      "id": "load_csv_head_tail_load_csv_preview"
-    },
-    {
-      "label": "tfi_analysis_test.py",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "tfi_analysis_test.py",
-      "id": "tfi_analysis_test"
-    },
-    {
-      "label": "parse_arguments()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L39",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "parse_arguments()",
-      "id": "tfi_analysis_test_parse_arguments"
-    },
-    {
-      "label": "ensure_output_directory()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L55",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "ensure_output_directory()",
-      "id": "tfi_analysis_test_ensure_output_directory"
-    },
-    {
-      "label": "setup_logging()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L59",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "setup_logging()",
-      "id": "tfi_analysis_test_setup_logging"
-    },
-    {
-      "label": "identify_aggregates()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L74",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "identify_aggregates()",
-      "id": "tfi_analysis_test_identify_aggregates"
-    },
-    {
-      "label": "connected_components()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L98",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "connected_components()",
-      "id": "tfi_analysis_test_connected_components"
-    },
-    {
-      "label": "perform_cylindrical_analysis()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L116",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "perform_cylindrical_analysis()",
-      "id": "tfi_analysis_test_perform_cylindrical_analysis"
-    },
-    {
-      "label": "compute_angular_uniformity()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L134",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "compute_angular_uniformity()",
-      "id": "tfi_analysis_test_compute_angular_uniformity"
-    },
-    {
-      "label": "segment_based_analysis()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L142",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "segment_based_analysis()",
-      "id": "tfi_analysis_test_segment_based_analysis"
-    },
-    {
-      "label": "compute_radial_density()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L166",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "compute_radial_density()",
-      "id": "tfi_analysis_test_compute_radial_density"
-    },
-    {
-      "label": "is_hollow_tube()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L172",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "is_hollow_tube()",
-      "id": "tfi_analysis_test_is_hollow_tube"
-    },
-    {
-      "label": "compute_shape_anisotropy()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L195",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "compute_shape_anisotropy()",
-      "id": "tfi_analysis_test_compute_shape_anisotropy"
-    },
-    {
-      "label": "analyze_aggregate()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L208",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "analyze_aggregate()",
-      "id": "tfi_analysis_test_analyze_aggregate"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L258",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "main()",
-      "id": "tfi_analysis_test_main"
-    },
-    {
-      "label": "save_frame_results()",
-      "file_type": "code",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L320",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "save_frame_results()",
-      "id": "tfi_analysis_test_save_frame_results"
-    },
-    {
-      "label": "Setup logging configuration",
-      "file_type": "rationale",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L60",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "setup logging configuration",
-      "id": "tfi_analysis_test_rationale_60"
-    },
-    {
-      "label": "Modified to return both aggregates and their peptide indices",
-      "file_type": "rationale",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L75",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "modified to return both aggregates and their peptide indices",
-      "id": "tfi_analysis_test_rationale_75"
-    },
-    {
-      "label": "Modified to detect partial hollowness",
-      "file_type": "rationale",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L173",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "modified to detect partial hollowness",
-      "id": "tfi_analysis_test_rationale_173"
-    },
-    {
-      "label": "Analyze aggregate for tube characteristics",
-      "file_type": "rationale",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L209",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "analyze aggregate for tube characteristics",
-      "id": "tfi_analysis_test_rationale_209"
-    },
-    {
-      "label": "Save TFI frame results to a CSV file.",
-      "file_type": "rationale",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L321",
-      "_origin": "ast",
-      "community": 4,
-      "norm_label": "save tfi frame results to a csv file.",
-      "id": "tfi_analysis_test_rationale_321"
-    },
-    {
-      "label": "tracking2.sh",
-      "file_type": "code",
-      "source_file": "tracking2.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "file"
-      },
-      "_origin": "ast",
-      "community": 39,
-      "norm_label": "tracking2.sh",
-      "id": "tracking2"
-    },
-    {
-      "label": "tracking2.sh script",
-      "file_type": "code",
-      "source_file": "tracking2.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_entrypoint"
-      },
-      "_origin": "ast",
-      "community": 39,
-      "norm_label": "tracking2.sh script",
-      "id": "tracking2_sh__entry"
-    },
-    {
-      "label": "tracking_python_job.py",
-      "file_type": "code",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "tracking_python_job.py",
-      "id": "tracking_python_job"
-    },
-    {
-      "label": "setup_logging()",
-      "file_type": "code",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L6",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "setup_logging()",
-      "id": "tracking_python_job_setup_logging"
-    },
-    {
-      "label": "submit_job()",
-      "file_type": "code",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "submit_job()",
-      "id": "tracking_python_job_submit_job"
-    },
-    {
-      "label": "check_job_status()",
-      "file_type": "code",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "check_job_status()",
-      "id": "tracking_python_job_check_job_status"
-    },
-    {
-      "label": "get_all_dirs()",
-      "file_type": "code",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L36",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "get_all_dirs()",
-      "id": "tracking_python_job_get_all_dirs"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L76",
-      "_origin": "ast",
-      "community": 28,
-      "norm_label": "main()",
-      "id": "tracking_python_job_main"
-    },
-    {
-      "label": "tracking_script.sh",
-      "file_type": "code",
-      "source_file": "tracking_script.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "file"
-      },
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "tracking_script.sh",
-      "id": "tracking_script"
-    },
-    {
-      "label": "tracking_script.sh script",
-      "file_type": "code",
-      "source_file": "tracking_script.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_entrypoint"
-      },
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "tracking_script.sh script",
-      "id": "tracking_script_sh__entry"
-    },
-    {
-      "label": "log()",
-      "file_type": "code",
-      "source_file": "tracking_script.sh",
-      "source_location": "L50",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_function"
-      },
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "log()",
-      "id": "tracking_script_log"
     },
     {
       "label": "adi_analysis.py",
@@ -3677,9 +2967,9 @@
       "source_file": "adi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "adi_analysis",
-      "community": 40,
-      "norm_label": "adi_analysis.py"
+      "community": 30,
+      "norm_label": "adi_analysis.py",
+      "id": "adi_analysis"
     },
     {
       "label": "centering.py",
@@ -3687,37 +2977,9 @@
       "source_file": "centering.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "centering",
-      "community": 43,
-      "norm_label": "centering.py"
-    },
-    {
-      "label": "run_full_pipeline.sh",
-      "file_type": "code",
-      "source_file": "examples/run_full_pipeline.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "file"
-      },
-      "_origin": "ast",
-      "id": "examples_run_full_pipeline",
-      "community": 36,
-      "norm_label": "run_full_pipeline.sh"
-    },
-    {
-      "label": "run_full_pipeline.sh script",
-      "file_type": "code",
-      "source_file": "examples/run_full_pipeline.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_entrypoint"
-      },
-      "_origin": "ast",
-      "id": "examples_run_full_pipeline_sh__entry",
-      "community": 36,
-      "norm_label": "run_full_pipeline.sh script"
+      "community": 33,
+      "norm_label": "centering.py",
+      "id": "centering"
     },
     {
       "label": "ffi_analysis.py",
@@ -3725,69 +2987,9 @@
       "source_file": "ffi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "ffi_analysis",
-      "community": 44,
-      "norm_label": "ffi_analysis.py"
-    },
-    {
-      "label": "run_adi.py",
-      "file_type": "code",
-      "source_file": "scripts/run_adi.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_run_adi",
-      "community": 45,
-      "norm_label": "run_adi.py"
-    },
-    {
-      "label": "run_ffi.py",
-      "file_type": "code",
-      "source_file": "scripts/run_ffi.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_run_ffi",
-      "community": 46,
-      "norm_label": "run_ffi.py"
-    },
-    {
-      "label": "run_sfi.py",
-      "file_type": "code",
-      "source_file": "scripts/run_sfi.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_run_sfi",
-      "community": 47,
-      "norm_label": "run_sfi.py"
-    },
-    {
-      "label": "run_tfi.py",
-      "file_type": "code",
-      "source_file": "scripts/run_tfi.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_run_tfi",
-      "community": 48,
-      "norm_label": "run_tfi.py"
-    },
-    {
-      "label": "run_tracker.py",
-      "file_type": "code",
-      "source_file": "scripts/run_tracker.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_run_tracker",
-      "community": 49,
-      "norm_label": "run_tracker.py"
-    },
-    {
-      "label": "run_vfi.py",
-      "file_type": "code",
-      "source_file": "scripts/run_vfi.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "scripts_run_vfi",
-      "community": 50,
-      "norm_label": "run_vfi.py"
+      "community": 34,
+      "norm_label": "ffi_analysis.py",
+      "id": "ffi_analysis"
     },
     {
       "label": "sfi_analysis.py",
@@ -3795,9 +2997,9 @@
       "source_file": "sfi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "sfi_analysis",
-      "community": 51,
-      "norm_label": "sfi_analysis.py"
+      "community": 35,
+      "norm_label": "sfi_analysis.py",
+      "id": "sfi_analysis"
     },
     {
       "label": "shape_tracker.py",
@@ -3805,9 +3007,9 @@
       "source_file": "shape_tracker.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "shape_tracker",
-      "community": 52,
-      "norm_label": "shape_tracker.py"
+      "community": 36,
+      "norm_label": "shape_tracker.py",
+      "id": "shape_tracker"
     },
     {
       "label": "test_descriptors.py",
@@ -3815,9 +3017,9 @@
       "source_file": "tests/test_descriptors.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tests_test_descriptors",
-      "community": 19,
-      "norm_label": "test_descriptors.py"
+      "community": 18,
+      "norm_label": "test_descriptors.py",
+      "id": "tests_test_descriptors"
     },
     {
       "label": "test_sphericity_sphere()",
@@ -3825,9 +3027,9 @@
       "source_file": "tests/test_descriptors.py",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "tests_test_descriptors_test_sphericity_sphere",
-      "community": 19,
-      "norm_label": "test_sphericity_sphere()"
+      "community": 18,
+      "norm_label": "test_sphericity_sphere()",
+      "id": "tests_test_descriptors_test_sphericity_sphere"
     },
     {
       "label": "test_sphericity_too_few_points()",
@@ -3835,9 +3037,9 @@
       "source_file": "tests/test_descriptors.py",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "tests_test_descriptors_test_sphericity_too_few_points",
-      "community": 19,
-      "norm_label": "test_sphericity_too_few_points()"
+      "community": 18,
+      "norm_label": "test_sphericity_too_few_points()",
+      "id": "tests_test_descriptors_test_sphericity_too_few_points"
     },
     {
       "label": "test_find_largest_cluster()",
@@ -3845,9 +3047,9 @@
       "source_file": "tests/test_descriptors.py",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "tests_test_descriptors_test_find_largest_cluster",
-      "community": 19,
-      "norm_label": "test_find_largest_cluster()"
+      "community": 18,
+      "norm_label": "test_find_largest_cluster()",
+      "id": "tests_test_descriptors_test_find_largest_cluster"
     },
     {
       "label": "tests/test_descriptors.py  Unit tests for shape-descriptors package modules and",
@@ -3855,9 +3057,9 @@
       "source_file": "tests/test_descriptors.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tests_test_descriptors_rationale_1",
-      "community": 19,
-      "norm_label": "tests/test_descriptors.py  unit tests for shape-descriptors package modules and"
+      "community": 18,
+      "norm_label": "tests/test_descriptors.py  unit tests for shape-descriptors package modules and",
+      "id": "tests_test_descriptors_rationale_1"
     },
     {
       "label": "Verify that points distributed on a sphere yield high sphericity (~1.0).",
@@ -3865,9 +3067,9 @@
       "source_file": "tests/test_descriptors.py",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "tests_test_descriptors_rationale_13",
-      "community": 19,
-      "norm_label": "verify that points distributed on a sphere yield high sphericity (~1.0)."
+      "community": 18,
+      "norm_label": "verify that points distributed on a sphere yield high sphericity (~1.0).",
+      "id": "tests_test_descriptors_rationale_13"
     },
     {
       "label": "Verify handling of < 4 points.",
@@ -3875,9 +3077,9 @@
       "source_file": "tests/test_descriptors.py",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "tests_test_descriptors_rationale_26",
-      "community": 19,
-      "norm_label": "verify handling of < 4 points."
+      "community": 18,
+      "norm_label": "verify handling of < 4 points.",
+      "id": "tests_test_descriptors_rationale_26"
     },
     {
       "label": "Verify DBSCAN cluster identification.",
@@ -3885,9 +3087,9 @@
       "source_file": "tests/test_descriptors.py",
       "source_location": "L32",
       "_origin": "ast",
-      "id": "tests_test_descriptors_rationale_32",
-      "community": 19,
-      "norm_label": "verify dbscan cluster identification."
+      "community": 18,
+      "norm_label": "verify dbscan cluster identification.",
+      "id": "tests_test_descriptors_rationale_32"
     },
     {
       "label": "tfi_analysis.py",
@@ -3895,9 +3097,9 @@
       "source_file": "tfi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tfi_analysis",
-      "community": 53,
-      "norm_label": "tfi_analysis.py"
+      "community": 37,
+      "norm_label": "tfi_analysis.py",
+      "id": "tfi_analysis"
     },
     {
       "label": "vfi_analysis.py",
@@ -3905,9 +3107,753 @@
       "source_file": "vfi_analysis.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "vfi_analysis",
-      "community": 54,
-      "norm_label": "vfi_analysis.py"
+      "community": 38,
+      "norm_label": "vfi_analysis.py",
+      "id": "vfi_analysis"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_init",
+      "community": 0,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "Shape Descriptor Toolkit ========================  A Python toolkit for calculat",
+      "file_type": "rationale",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_init_rationale_1",
+      "community": 0,
+      "norm_label": "shape descriptor toolkit ========================  a python toolkit for calculat"
+    },
+    {
+      "label": "adi.py",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_adi",
+      "community": 0,
+      "norm_label": "adi.py"
+    },
+    {
+      "label": "parse_arguments()",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "descriptors_adi_parse_arguments",
+      "community": 0,
+      "norm_label": "parse_arguments()"
+    },
+    {
+      "label": "identify_clusters()",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "descriptors_adi_identify_clusters",
+      "community": 0,
+      "norm_label": "identify_clusters()"
+    },
+    {
+      "label": "process_cluster_contacts()",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "descriptors_adi_process_cluster_contacts",
+      "community": 0,
+      "norm_label": "process_cluster_contacts()"
+    },
+    {
+      "label": "calculate_adi()",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "descriptors_adi_calculate_adi",
+      "community": 0,
+      "norm_label": "calculate_adi()"
+    },
+    {
+      "label": "save_frame_results()",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L112",
+      "_origin": "ast",
+      "id": "descriptors_adi_save_frame_results",
+      "community": 0,
+      "norm_label": "save_frame_results()"
+    },
+    {
+      "label": "save_cluster_size_distribution()",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L121",
+      "_origin": "ast",
+      "id": "descriptors_adi_save_cluster_size_distribution",
+      "community": 0,
+      "norm_label": "save_cluster_size_distribution()"
+    },
+    {
+      "label": "plot_cluster_size_distribution()",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L130",
+      "_origin": "ast",
+      "id": "descriptors_adi_plot_cluster_size_distribution",
+      "community": 0,
+      "norm_label": "plot_cluster_size_distribution()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L143",
+      "_origin": "ast",
+      "id": "descriptors_adi_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "descriptors/adi.py  Aggregate Dynamics Index (ADI) Analysis for peptide self-ass",
+      "file_type": "rationale",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_adi_rationale_1",
+      "community": 0,
+      "norm_label": "descriptors/adi.py  aggregate dynamics index (adi) analysis for peptide self-ass"
+    },
+    {
+      "label": "Programmatic API for ADI analysis.",
+      "file_type": "rationale",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "descriptors_adi_rationale_74",
+      "community": 0,
+      "norm_label": "programmatic api for adi analysis."
+    },
+    {
+      "label": "centering.py",
+      "file_type": "code",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_centering",
+      "community": 0,
+      "norm_label": "centering.py"
+    },
+    {
+      "label": "find_largest_cluster()",
+      "file_type": "code",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "descriptors_centering_find_largest_cluster",
+      "community": 0,
+      "norm_label": "find_largest_cluster()"
+    },
+    {
+      "label": "center_trajectory()",
+      "file_type": "code",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "descriptors_centering_center_trajectory",
+      "community": 0,
+      "norm_label": "center_trajectory()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "descriptors_centering_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "descriptors/centering.py  PBC Centering and Cluster Extraction Utilities for MD",
+      "file_type": "rationale",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_centering_rationale_1",
+      "community": 0,
+      "norm_label": "descriptors/centering.py  pbc centering and cluster extraction utilities for md"
+    },
+    {
+      "label": "Identify the largest spatial cluster using DBSCAN.",
+      "file_type": "rationale",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "descriptors_centering_rationale_20",
+      "community": 0,
+      "norm_label": "identify the largest spatial cluster using dbscan."
+    },
+    {
+      "label": "Center protein aggregates in simulation box and wrap PBC.",
+      "file_type": "rationale",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "descriptors_centering_rationale_35",
+      "community": 0,
+      "norm_label": "center protein aggregates in simulation box and wrap pbc."
+    },
+    {
+      "label": "ffi.py",
+      "file_type": "code",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_ffi",
+      "community": 0,
+      "norm_label": "ffi.py"
+    },
+    {
+      "label": "parse_arguments()",
+      "file_type": "code",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "descriptors_ffi_parse_arguments",
+      "community": 0,
+      "norm_label": "parse_arguments()"
+    },
+    {
+      "label": "calculate_ffi()",
+      "file_type": "code",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "descriptors_ffi_calculate_ffi",
+      "community": 0,
+      "norm_label": "calculate_ffi()"
+    },
+    {
+      "label": "save_ffi_results()",
+      "file_type": "code",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "descriptors_ffi_save_ffi_results",
+      "community": 0,
+      "norm_label": "save_ffi_results()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "descriptors_ffi_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "descriptors/ffi.py  Fiber Formation Index (FFI) Analysis for peptide self-assemb",
+      "file_type": "rationale",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_ffi_rationale_1",
+      "community": 0,
+      "norm_label": "descriptors/ffi.py  fiber formation index (ffi) analysis for peptide self-assemb"
+    },
+    {
+      "label": "Programmatic API for FFI analysis.",
+      "file_type": "rationale",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "descriptors_ffi_rationale_38",
+      "community": 0,
+      "norm_label": "programmatic api for ffi analysis."
+    },
+    {
+      "label": "sfi.py",
+      "file_type": "code",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_sfi",
+      "community": 0,
+      "norm_label": "sfi.py"
+    },
+    {
+      "label": "parse_arguments()",
+      "file_type": "code",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "descriptors_sfi_parse_arguments",
+      "community": 0,
+      "norm_label": "parse_arguments()"
+    },
+    {
+      "label": "calculate_sfi()",
+      "file_type": "code",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "descriptors_sfi_calculate_sfi",
+      "community": 0,
+      "norm_label": "calculate_sfi()"
+    },
+    {
+      "label": "save_sfi_results()",
+      "file_type": "code",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L86",
+      "_origin": "ast",
+      "id": "descriptors_sfi_save_sfi_results",
+      "community": 0,
+      "norm_label": "save_sfi_results()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L96",
+      "_origin": "ast",
+      "id": "descriptors_sfi_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "descriptors/sfi.py  Sheet Formation Index (SFI) Analysis for peptide self-assemb",
+      "file_type": "rationale",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_sfi_rationale_1",
+      "community": 0,
+      "norm_label": "descriptors/sfi.py  sheet formation index (sfi) analysis for peptide self-assemb"
+    },
+    {
+      "label": "Programmatic API for SFI analysis.",
+      "file_type": "rationale",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "descriptors_sfi_rationale_45",
+      "community": 0,
+      "norm_label": "programmatic api for sfi analysis."
+    },
+    {
+      "label": "tfi.py",
+      "file_type": "code",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_tfi",
+      "community": 0,
+      "norm_label": "tfi.py"
+    },
+    {
+      "label": "parse_arguments()",
+      "file_type": "code",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "descriptors_tfi_parse_arguments",
+      "community": 0,
+      "norm_label": "parse_arguments()"
+    },
+    {
+      "label": "calculate_tfi()",
+      "file_type": "code",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "descriptors_tfi_calculate_tfi",
+      "community": 0,
+      "norm_label": "calculate_tfi()"
+    },
+    {
+      "label": "save_tfi_results()",
+      "file_type": "code",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L77",
+      "_origin": "ast",
+      "id": "descriptors_tfi_save_tfi_results",
+      "community": 0,
+      "norm_label": "save_tfi_results()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L87",
+      "_origin": "ast",
+      "id": "descriptors_tfi_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "descriptors/tfi.py  Tube Formation Index (TFI) Analysis for peptide self-assembl",
+      "file_type": "rationale",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_tfi_rationale_1",
+      "community": 0,
+      "norm_label": "descriptors/tfi.py  tube formation index (tfi) analysis for peptide self-assembl"
+    },
+    {
+      "label": "Programmatic API for TFI analysis.",
+      "file_type": "rationale",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "descriptors_tfi_rationale_39",
+      "community": 0,
+      "norm_label": "programmatic api for tfi analysis."
+    },
+    {
+      "label": "tracker.py",
+      "file_type": "code",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_tracker",
+      "community": 0,
+      "norm_label": "tracker.py"
+    },
+    {
+      "label": "parse_arguments()",
+      "file_type": "code",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "descriptors_tracker_parse_arguments",
+      "community": 0,
+      "norm_label": "parse_arguments()"
+    },
+    {
+      "label": "track_shapes()",
+      "file_type": "code",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "descriptors_tracker_track_shapes",
+      "community": 0,
+      "norm_label": "track_shapes()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L77",
+      "_origin": "ast",
+      "id": "descriptors_tracker_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "descriptors/tracker.py  Integrative Shape Tracker engine for peptide self-assemb",
+      "file_type": "rationale",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_tracker_rationale_1",
+      "community": 0,
+      "norm_label": "descriptors/tracker.py  integrative shape tracker engine for peptide self-assemb"
+    },
+    {
+      "label": "Programmatic API for multi-descriptor shape tracking.",
+      "file_type": "rationale",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "descriptors_tracker_rationale_40",
+      "community": 0,
+      "norm_label": "programmatic api for multi-descriptor shape tracking."
+    },
+    {
+      "label": "utils.py",
+      "file_type": "code",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_utils",
+      "community": 0,
+      "norm_label": "utils.py"
+    },
+    {
+      "label": "suppress_warnings()",
+      "file_type": "code",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "descriptors_utils_suppress_warnings",
+      "community": 0,
+      "norm_label": "suppress_warnings()"
+    },
+    {
+      "label": "ensure_output_directory()",
+      "file_type": "code",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "descriptors_utils_ensure_output_directory",
+      "community": 0,
+      "norm_label": "ensure_output_directory()"
+    },
+    {
+      "label": "load_universe()",
+      "file_type": "code",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "descriptors_utils_load_universe",
+      "community": 0,
+      "norm_label": "load_universe()"
+    },
+    {
+      "label": "setup_logger()",
+      "file_type": "code",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "descriptors_utils_setup_logger",
+      "community": 0,
+      "norm_label": "setup_logger()"
+    },
+    {
+      "label": "descriptors/utils.py  Shared utilities for universe loading, logging, output dir",
+      "file_type": "rationale",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_utils_rationale_1",
+      "community": 0,
+      "norm_label": "descriptors/utils.py  shared utilities for universe loading, logging, output dir"
+    },
+    {
+      "label": "Suppress common non-critical warnings from MDAnalysis and Biopython.",
+      "file_type": "rationale",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "descriptors_utils_rationale_15",
+      "community": 0,
+      "norm_label": "suppress common non-critical warnings from mdanalysis and biopython."
+    },
+    {
+      "label": "Create directory if it does not exist.",
+      "file_type": "rationale",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "descriptors_utils_rationale_21",
+      "community": 0,
+      "norm_label": "create directory if it does not exist."
+    },
+    {
+      "label": "Load MDAnalysis Universe with validation.",
+      "file_type": "rationale",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "descriptors_utils_rationale_27",
+      "community": 0,
+      "norm_label": "load mdanalysis universe with validation."
+    },
+    {
+      "label": "Configure module logger with both file and console handlers.",
+      "file_type": "rationale",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "descriptors_utils_rationale_35",
+      "community": 0,
+      "norm_label": "configure module logger with both file and console handlers."
+    },
+    {
+      "label": "vfi.py",
+      "file_type": "code",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_vfi",
+      "community": 0,
+      "norm_label": "vfi.py"
+    },
+    {
+      "label": "parse_arguments()",
+      "file_type": "code",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "descriptors_vfi_parse_arguments",
+      "community": 0,
+      "norm_label": "parse_arguments()"
+    },
+    {
+      "label": "calculate_sphericity()",
+      "file_type": "code",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "descriptors_vfi_calculate_sphericity",
+      "community": 0,
+      "norm_label": "calculate_sphericity()"
+    },
+    {
+      "label": "calculate_vfi()",
+      "file_type": "code",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "descriptors_vfi_calculate_vfi",
+      "community": 0,
+      "norm_label": "calculate_vfi()"
+    },
+    {
+      "label": "save_vfi_results()",
+      "file_type": "code",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "descriptors_vfi_save_vfi_results",
+      "community": 0,
+      "norm_label": "save_vfi_results()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "descriptors_vfi_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "descriptors/vfi.py  Vesicle Formation Index (VFI) Analysis for peptide self-asse",
+      "file_type": "rationale",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "descriptors_vfi_rationale_1",
+      "community": 0,
+      "norm_label": "descriptors/vfi.py  vesicle formation index (vfi) analysis for peptide self-asse"
+    },
+    {
+      "label": "Calculate sphericity via convex hull volume and surface area.",
+      "file_type": "rationale",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "descriptors_vfi_rationale_35",
+      "community": 0,
+      "norm_label": "calculate sphericity via convex hull volume and surface area."
+    },
+    {
+      "label": "Programmatic API for VFI analysis.",
+      "file_type": "rationale",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "descriptors_vfi_rationale_50",
+      "community": 0,
+      "norm_label": "programmatic api for vfi analysis."
+    },
+    {
+      "label": "centering_job.sh",
+      "file_type": "code",
+      "source_file": "slurm/centering_job.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "slurm_centering_job",
+      "community": 27,
+      "norm_label": "centering_job.sh"
+    },
+    {
+      "label": "centering_job.sh script",
+      "file_type": "code",
+      "source_file": "slurm/centering_job.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "slurm_centering_job_sh__entry",
+      "community": 27,
+      "norm_label": "centering_job.sh script"
+    },
+    {
+      "label": "csv_job.sh",
+      "file_type": "code",
+      "source_file": "slurm/csv_job.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "slurm_csv_job",
+      "community": 28,
+      "norm_label": "csv_job.sh"
+    },
+    {
+      "label": "csv_job.sh script",
+      "file_type": "code",
+      "source_file": "slurm/csv_job.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "slurm_csv_job_sh__entry",
+      "community": 28,
+      "norm_label": "csv_job.sh script"
+    },
+    {
+      "label": "tracking_job.sh",
+      "file_type": "code",
+      "source_file": "slurm/tracking_job.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "slurm_tracking_job",
+      "community": 29,
+      "norm_label": "tracking_job.sh"
+    },
+    {
+      "label": "tracking_job.sh script",
+      "file_type": "code",
+      "source_file": "slurm/tracking_job.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "slurm_tracking_job_sh__entry",
+      "community": 29,
+      "norm_label": "tracking_job.sh script"
     }
   ],
   "links": [
@@ -8317,471 +8263,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "centering_python_job.py",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "centering_python_job",
-      "target": "centering_python_job_check_job_status"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "centering_python_job.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "centering_python_job",
-      "target": "centering_python_job_get_dipep_dirs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "centering_python_job.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "centering_python_job",
-      "target": "centering_python_job_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "centering_python_job.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "centering_python_job",
-      "target": "centering_python_job_submit_job"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "centering_python_job.py",
-      "source_location": "L39",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "centering_python_job_main",
-      "target": "centering_python_job_submit_job"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "centering_python_job.py",
-      "source_location": "L46",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "centering_python_job_main",
-      "target": "centering_python_job_check_job_status"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "centering_python_job.py",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "centering_python_job_main",
-      "target": "centering_python_job_get_dipep_dirs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "centering_script.sh",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "centering_script",
-      "target": "centering_script_sh__entry"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution",
-      "target": "combined_evolution_create_heat_map"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution.py",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution",
-      "target": "combined_evolution_determine_dominant_shape"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution.py",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution",
-      "target": "combined_evolution_load_descriptors"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution.py",
-      "source_location": "L104",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution",
-      "target": "combined_evolution_main"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution.py",
-      "source_location": "L110",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution_main",
-      "target": "combined_evolution_load_descriptors"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution.py",
-      "source_location": "L113",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution_main",
-      "target": "combined_evolution_determine_dominant_shape"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution.py",
-      "source_location": "L116",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution_main",
-      "target": "combined_evolution_create_heat_map"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L86",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution_final",
-      "target": "combined_evolution_final_categorize_by_final_shape"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L50",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution_final",
-      "target": "combined_evolution_final_get_detected_shapes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution_final",
-      "target": "combined_evolution_final_load_descriptors"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L99",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution_final_categorize_by_final_shape",
-      "target": "combined_evolution_final_get_detected_shapes"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "combined_evolution_final.py",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "combined_evolution_final_rationale_51",
-      "target": "combined_evolution_final_get_detected_shapes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_python_job.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_python_job",
-      "target": "csv_python_job_check_job_status"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_python_job.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_python_job",
-      "target": "csv_python_job_get_all_dirs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_python_job.py",
-      "source_location": "L76",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_python_job",
-      "target": "csv_python_job_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_python_job.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_python_job",
-      "target": "csv_python_job_setup_logging"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_python_job.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_python_job",
-      "target": "csv_python_job_submit_job"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_python_job.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_python_job_main",
-      "target": "csv_python_job_setup_logging"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_python_job.py",
-      "source_location": "L89",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_python_job_main",
-      "target": "csv_python_job_submit_job"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_python_job.py",
-      "source_location": "L81",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_python_job_main",
-      "target": "csv_python_job_get_all_dirs"
-    },
-    {
-      "relation": "defines",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_script.sh",
-      "source_location": "L50",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_script",
-      "target": "csv_script_log"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_script.sh",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_script",
-      "target": "csv_script_sh__entry"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "csv_script.sh",
-      "source_location": "L55",
-      "weight": 1.0,
-      "context": "call",
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "csv_script_sh__entry",
-      "target": "csv_script_log"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution",
-      "target": "evolution_load_and_process_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L110",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution",
-      "target": "evolution_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L60",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution",
-      "target": "evolution_plot_evolution"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution",
-      "target": "evolution_validate_fractions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L52",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution_load_and_process_data",
-      "target": "evolution_validate_fractions"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution_rationale_8",
-      "target": "evolution_validate_fractions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L114",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution_main",
-      "target": "evolution_load_and_process_data"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution_rationale_20",
-      "target": "evolution_load_and_process_data"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution_main",
-      "target": "evolution_plot_evolution"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "evolution.py",
-      "source_location": "L61",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "evolution_rationale_61",
-      "target": "evolution_plot_evolution"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "extract_largest_clusters.py",
       "source_location": "L17",
       "weight": 1.0,
@@ -8804,536 +8285,13 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "load_csv_head_tail.py",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "load_csv_head_tail",
-      "target": "load_csv_head_tail_load_csv_preview"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L208",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_analyze_aggregate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L134",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_compute_angular_uniformity"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L166",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_compute_radial_density"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L195",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_compute_shape_anisotropy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L98",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_connected_components"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L55",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_ensure_output_directory"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L74",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_identify_aggregates"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L172",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_is_hollow_tube"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L258",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L39",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_parse_arguments"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L116",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_perform_cylindrical_analysis"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L320",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_save_frame_results"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L142",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_segment_based_analysis"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L59",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test",
-      "target": "tfi_analysis_test_setup_logging"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L259",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_main",
-      "target": "tfi_analysis_test_parse_arguments"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L260",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_main",
-      "target": "tfi_analysis_test_ensure_output_directory"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L261",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_main",
-      "target": "tfi_analysis_test_setup_logging"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L60",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_rationale_60",
-      "target": "tfi_analysis_test_setup_logging"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L286",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_main",
-      "target": "tfi_analysis_test_identify_aggregates"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L75",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_rationale_75",
-      "target": "tfi_analysis_test_identify_aggregates"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L218",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_analyze_aggregate",
-      "target": "tfi_analysis_test_perform_cylindrical_analysis"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L130",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_perform_cylindrical_analysis",
-      "target": "tfi_analysis_test_compute_angular_uniformity"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L157",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_segment_based_analysis",
-      "target": "tfi_analysis_test_perform_cylindrical_analysis"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L217",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_analyze_aggregate",
-      "target": "tfi_analysis_test_segment_based_analysis"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L219",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_analyze_aggregate",
-      "target": "tfi_analysis_test_compute_radial_density"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L220",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_analyze_aggregate",
-      "target": "tfi_analysis_test_is_hollow_tube"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L173",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_rationale_173",
-      "target": "tfi_analysis_test_is_hollow_tube"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L221",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_analyze_aggregate",
-      "target": "tfi_analysis_test_compute_shape_anisotropy"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L294",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_main",
-      "target": "tfi_analysis_test_analyze_aggregate"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L209",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_rationale_209",
-      "target": "tfi_analysis_test_analyze_aggregate"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L317",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_main",
-      "target": "tfi_analysis_test_save_frame_results"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "tfi_analysis_test.py",
-      "source_location": "L321",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tfi_analysis_test_rationale_321",
-      "target": "tfi_analysis_test_save_frame_results"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking2.sh",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking2",
-      "target": "tracking2_sh__entry"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_python_job",
-      "target": "tracking_python_job_check_job_status"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_python_job",
-      "target": "tracking_python_job_get_all_dirs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L76",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_python_job",
-      "target": "tracking_python_job_main"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_python_job",
-      "target": "tracking_python_job_setup_logging"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_python_job",
-      "target": "tracking_python_job_submit_job"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_python_job_main",
-      "target": "tracking_python_job_setup_logging"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L89",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_python_job_main",
-      "target": "tracking_python_job_submit_job"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_python_job.py",
-      "source_location": "L81",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_python_job_main",
-      "target": "tracking_python_job_get_all_dirs"
-    },
-    {
-      "relation": "defines",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_script.sh",
-      "source_location": "L50",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_script",
-      "target": "tracking_script_log"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_script.sh",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_script",
-      "target": "tracking_script_sh__entry"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "tracking_script.sh",
-      "source_location": "L55",
-      "weight": 1.0,
-      "context": "call",
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "tracking_script_sh__entry",
-      "target": "tracking_script_log"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "examples/run_full_pipeline.sh",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "examples_run_full_pipeline",
-      "target": "examples_run_full_pipeline_sh__entry",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "tests/test_descriptors.py",
       "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "tests_test_descriptors",
-      "target": "tests_test_descriptors_test_find_largest_cluster",
-      "confidence_score": 1.0
+      "target": "tests_test_descriptors_test_find_largest_cluster"
     },
     {
       "relation": "contains",
@@ -9342,9 +8300,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "tests_test_descriptors",
-      "target": "tests_test_descriptors_test_sphericity_sphere",
-      "confidence_score": 1.0
+      "target": "tests_test_descriptors_test_sphericity_sphere"
     },
     {
       "relation": "contains",
@@ -9353,9 +8311,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "tests_test_descriptors",
-      "target": "tests_test_descriptors_test_sphericity_too_few_points",
-      "confidence_score": 1.0
+      "target": "tests_test_descriptors_test_sphericity_too_few_points"
     },
     {
       "relation": "rationale_for",
@@ -9364,9 +8322,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "tests_test_descriptors_rationale_1",
-      "target": "tests_test_descriptors",
-      "confidence_score": 1.0
+      "target": "tests_test_descriptors"
     },
     {
       "relation": "rationale_for",
@@ -9375,9 +8333,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "tests_test_descriptors_rationale_13",
-      "target": "tests_test_descriptors_test_sphericity_sphere",
-      "confidence_score": 1.0
+      "target": "tests_test_descriptors_test_sphericity_sphere"
     },
     {
       "relation": "rationale_for",
@@ -9386,9 +8344,9 @@
       "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "tests_test_descriptors_rationale_26",
-      "target": "tests_test_descriptors_test_sphericity_too_few_points",
-      "confidence_score": 1.0
+      "target": "tests_test_descriptors_test_sphericity_too_few_points"
     },
     {
       "relation": "rationale_for",
@@ -9397,11 +8355,1751 @@
       "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "tests_test_descriptors_rationale_32",
-      "target": "tests_test_descriptors_test_find_largest_cluster",
+      "target": "tests_test_descriptors_test_find_largest_cluster"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_adi_calculate_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_ffi_calculate_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_sfi_calculate_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_tfi_calculate_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_tracker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_tracker_track_shapes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init",
+      "target": "descriptors_vfi_calculate_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_init_rationale_1",
+      "target": "descriptors_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_adi_calculate_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_adi_identify_clusters",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L143",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_adi_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_adi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_adi_plot_cluster_size_distribution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_adi_process_cluster_contacts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_adi_save_cluster_size_distribution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_adi_save_frame_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_rationale_1",
+      "target": "descriptors_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L144",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_main",
+      "target": "descriptors_adi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_calculate_adi",
+      "target": "descriptors_adi_identify_clusters",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_calculate_adi",
+      "target": "descriptors_adi_plot_cluster_size_distribution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_calculate_adi",
+      "target": "descriptors_adi_save_cluster_size_distribution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_calculate_adi",
+      "target": "descriptors_adi_save_frame_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_calculate_adi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_calculate_adi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_main",
+      "target": "descriptors_adi_calculate_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/adi.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_adi_rationale_74",
+      "target": "descriptors_adi_calculate_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_adi_calculate_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_track_shapes",
+      "target": "descriptors_adi_calculate_adi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering",
+      "target": "descriptors_centering_center_trajectory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering",
+      "target": "descriptors_centering_find_largest_cluster",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering",
+      "target": "descriptors_centering_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering",
+      "target": "descriptors_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering_rationale_1",
+      "target": "descriptors_centering",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering_rationale_20",
+      "target": "descriptors_centering_find_largest_cluster",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering_center_trajectory",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering_main",
+      "target": "descriptors_centering_center_trajectory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/centering.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_centering_rationale_35",
+      "target": "descriptors_centering_center_trajectory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi",
+      "target": "descriptors_ffi_calculate_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi",
+      "target": "descriptors_ffi_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi",
+      "target": "descriptors_ffi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi",
+      "target": "descriptors_ffi_save_ffi_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi",
+      "target": "descriptors_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi_rationale_1",
+      "target": "descriptors_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi_main",
+      "target": "descriptors_ffi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi_calculate_ffi",
+      "target": "descriptors_ffi_save_ffi_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi_calculate_ffi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi_calculate_ffi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi_main",
+      "target": "descriptors_ffi_calculate_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/ffi.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_ffi_rationale_38",
+      "target": "descriptors_ffi_calculate_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_ffi_calculate_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_track_shapes",
+      "target": "descriptors_ffi_calculate_ffi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi",
+      "target": "descriptors_sfi_calculate_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi",
+      "target": "descriptors_sfi_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi",
+      "target": "descriptors_sfi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi",
+      "target": "descriptors_sfi_save_sfi_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi",
+      "target": "descriptors_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi_rationale_1",
+      "target": "descriptors_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi_main",
+      "target": "descriptors_sfi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi_calculate_sfi",
+      "target": "descriptors_sfi_save_sfi_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi_calculate_sfi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi_calculate_sfi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi_main",
+      "target": "descriptors_sfi_calculate_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/sfi.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_sfi_rationale_45",
+      "target": "descriptors_sfi_calculate_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_sfi_calculate_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_track_shapes",
+      "target": "descriptors_sfi_calculate_sfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi",
+      "target": "descriptors_tfi_calculate_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi",
+      "target": "descriptors_tfi_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi",
+      "target": "descriptors_tfi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi",
+      "target": "descriptors_tfi_save_tfi_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi",
+      "target": "descriptors_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi_rationale_1",
+      "target": "descriptors_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi_main",
+      "target": "descriptors_tfi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi_calculate_tfi",
+      "target": "descriptors_tfi_save_tfi_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi_calculate_tfi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi_calculate_tfi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi_main",
+      "target": "descriptors_tfi_calculate_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tfi.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tfi_rationale_39",
+      "target": "descriptors_tfi_calculate_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_tfi_calculate_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_track_shapes",
+      "target": "descriptors_tfi_calculate_tfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_tracker_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_tracker_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_tracker_track_shapes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker",
+      "target": "descriptors_vfi_calculate_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_rationale_1",
+      "target": "descriptors_tracker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_main",
+      "target": "descriptors_tracker_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_main",
+      "target": "descriptors_tracker_track_shapes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_rationale_40",
+      "target": "descriptors_tracker_track_shapes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_track_shapes",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_track_shapes",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/tracker.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_tracker_track_shapes",
+      "target": "descriptors_vfi_calculate_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils",
+      "target": "descriptors_utils_load_universe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils_rationale_1",
+      "target": "descriptors_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_utils",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils_rationale_15",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_utils_suppress_warnings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils_rationale_21",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils_setup_logger",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_calculate_vfi",
+      "target": "descriptors_utils_ensure_output_directory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils_rationale_27",
+      "target": "descriptors_utils_load_universe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/utils.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_utils_rationale_35",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_calculate_vfi",
+      "target": "descriptors_utils_setup_logger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_vfi_calculate_sphericity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_vfi_calculate_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_vfi_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_vfi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi",
+      "target": "descriptors_vfi_save_vfi_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_rationale_1",
+      "target": "descriptors_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_main",
+      "target": "descriptors_vfi_parse_arguments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_calculate_vfi",
+      "target": "descriptors_vfi_calculate_sphericity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_rationale_35",
+      "target": "descriptors_vfi_calculate_sphericity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_calculate_vfi",
+      "target": "descriptors_vfi_save_vfi_results",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_main",
+      "target": "descriptors_vfi_calculate_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "descriptors/vfi.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "descriptors_vfi_rationale_50",
+      "target": "descriptors_vfi_calculate_vfi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "slurm/centering_job.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "slurm_centering_job",
+      "target": "slurm_centering_job_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "slurm/csv_job.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "slurm_csv_job",
+      "target": "slurm_csv_job_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "slurm/tracking_job.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "slurm_tracking_job",
+      "target": "slurm_tracking_job_sh__entry",
       "confidence_score": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "1f4c75b528ffc378993c0c2b6eddbfb93a7329c3"
+  "built_at_commit": "ab53e51bc6112815612230088fbda078fb4a67b9"
 }
