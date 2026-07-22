@@ -1,58 +1,8 @@
 {
-  "FF/center.py": {
-    "mtime": 1734077181.62591,
-    "ast_hash": "1aa822535297c47126a62bbcc4712b6b",
-    "semantic_hash": "1aa822535297c47126a62bbcc4712b6b"
-  },
-  "FF/cluster.py": {
-    "mtime": 1734077263.034669,
-    "ast_hash": "3624c96549ae6f5f9d87f89408ab8f61",
-    "semantic_hash": "3624c96549ae6f5f9d87f89408ab8f61"
-  },
-  "FF/ffi.py": {
-    "mtime": 1734080686.157664,
-    "ast_hash": "68f3bc45561f8590b7ecfd03ce4cc190",
-    "semantic_hash": "68f3bc45561f8590b7ecfd03ce4cc190"
-  },
-  "FF/main.py": {
-    "mtime": 1734081850.491108,
-    "ast_hash": "387b3c81fb8013d29ff63e5fb1e33e1e",
-    "semantic_hash": "387b3c81fb8013d29ff63e5fb1e33e1e"
-  },
-  "FF/main.sh": {
-    "mtime": 1784712540.055743,
-    "ast_hash": "f27c411e2004155faf75bc353211671a",
-    "semantic_hash": "f27c411e2004155faf75bc353211671a"
-  },
-  "FF/plot.py": {
-    "mtime": 1734082156.142934,
-    "ast_hash": "c8f3cffab4ffa7f452ba2107f2b17905",
-    "semantic_hash": "c8f3cffab4ffa7f452ba2107f2b17905"
-  },
-  "FF/sfi.py": {
-    "mtime": 1734079764.443821,
-    "ast_hash": "f767e2747126340e0f7254b01273b894",
-    "semantic_hash": "f767e2747126340e0f7254b01273b894"
-  },
-  "FF/tfi.py": {
-    "mtime": 1733947594.955988,
-    "ast_hash": "37d42c4ba9e7bdfbba3cfe2e18f28e25",
-    "semantic_hash": "37d42c4ba9e7bdfbba3cfe2e18f28e25"
-  },
-  "FF/vfi.py": {
-    "mtime": 1734080672.891475,
-    "ast_hash": "84fbac7fd11f8e5d252d9f2c7130e043",
-    "semantic_hash": "84fbac7fd11f8e5d252d9f2c7130e043"
-  },
   "adi_analysis.py": {
     "mtime": 1784712871.934606,
     "ast_hash": "611d5f7ac0bbda45f01fd581557a5280",
     "semantic_hash": "611d5f7ac0bbda45f01fd581557a5280"
-  },
-  "adi_graph.py": {
-    "mtime": 1732724621.241625,
-    "ast_hash": "c3b1101d5286342ec67446f1e448f729",
-    "semantic_hash": "c3b1101d5286342ec67446f1e448f729"
   },
   "analysis/RF/dominant_RF2.py": {
     "mtime": 1784712540.099019,
@@ -143,11 +93,6 @@
     "mtime": 1784712871.9358356,
     "ast_hash": "04972caeea4df54f2e59dc09f3860317",
     "semantic_hash": "04972caeea4df54f2e59dc09f3860317"
-  },
-  "extract_largest_clusters.py": {
-    "mtime": 1784712540.440844,
-    "ast_hash": "733465f1a8747ab09773eaec3a2c839d",
-    "semantic_hash": "733465f1a8747ab09773eaec3a2c839d"
   },
   "ffi_analysis.py": {
     "mtime": 1784712871.9591377,

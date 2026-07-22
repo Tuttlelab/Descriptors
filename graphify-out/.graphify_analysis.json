@@ -1,33 +1,6 @@
 {
   "communities": {
     "0": [
-      "descriptors_adi",
-      "descriptors_adi_calculate_adi",
-      "descriptors_adi_identify_clusters",
-      "descriptors_adi_main",
-      "descriptors_adi_parse_arguments",
-      "descriptors_adi_plot_cluster_size_distribution",
-      "descriptors_adi_process_cluster_contacts",
-      "descriptors_adi_rationale_1",
-      "descriptors_adi_rationale_74",
-      "descriptors_adi_save_cluster_size_distribution",
-      "descriptors_adi_save_frame_results",
-      "descriptors_centering",
-      "descriptors_centering_center_trajectory",
-      "descriptors_centering_find_largest_cluster",
-      "descriptors_centering_main",
-      "descriptors_centering_rationale_1",
-      "descriptors_centering_rationale_20",
-      "descriptors_centering_rationale_35",
-      "descriptors_ffi",
-      "descriptors_ffi_calculate_ffi",
-      "descriptors_ffi_main",
-      "descriptors_ffi_parse_arguments",
-      "descriptors_ffi_rationale_1",
-      "descriptors_ffi_rationale_38",
-      "descriptors_ffi_save_ffi_results",
-      "descriptors_init",
-      "descriptors_init_rationale_1",
       "descriptors_sfi",
       "descriptors_sfi_calculate_sfi",
       "descriptors_sfi_main",
@@ -35,194 +8,14 @@
       "descriptors_sfi_rationale_1",
       "descriptors_sfi_rationale_45",
       "descriptors_sfi_save_sfi_results",
-      "descriptors_tfi",
-      "descriptors_tfi_calculate_tfi",
-      "descriptors_tfi_main",
-      "descriptors_tfi_parse_arguments",
-      "descriptors_tfi_rationale_1",
-      "descriptors_tfi_rationale_39",
-      "descriptors_tfi_save_tfi_results",
-      "descriptors_tracker",
-      "descriptors_tracker_main",
-      "descriptors_tracker_parse_arguments",
-      "descriptors_tracker_rationale_1",
-      "descriptors_tracker_rationale_40",
-      "descriptors_tracker_track_shapes",
       "descriptors_utils",
       "descriptors_utils_ensure_output_directory",
-      "descriptors_utils_load_universe",
       "descriptors_utils_rationale_1",
-      "descriptors_utils_rationale_15",
       "descriptors_utils_rationale_21",
-      "descriptors_utils_rationale_27",
       "descriptors_utils_rationale_35",
-      "descriptors_utils_setup_logger",
-      "descriptors_utils_suppress_warnings",
-      "descriptors_vfi",
-      "descriptors_vfi_calculate_sphericity",
-      "descriptors_vfi_calculate_vfi",
-      "descriptors_vfi_main",
-      "descriptors_vfi_parse_arguments",
-      "descriptors_vfi_rationale_1",
-      "descriptors_vfi_rationale_35",
-      "descriptors_vfi_rationale_50",
-      "descriptors_vfi_save_vfi_results"
+      "descriptors_utils_setup_logger"
     ],
     "1": [
-      "ff_center",
-      "ff_center_ensure_output_directory",
-      "ff_center_find_largest_cluster",
-      "ff_center_load_and_process_trajectory",
-      "ff_center_main",
-      "ff_center_parse_arguments",
-      "ff_main_analyze_frame_clusters",
-      "ff_main_classify_frame_aggregates",
-      "ff_main_clean_clusters_directory",
-      "ff_main_ensure_analysis_directories",
-      "ff_main_find_cluster_files",
-      "ff_main_main",
-      "ff_main_parse_arguments",
-      "ff_main_py_ff_main",
-      "ff_main_rationale_139",
-      "ff_main_rationale_147",
-      "ff_main_rationale_153",
-      "ff_main_rationale_206",
-      "ff_main_rationale_244",
-      "ff_main_rationale_263",
-      "ff_main_rationale_440",
-      "ff_main_rationale_57",
-      "ff_main_save_analysis_data",
-      "ff_main_save_shape_results",
-      "ff_main_setup_logging"
-    ],
-    "2": [
-      "ff_ffi",
-      "ff_ffi_analyze_clusters",
-      "ff_ffi_analyze_orientation_distribution",
-      "ff_ffi_check_cylindrical_geometry",
-      "ff_ffi_compute_cylindrical_score",
-      "ff_ffi_compute_fop",
-      "ff_ffi_compute_moments_of_inertia",
-      "ff_ffi_compute_radial_density",
-      "ff_ffi_compute_sphericity",
-      "ff_ffi_cross_sectional_profiling",
-      "ff_ffi_get_peptide_orientations",
-      "ff_ffi_is_hollow_tube",
-      "ff_ffi_rationale_1",
-      "ff_ffi_rationale_121",
-      "ff_ffi_rationale_159",
-      "ff_ffi_rationale_202",
-      "ff_ffi_rationale_230",
-      "ff_ffi_rationale_250",
-      "ff_ffi_rationale_260",
-      "ff_ffi_rationale_28",
-      "ff_ffi_rationale_45",
-      "ff_ffi_rationale_66",
-      "ff_ffi_rationale_87",
-      "ff_ffi_rationale_99"
-    ],
-    "3": [
-      "ff_plot",
-      "ff_plot_analyze_and_plot_evolution",
-      "ff_plot_analyze_evolution_confidence",
-      "ff_plot_calculate_structure_fractions",
-      "ff_plot_identify_stable_transitions",
-      "ff_plot_load_structure_data",
-      "ff_plot_main",
-      "ff_plot_plot_aggregation_analysis",
-      "ff_plot_plot_aggregation_evolution",
-      "ff_plot_plot_multi_scale_evolution",
-      "ff_plot_plot_raw_assembly_evolution",
-      "ff_plot_plot_shape_analysis",
-      "ff_plot_plot_shape_metrics",
-      "ff_plot_rationale_12",
-      "ff_plot_rationale_148",
-      "ff_plot_rationale_190",
-      "ff_plot_rationale_201",
-      "ff_plot_rationale_239",
-      "ff_plot_rationale_303",
-      "ff_plot_rationale_321",
-      "ff_plot_rationale_346",
-      "ff_plot_rationale_409",
-      "ff_plot_rationale_46",
-      "ff_plot_rationale_94"
-    ],
-    "4": [
-      "adi_graph",
-      "adi_graph_analyze_aggregate_persistence",
-      "adi_graph_calculate_adaptive_cutoff",
-      "adi_graph_ensure_output_directory",
-      "adi_graph_identify_clusters",
-      "adi_graph_load_and_crop_trajectory",
-      "adi_graph_main",
-      "adi_graph_parse_arguments",
-      "adi_graph_plot_cluster_size_distribution",
-      "adi_graph_plot_persistent_aggregates",
-      "adi_graph_rationale_195",
-      "adi_graph_rationale_381",
-      "adi_graph_rationale_394",
-      "adi_graph_rationale_411",
-      "adi_graph_rationale_424",
-      "adi_graph_rationale_472",
-      "adi_graph_rationale_99",
-      "adi_graph_save_cluster_size_distribution",
-      "adi_graph_save_frame_results",
-      "adi_graph_save_persistent_aggregates"
-    ],
-    "5": [
-      "ff_sfi",
-      "ff_sfi_analyze_bb_sc_distribution",
-      "ff_sfi_analyze_clusters",
-      "ff_sfi_analyze_local_structure",
-      "ff_sfi_calculate_peptide_length",
-      "ff_sfi_compute_angle_matrix",
-      "ff_sfi_compute_sphericity",
-      "ff_sfi_compute_thickness_variation",
-      "ff_sfi_fit_quadratic_surface",
-      "ff_sfi_is_sheet_like",
-      "ff_sfi_perform_pca",
-      "ff_sfi_rationale_118",
-      "ff_sfi_rationale_156",
-      "ff_sfi_rationale_161",
-      "ff_sfi_rationale_217",
-      "ff_sfi_rationale_239",
-      "ff_sfi_rationale_306",
-      "ff_sfi_rationale_37",
-      "ff_sfi_rationale_69",
-      "ff_sfi_rationale_97"
-    ],
-    "6": [
-      "ff_vfi",
-      "ff_vfi_analyze_clusters",
-      "ff_vfi_calculate_dipeptide_length",
-      "ff_vfi_compute_hollowness_ratio",
-      "ff_vfi_compute_radial_density",
-      "ff_vfi_compute_shape_descriptors",
-      "ff_vfi_compute_sphericity",
-      "ff_vfi_rationale_1",
-      "ff_vfi_rationale_113",
-      "ff_vfi_rationale_128",
-      "ff_vfi_rationale_148",
-      "ff_vfi_rationale_25",
-      "ff_vfi_rationale_40",
-      "ff_vfi_rationale_61"
-    ],
-    "7": [
-      "ff_cluster",
-      "ff_cluster_analyze_trajectory",
-      "ff_cluster_cluster_analysis",
-      "ff_cluster_main",
-      "ff_cluster_parse_arguments",
-      "ff_cluster_rationale_13",
-      "ff_cluster_rationale_141",
-      "ff_cluster_rationale_186",
-      "ff_cluster_rationale_30",
-      "ff_cluster_rationale_38",
-      "ff_cluster_save_clusters",
-      "ff_cluster_unwrap_coordinates",
-      "ff_cluster_visualize_clusters"
-    ],
-    "8": [
       "analysis_agg_analysis_evolution",
       "analysis_agg_analysis_evolution_analyze_evolution_confidence",
       "analysis_agg_analysis_evolution_calculate_structure_fractions",
@@ -236,7 +29,7 @@
       "analysis_agg_analysis_evolution_rationale_33",
       "analysis_agg_analysis_evolution_rationale_86"
     ],
-    "9": [
+    "2": [
       "analysis_agg_analysis_evolution_copy",
       "analysis_agg_analysis_evolution_copy_analyze_evolution_confidence",
       "analysis_agg_analysis_evolution_copy_calculate_structure_fractions",
@@ -250,7 +43,7 @@
       "analysis_agg_analysis_evolution_copy_rationale_46",
       "analysis_agg_analysis_evolution_copy_rationale_96"
     ],
-    "10": [
+    "3": [
       "analysis_agg_analysis_evolution_ff",
       "analysis_agg_analysis_evolution_ff_analyze_evolution_confidence",
       "analysis_agg_analysis_evolution_ff_calculate_structure_fractions",
@@ -264,7 +57,7 @@
       "analysis_agg_analysis_evolution_ff_rationale_158",
       "analysis_agg_analysis_evolution_ff_rationale_53"
     ],
-    "11": [
+    "4": [
       "analysis_evolution_ff",
       "analysis_evolution_ff_analyze_evolution_confidence",
       "analysis_evolution_ff_calculate_structure_fractions",
@@ -278,7 +71,7 @@
       "analysis_evolution_ff_rationale_169",
       "analysis_evolution_ff_rationale_53"
     ],
-    "12": [
+    "5": [
       "analysis_evolution_rf",
       "analysis_evolution_rf_analyze_evolution_confidence",
       "analysis_evolution_rf_calculate_structure_fractions",
@@ -292,7 +85,7 @@
       "analysis_evolution_rf_rationale_169",
       "analysis_evolution_rf_rationale_53"
     ],
-    "13": [
+    "6": [
       "analysis_evolution_wi",
       "analysis_evolution_wi_analyze_evolution_confidence",
       "analysis_evolution_wi_calculate_structure_fractions",
@@ -306,7 +99,7 @@
       "analysis_evolution_wi_rationale_169",
       "analysis_evolution_wi_rationale_53"
     ],
-    "14": [
+    "7": [
       "analysis_rf_evolution_rf2",
       "analysis_rf_evolution_rf2_analyze_evolution_confidence",
       "analysis_rf_evolution_rf2_calculate_structure_fractions",
@@ -320,21 +113,53 @@
       "analysis_rf_evolution_rf2_rationale_158",
       "analysis_rf_evolution_rf2_rationale_53"
     ],
-    "15": [
-      "ff_tfi",
-      "ff_tfi_analyze_clusters",
-      "ff_tfi_calculate_peptide_length",
-      "ff_tfi_compute_angular_uniformity",
-      "ff_tfi_compute_radial_density",
-      "ff_tfi_compute_shape_anisotropy",
-      "ff_tfi_is_hollow_tube",
-      "ff_tfi_perform_cylindrical_analysis",
-      "ff_tfi_rationale_1",
-      "ff_tfi_rationale_112",
-      "ff_tfi_rationale_92",
-      "ff_tfi_segment_based_analysis"
+    "8": [
+      "descriptors_adi",
+      "descriptors_adi_calculate_adi",
+      "descriptors_adi_identify_clusters",
+      "descriptors_adi_main",
+      "descriptors_adi_parse_arguments",
+      "descriptors_adi_plot_cluster_size_distribution",
+      "descriptors_adi_process_cluster_contacts",
+      "descriptors_adi_rationale_1",
+      "descriptors_adi_rationale_74",
+      "descriptors_adi_save_cluster_size_distribution",
+      "descriptors_adi_save_frame_results"
     ],
-    "16": [
+    "9": [
+      "descriptors_ffi",
+      "descriptors_ffi_calculate_ffi",
+      "descriptors_ffi_main",
+      "descriptors_ffi_parse_arguments",
+      "descriptors_ffi_rationale_1",
+      "descriptors_ffi_rationale_38",
+      "descriptors_ffi_save_ffi_results",
+      "descriptors_init",
+      "descriptors_init_rationale_1"
+    ],
+    "10": [
+      "descriptors_tfi",
+      "descriptors_tfi_calculate_tfi",
+      "descriptors_tfi_main",
+      "descriptors_tfi_parse_arguments",
+      "descriptors_tfi_rationale_1",
+      "descriptors_tfi_rationale_39",
+      "descriptors_tfi_save_tfi_results",
+      "descriptors_utils_rationale_15",
+      "descriptors_utils_suppress_warnings"
+    ],
+    "11": [
+      "descriptors_vfi",
+      "descriptors_vfi_calculate_sphericity",
+      "descriptors_vfi_calculate_vfi",
+      "descriptors_vfi_main",
+      "descriptors_vfi_parse_arguments",
+      "descriptors_vfi_rationale_1",
+      "descriptors_vfi_rationale_35",
+      "descriptors_vfi_rationale_50",
+      "descriptors_vfi_save_vfi_results"
+    ],
+    "12": [
       "analysis_agg_analysis_combined_plot_wi",
       "analysis_agg_analysis_combined_plot_wi_create_combined_plot",
       "analysis_agg_analysis_combined_plot_wi_load_data",
@@ -344,7 +169,7 @@
       "analysis_agg_analysis_combined_plot_wi_rationale_63",
       "analysis_agg_analysis_combined_plot_wi_rationale_8"
     ],
-    "17": [
+    "13": [
       "analysis_agg_analysis_decision_copy",
       "analysis_agg_analysis_decision_copy_analyze_state_transitions",
       "analysis_agg_analysis_decision_copy_load_all_descriptors",
@@ -354,7 +179,7 @@
       "analysis_agg_analysis_decision_copy_rationale_47",
       "analysis_agg_analysis_decision_copy_train_state_classifier"
     ],
-    "18": [
+    "14": [
       "tests_test_descriptors",
       "tests_test_descriptors_rationale_1",
       "tests_test_descriptors_rationale_13",
@@ -364,7 +189,16 @@
       "tests_test_descriptors_test_sphericity_sphere",
       "tests_test_descriptors_test_sphericity_too_few_points"
     ],
-    "19": [
+    "15": [
+      "descriptors_centering",
+      "descriptors_centering_center_trajectory",
+      "descriptors_centering_find_largest_cluster",
+      "descriptors_centering_main",
+      "descriptors_centering_rationale_1",
+      "descriptors_centering_rationale_20",
+      "descriptors_centering_rationale_35"
+    ],
+    "16": [
       "analysis_agg_analysis_decision",
       "analysis_agg_analysis_decision_analyze_state_transitions",
       "analysis_agg_analysis_decision_load_all_descriptors",
@@ -372,7 +206,7 @@
       "analysis_agg_analysis_decision_plot_aggregation_analysis",
       "analysis_agg_analysis_decision_rationale_30"
     ],
-    "20": [
+    "17": [
       "analysis_dominant_ff",
       "analysis_dominant_ff_analyze_state_transitions",
       "analysis_dominant_ff_load_all_descriptors",
@@ -380,7 +214,7 @@
       "analysis_dominant_ff_plot_aggregation_analysis",
       "analysis_dominant_ff_rationale_30"
     ],
-    "21": [
+    "18": [
       "analysis_dominant_rf",
       "analysis_dominant_rf_analyze_state_transitions",
       "analysis_dominant_rf_load_all_descriptors",
@@ -388,7 +222,7 @@
       "analysis_dominant_rf_plot_aggregation_analysis",
       "analysis_dominant_rf_rationale_30"
     ],
-    "22": [
+    "19": [
       "analysis_dominant_rf2",
       "analysis_dominant_rf2_analyze_state_transitions",
       "analysis_dominant_rf2_load_all_descriptors",
@@ -396,7 +230,7 @@
       "analysis_dominant_rf2_plot_aggregation_analysis",
       "analysis_dominant_rf2_rationale_30"
     ],
-    "23": [
+    "20": [
       "analysis_dominant_wi",
       "analysis_dominant_wi_analyze_state_transitions",
       "analysis_dominant_wi_load_all_descriptors",
@@ -404,7 +238,7 @@
       "analysis_dominant_wi_plot_aggregation_analysis",
       "analysis_dominant_wi_rationale_30"
     ],
-    "24": [
+    "21": [
       "analysis_rf_dominant_rf2",
       "analysis_rf_dominant_rf2_analyze_state_transitions",
       "analysis_rf_dominant_rf2_load_all_descriptors",
@@ -412,82 +246,85 @@
       "analysis_rf_dominant_rf2_plot_aggregation_analysis",
       "analysis_rf_dominant_rf2_rationale_30"
     ],
-    "25": [
-      "extract_largest_clusters",
-      "extract_largest_clusters_extract_largest_clusters",
-      "extract_largest_clusters_unwrap_positions"
+    "22": [
+      "descriptors_tracker",
+      "descriptors_tracker_main",
+      "descriptors_tracker_parse_arguments",
+      "descriptors_tracker_rationale_1",
+      "descriptors_tracker_rationale_40",
+      "descriptors_tracker_track_shapes"
     ],
-    "26": [
-      "ff_main_sh__entry",
-      "ff_main_sh_ff_main"
+    "23": [
+      "descriptors_utils_load_universe",
+      "descriptors_utils_rationale_27"
     ],
-    "27": [
+    "24": [
       "slurm_centering_job",
       "slurm_centering_job_sh__entry"
     ],
-    "28": [
+    "25": [
       "slurm_csv_job",
       "slurm_csv_job_sh__entry"
     ],
-    "29": [
+    "26": [
       "slurm_tracking_job",
       "slurm_tracking_job_sh__entry"
     ],
-    "30": [
+    "27": [
       "adi_analysis"
     ],
-    "31": [
+    "28": [
       "analysis_agg_analysis_csv_results"
     ],
-    "32": [
+    "29": [
       "analysis_combined_plot_wi"
     ],
-    "33": [
+    "30": [
       "centering"
     ],
-    "34": [
+    "31": [
       "ffi_analysis"
     ],
-    "35": [
+    "32": [
       "sfi_analysis"
     ],
-    "36": [
+    "33": [
       "shape_tracker"
     ],
-    "37": [
+    "34": [
       "tfi_analysis"
     ],
-    "38": [
+    "35": [
       "vfi_analysis"
     ]
   },
   "cohesion": {
-    "0": 0.06853146853146853,
-    "1": 0.11666666666666667,
-    "2": 0.11594202898550725,
-    "3": 0.10144927536231885,
-    "4": 0.15789473684210525,
-    "5": 0.12631578947368421,
-    "6": 0.2087912087912088,
-    "7": 0.19230769230769232,
-    "8": 0.24242424242424243,
-    "9": 0.24242424242424243,
-    "10": 0.24242424242424243,
-    "11": 0.24242424242424243,
-    "12": 0.24242424242424243,
-    "13": 0.24242424242424243,
-    "14": 0.24242424242424243,
-    "15": 0.2727272727272727,
-    "16": 0.35714285714285715,
-    "17": 0.39285714285714285,
-    "18": 0.25,
+    "0": 0.2564102564102564,
+    "1": 0.24242424242424243,
+    "2": 0.24242424242424243,
+    "3": 0.24242424242424243,
+    "4": 0.24242424242424243,
+    "5": 0.24242424242424243,
+    "6": 0.24242424242424243,
+    "7": 0.24242424242424243,
+    "8": 0.2909090909090909,
+    "9": 0.3333333333333333,
+    "10": 0.3055555555555556,
+    "11": 0.3333333333333333,
+    "12": 0.35714285714285715,
+    "13": 0.39285714285714285,
+    "14": 0.25,
+    "15": 0.3333333333333333,
+    "16": 0.5333333333333333,
+    "17": 0.5333333333333333,
+    "18": 0.5333333333333333,
     "19": 0.5333333333333333,
     "20": 0.5333333333333333,
     "21": 0.5333333333333333,
-    "22": 0.5333333333333333,
-    "23": 0.5333333333333333,
-    "24": 0.5333333333333333,
-    "25": 0.6666666666666666,
+    "22": 0.4666666666666667,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
     "26": 1.0,
     "27": 1.0,
     "28": 1.0,
@@ -497,10 +334,7 @@
     "32": 1.0,
     "33": 1.0,
     "34": 1.0,
-    "35": 1.0,
-    "36": 1.0,
-    "37": 1.0,
-    "38": 1.0
+    "35": 1.0
   },
   "gods": [
     {
@@ -514,19 +348,9 @@
       "degree": 15
     },
     {
-      "id": "adi_graph_main",
-      "label": "main()",
-      "degree": 12
-    },
-    {
       "id": "descriptors_adi_calculate_adi",
       "label": "calculate_adi()",
       "degree": 12
-    },
-    {
-      "id": "ff_ffi_analyze_clusters",
-      "label": "analyze_clusters()",
-      "degree": 11
     },
     {
       "id": "descriptors_tracker_track_shapes",
@@ -552,6 +376,16 @@
       "id": "descriptors_tfi_calculate_tfi",
       "label": "calculate_tfi()",
       "degree": 9
+    },
+    {
+      "id": "descriptors_utils_suppress_warnings",
+      "label": "suppress_warnings()",
+      "degree": 9
+    },
+    {
+      "id": "analysis_rf_evolution_rf2_main",
+      "label": "main()",
+      "degree": 6
     }
   ],
   "surprises": [
@@ -564,7 +398,7 @@
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
-      "why": "cross-file semantic connection"
+      "why": "bridges separate communities"
     },
     {
       "source": "calculate_adi()",
@@ -575,7 +409,7 @@
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
-      "why": "cross-file semantic connection"
+      "why": "bridges separate communities"
     },
     {
       "source": "track_shapes()",
@@ -586,7 +420,7 @@
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
-      "why": "cross-file semantic connection"
+      "why": "bridges separate communities"
     },
     {
       "source": "center_trajectory()",
@@ -597,7 +431,7 @@
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
-      "why": "cross-file semantic connection"
+      "why": "bridges separate communities"
     },
     {
       "source": "calculate_ffi()",
@@ -608,7 +442,7 @@
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
-      "why": "cross-file semantic connection"
+      "why": "bridges separate communities"
     }
   ],
   "tokens": {
