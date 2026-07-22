@@ -14,7 +14,9 @@ __pycache__/
 *.lock
 *.npz
 .*.xtc_offsets.*
-FF_Eq_centered_2.1.pdb
+
+# Archived Legacy Runs & Datasets
+archive/
 
 # Analysis Results & Scratch Directories
 adi_results/
