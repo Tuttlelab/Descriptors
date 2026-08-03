@@ -2,13 +2,18 @@ name: descriptors
 channels:
   - conda-forge
 dependencies:
-  - python=3.9
+  - python>=3.9
   - numpy
   - scipy
   - pandas
   - matplotlib
+  - seaborn
   - mdanalysis
   - scikit-image
+  - scikit-learn
+  - networkx
+  - psutil
+  - tqdm
+  - biopython
   - pip
-  - pip:
-    - mdtraj
+

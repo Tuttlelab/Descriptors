@@ -1,3 +1,5 @@
+import os
+import argparse
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,10 +11,10 @@ import seaborn as sns
 def calculate_structure_fractions(df, window=101):
     """Calculate structure fractions with thresholds and smoothing"""
     # Apply thresholds as in decision.py
-    sheet_mask = df['avg_sheet_size'] >=5 #150
-    fiber_mask = df['avg_fiber_size'] >=5 #1500
-    vesicle_mask = df['avg_vesicle_size'] >=5 #300
-    tube_mask = df['avg_tube_size'] >=5 #130
+    sheet_mask = df['avg_sheet_size'] >= 5
+    fiber_mask = df['avg_fiber_size'] >= 5
+    vesicle_mask = df['avg_vesicle_size'] >= 5
+    tube_mask = df['avg_tube_size'] >= 5
 
     # Calculate scores
     df['sheet_score'] = df.apply(lambda row:
@@ -99,16 +101,13 @@ def identify_stable_transitions(df, min_stable_frames=20):
 
     return transitions
 
-def plot_multi_scale_evolution(df, transitions, timestamp):
+def plot_multi_scale_evolution(df, transitions, timestamp, data_dir='RF'):
     """Create evolution plot showing smoothed structure populations"""
+    os.makedirs(data_dir, exist_ok=True)
     plt.figure(figsize=(7, 4))
 
     # Set font sizes
     plt.rcParams.update({'font.size': 11})
-
-    colors = sns.color_palette("husl", 4)
-    structures = ['sheets', 'fibers', 'vesicles', 'tubes']
-    labels = [s.capitalize() for s in structures]
 
     colors = sns.color_palette("husl", 4)
     structures = ['sheets', 'fibers', 'vesicles', 'tubes']
@@ -134,9 +133,6 @@ def plot_multi_scale_evolution(df, transitions, timestamp):
             plt.axvline(x=t['frame']/8, color='gray',
                        linestyle='--', alpha=0.3)
 
-    # Styling
-    # plt.ylabel('Structure Population Fraction')
-    # plt.xlabel('Time (ns)', fontsize=14)
     ax = plt.gca()  # Get current axes
     ax.set_yticklabels([])  # Hide y tick labels
     ax.set_xticklabels([])  # Hide x tick labels
@@ -150,8 +146,8 @@ def plot_multi_scale_evolution(df, transitions, timestamp):
     plt.xticks([0, 250, 500, 750, 1000, 1250, 1500])
 
     plt.tight_layout()
-    plt.savefig(f'RF/evolution_{timestamp}.png',
-                dpi=600, bbox_inches='tight')
+    output_png = os.path.join(data_dir, f'evolution_{timestamp}.png')
+    plt.savefig(output_png, dpi=600, bbox_inches='tight')
     plt.close()
 
 def analyze_evolution_confidence(df, transitions):
@@ -165,14 +161,14 @@ def analyze_evolution_confidence(df, transitions):
     }
     return summary
 
-def load_structure_data():
+def load_structure_data(data_dir='RF'):
     """Load structure data from multiple CSV files"""
-    print("Attempting to load structure data files...")
+    print(f"Attempting to load structure data files from '{data_dir}'...")
     try:
-        sheets_df = pd.read_csv('RF/sfi_output.csv')
-        vesicles_df = pd.read_csv('RF/vfi_output.csv')
-        tubes_df = pd.read_csv('RF/tfi_output.csv')
-        fibers_df = pd.read_csv('RF/ffi_output.csv')
+        sheets_df = pd.read_csv(os.path.join(data_dir, 'sfi_output.csv'))
+        vesicles_df = pd.read_csv(os.path.join(data_dir, 'vfi_output.csv'))
+        tubes_df = pd.read_csv(os.path.join(data_dir, 'tfi_output.csv'))
+        fibers_df = pd.read_csv(os.path.join(data_dir, 'ffi_output.csv'))
 
         print("Successfully loaded all CSV files")
         print("Columns found in vesicles file:", vesicles_df.columns.tolist())
@@ -192,7 +188,8 @@ def load_structure_data():
         print(f"Combined data shape: {df.shape}")
         return df
     except FileNotFoundError as e:
-        print(f"Error: Could not find file: {e}")
+        print(f"Error: Could not find required CSV file: {e}")
+        print(f"Expected files in directory '{data_dir}': sfi_output.csv, vfi_output.csv, tfi_output.csv, ffi_output.csv")
         return None
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
@@ -201,13 +198,18 @@ def load_structure_data():
         return None
 
 def main():
+    parser = argparse.ArgumentParser(description="Evolution analysis for RF peptide structural transitions.")
+    parser.add_argument("-d", "--data-dir", default="RF", help="Directory containing descriptor CSV files (default: RF)")
+    args = parser.parse_args()
+
+    data_dir = args.data_dir
     timestamp = datetime.now().strftime("%m%d_%H%M")
-    print("\n=== Starting Evolution Analysis ===")
+    print(f"\n=== Starting Evolution Analysis ({data_dir}) ===")
 
     # Load and process data
-    df = load_structure_data()
+    df = load_structure_data(data_dir)
     if df is None:
-        print("Error: Could not load required data files")
+        print(f"Error: Could not load required data files from '{data_dir}'")
         return
 
     print("Calculating structure fractions...")
@@ -218,14 +220,16 @@ def main():
 
     # Generate visualizations and analysis
     print("Generating plots...")
-    plot_multi_scale_evolution(df, transitions, timestamp)
+    plot_multi_scale_evolution(df, transitions, timestamp, data_dir)
 
     print("Analyzing confidence...")
     summary = analyze_evolution_confidence(df, transitions)
 
     # Save results
+    os.makedirs(data_dir, exist_ok=True)
     results = pd.DataFrame(transitions)
-    results.to_csv(f'RF/evolution_{timestamp}.csv', index=False)
+    output_csv = os.path.join(data_dir, f'evolution_{timestamp}.csv')
+    results.to_csv(output_csv, index=False)
 
     # Print summary
     print("\nAnalysis Summary:")
@@ -236,7 +240,7 @@ def main():
     for state, count in summary['stable_states'].items():
         print(f"  {state}: {count} frames")
 
-    print(f"\nResults saved with timestamp {timestamp}")
+    print(f"\nResults saved to '{data_dir}' with timestamp {timestamp}")
 
 if __name__ == "__main__":
     main()

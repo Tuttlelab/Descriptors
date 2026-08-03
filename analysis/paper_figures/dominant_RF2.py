@@ -1,15 +1,21 @@
+import os
+import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-def load_all_descriptors():
-    print("\n=== Loading Descriptor Files ===")
-
-    adi = pd.read_csv('RF/adi_output.csv')
-    sfi = pd.read_csv('RF/sfi_output.csv')
-    ffi = pd.read_csv('RF/ffi_output.csv')
-    tfi = pd.read_csv('RF/tfi_output.csv')
-    vfi = pd.read_csv('RF/vfi_output.csv')
+def load_all_descriptors(data_dir='RF'):
+    print(f"\n=== Loading Descriptor Files from '{data_dir}' ===")
+    try:
+        adi = pd.read_csv(os.path.join(data_dir, 'adi_output.csv'))
+        sfi = pd.read_csv(os.path.join(data_dir, 'sfi_output.csv'))
+        ffi = pd.read_csv(os.path.join(data_dir, 'ffi_output.csv'))
+        tfi = pd.read_csv(os.path.join(data_dir, 'tfi_output.csv'))
+        vfi = pd.read_csv(os.path.join(data_dir, 'vfi_output.csv'))
+    except FileNotFoundError as e:
+        print(f"Error loading descriptor CSV files: {e}")
+        print(f"Expected files in directory '{data_dir}': adi_output.csv, sfi_output.csv, ffi_output.csv, tfi_output.csv, vfi_output.csv")
+        return None
 
     print("\nColumns in each file:")
     print("ADI columns:", adi.columns.tolist())
@@ -62,37 +68,17 @@ def analyze_state_transitions(df):
 
     return df
 
-def plot_aggregation_analysis(df, timestamp):
+def plot_aggregation_analysis(df, timestamp, data_dir='RF'):
     import matplotlib as mpl
+    os.makedirs(data_dir, exist_ok=True)
     mpl.rcParams.update({'font.size': 16})
 
-    # Create figure with only one subplot now that top plot is commented out
     fig, ax = plt.subplots(figsize=(12, 5))
 
-    """
-    # Stacked area plot
-    scores = ['sheet_score', 'fiber_score', 'vesicle_score', 'tube_score']
-    labels = ['Sheets', 'Fibers', 'Vesicles', 'Tubes']
-
-    df_norm = df[scores].copy()
-    row_sums = df_norm.sum(axis=1)
-    df_norm = df_norm.div(row_sums, axis=0).fillna(0)
-
-    ax1.stackplot(df['Frame'], [df_norm[score] for score in scores],
-                  labels=labels, alpha=0.6)
-
-    ax1.set_ylabel('Relative Abundance', fontsize=16)
-    ax1.legend(loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=4, fontsize=16)
-    ax1.grid(False)
-    ax1.set_xlabel('Time (ns)', fontsize=16)
-    """
-
-    # State transitions
     ordered_shapes = ['undetermined', 'sheet', 'vesicle', 'fiber', 'tube']
     unique_shapes = [shape for shape in ordered_shapes if shape in df['shapes'].unique()]
     shape_map = {shape: idx for idx, shape in enumerate(unique_shapes)}
 
-    # Convert frames to nanoseconds by dividing by 8
     time_ns = df['Frame'] / 8
 
     ax.scatter(time_ns, df['shapes'].map(shape_map),
@@ -105,30 +91,39 @@ def plot_aggregation_analysis(df, timestamp):
     ax.tick_params(axis='both', which='major', labelsize=16)
     ax.grid(False)
 
-    # Set x-axis limits and ticks
     ax.set_xlim(0, 1500)
     ax.set_xticks([0, 250, 500, 750, 1000, 1250, 1500])
 
     plt.tight_layout()
-    plt.savefig(f'RF/dominant_{timestamp}.png', dpi=600, bbox_inches='tight')
+    output_png = os.path.join(data_dir, f'dominant_{timestamp}.png')
+    plt.savefig(output_png, dpi=600, bbox_inches='tight')
+    plt.close()
 
 def main():
-    timestamp = datetime.now().strftime("%m%d_%H%M")
-    print("\n=== Starting Analysis ===")
+    parser = argparse.ArgumentParser(description="Dominant shape analysis for RF peptide structures (variant 2).")
+    parser.add_argument("-d", "--data-dir", default="RF", help="Directory containing descriptor CSV files (default: RF)")
+    args = parser.parse_args()
 
-    df = load_all_descriptors()
+    data_dir = args.data_dir
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+    print(f"\n=== Starting Dominant Shape Analysis ({data_dir}) ===")
+
+    df = load_all_descriptors(data_dir)
+    if df is None:
+        print(f"Error: Could not load descriptor files from '{data_dir}'")
+        return
+
     df = analyze_state_transitions(df)
 
     # Generate evolution plot
-    plot_aggregation_analysis(df, timestamp)
+    plot_aggregation_analysis(df, timestamp, data_dir)
 
     # Save analysis results
-    df[['Frame', 'shapes']].to_csv(
-        f'RF/dominant_{timestamp}.csv', index=False)
+    os.makedirs(data_dir, exist_ok=True)
+    output_csv = os.path.join(data_dir, f'dominant_{timestamp}.csv')
+    df[['Frame', 'shapes']].to_csv(output_csv, index=False)
 
-    print(f"\nResults saved with timestamp {timestamp}:")
-    print(f"- dominant_{timestamp}.png")
-    print(f"- dominant_{timestamp}.csv")
+    print(f"\nResults saved to '{data_dir}' with timestamp {timestamp}")
 
 if __name__ == "__main__":
     main()

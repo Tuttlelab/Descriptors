@@ -1,15 +1,21 @@
+import os
+import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-def load_all_descriptors():
-    print("\n=== Loading Descriptor Files ===")
-
-    adi = pd.read_csv('WI/adi_output.csv')
-    sfi = pd.read_csv('WI/sfi_output.csv')
-    ffi = pd.read_csv('WI/ffi_output.csv')
-    tfi = pd.read_csv('WI/tfi_output.csv')
-    vfi = pd.read_csv('WI/vfi_output.csv')
+def load_all_descriptors(data_dir='WI'):
+    print(f"\n=== Loading Descriptor Files from '{data_dir}' ===")
+    try:
+        adi = pd.read_csv(os.path.join(data_dir, 'adi_output.csv'))
+        sfi = pd.read_csv(os.path.join(data_dir, 'sfi_output.csv'))
+        ffi = pd.read_csv(os.path.join(data_dir, 'ffi_output.csv'))
+        tfi = pd.read_csv(os.path.join(data_dir, 'tfi_output.csv'))
+        vfi = pd.read_csv(os.path.join(data_dir, 'vfi_output.csv'))
+    except FileNotFoundError as e:
+        print(f"Error loading descriptor CSV files: {e}")
+        print(f"Expected files in directory '{data_dir}': adi_output.csv, sfi_output.csv, ffi_output.csv, tfi_output.csv, vfi_output.csv")
+        return None
 
     print("\nColumns in each file:")
     print("ADI columns:", adi.columns.tolist())
@@ -62,9 +68,10 @@ def analyze_state_transitions(df):
 
     return df
 
-def plot_aggregation_analysis(df, timestamp):
+def plot_aggregation_analysis(df, timestamp, data_dir='WI'):
     import matplotlib as mpl
     import seaborn as sns
+    os.makedirs(data_dir, exist_ok=True)
     mpl.rcParams.update({'font.size': 16})
 
     # Create a more compact figure
@@ -80,24 +87,13 @@ def plot_aggregation_analysis(df, timestamp):
         'undetermined': 'gray'
     }
 
-    # Define display labels
-    label_map = {
-        'undetermined': 'undet.',
-        'sheet': 'sheet',
-        'vesicle': 'vesicle',
-        'fiber': 'fibre',
-        'tube': 'tube'
-    }
-
     # State transitions with compact spacing
     ordered_shapes = ['undetermined', 'sheet', 'vesicle', 'fiber', 'tube']
     unique_shapes = [shape for shape in ordered_shapes if shape in df['shapes'].unique()]
-    # shape_map = {shape: idx/4 for idx, shape in enumerate(unique_shapes)}  # Divide by 4 to reduce spacing
 
     shape_map = {shape: 0.15 + (idx * 0.7/(len(unique_shapes)-1))
                  for idx, shape in enumerate(unique_shapes)}
 
-        # Set wider y-axis limits for padding
     ax.set_ylim(-0.1, 1.1)
 
     # Convert frames to nanoseconds
@@ -112,39 +108,45 @@ def plot_aggregation_analysis(df, timestamp):
                   alpha=0.5,
                   s=2)
 
-    # ax.set_yticks([idx/4 for idx in range(len(unique_shapes))])  # Adjust ticks to match new spacing
     ax.set_yticks([])
     ax.set_yticklabels([])  # Hide y tick labels
     ax.set_xticklabels([])  # Hide x tick labels
-    # ax.set_yticklabels([label_map[shape] for shape in unique_shapes])
-    # ax.set_xlabel('Time (ns)', fontsize=16)
-    # ax.set_ylabel('Dominant Shape', labelpad=0, fontsize=16)
     ax.spines['left'].set_visible(True)  # Hide y axis line
-    # ax.tick_params(axis='both', which='major', labelsize=16)
-    # ax.grid(False)
 
     # Set x-axis limits and ticks
     ax.set_xlim(0, 1500)
     ax.set_xticks([0, 250, 500, 750, 1000, 1250, 1500])
 
     plt.tight_layout()
-    plt.savefig(f'WI/dominant_{timestamp}.png', dpi=600, bbox_inches='tight')
+    output_png = os.path.join(data_dir, f'dominant_{timestamp}.png')
+    plt.savefig(output_png, dpi=600, bbox_inches='tight')
+    plt.close()
 
 def main():
-    timestamp = datetime.now().strftime("%m%d_%H%M")
-    print("\n=== Starting Analysis ===")
+    parser = argparse.ArgumentParser(description="Dominant shape analysis for WI peptide structures.")
+    parser.add_argument("-d", "--data-dir", default="WI", help="Directory containing descriptor CSV files (default: WI)")
+    args = parser.parse_args()
 
-    df = load_all_descriptors()
+    data_dir = args.data_dir
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+    print(f"\n=== Starting Dominant Shape Analysis ({data_dir}) ===")
+
+    df = load_all_descriptors(data_dir)
+    if df is None:
+        print(f"Error: Could not load descriptor files from '{data_dir}'")
+        return
+
     df = analyze_state_transitions(df)
 
     # Generate evolution plot
-    plot_aggregation_analysis(df, timestamp)
+    plot_aggregation_analysis(df, timestamp, data_dir)
 
     # Save analysis results
-    df[['Frame', 'shapes']].to_csv(
-        f'WI/dominant_{timestamp}.csv', index=False)
+    os.makedirs(data_dir, exist_ok=True)
+    output_csv = os.path.join(data_dir, f'dominant_{timestamp}.csv')
+    df[['Frame', 'shapes']].to_csv(output_csv, index=False)
 
-    print(f"\nResults saved with timestamp {timestamp}")
+    print(f"\nResults saved to '{data_dir}' with timestamp {timestamp}")
 
 if __name__ == "__main__":
     main()

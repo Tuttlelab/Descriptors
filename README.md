@@ -53,6 +53,8 @@ python analysis/paper_figures/evolution_WI.py
 - [`analysis/`](analysis/): Descriptor entrypoints (`shape_tracker.py`, `adi_analysis.py`) and paper plotting scripts ([`analysis/paper_figures/`](analysis/paper_figures/)).
 - [`slurm/`](slurm/): Slurm HPC batch submission scripts (`centering_job.sh`, `tracking_job.sh`).
 - [`tests/`](tests/): Test suite (`pytest tests/`).
+- [`archive/`](archive/): Legacy scripts, baseline datasets, and figure reference archives.
+
 
 ---
 
