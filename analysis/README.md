@@ -16,7 +16,8 @@ These generic tools analyze any peptide MD simulation topology (`.gro`) and traj
 
 ## Paper Figure Plotting Scripts ([`paper_figures/`](paper_figures/))
 
-System-specific post-processing scripts used to generate timelines and dominant shape figures for specific peptide systems (FF, RF, WI) from the paper:
+Unified post-processing scripts used to generate timelines and dominant shape figures for any peptide system (e.g. FF, RF, WI) from the paper:
 
-- `paper_figures/evolution_FF.py`, `evolution_RF.py`, `evolution_WI.py`: Structural evolution timelines.
-- `paper_figures/dominant_FF.py`, `dominant_RF.py`, `dominant_WI.py`: Dominant shape distribution figures.
+- `paper_figures/plot_evolution.py`: Structural evolution timelines (`python analysis/paper_figures/plot_evolution.py --system FF`).
+- `paper_figures/plot_dominant.py`: Dominant shape distribution figures (`python analysis/paper_figures/plot_dominant.py --system FF`).
+

@@ -38,12 +38,15 @@ python analysis/ffi_analysis.py -t topology.gro -x trajectory.xtc -o results/ffi
 ```
 
 ### Step 3: Reproduce Paper Plotting & Figures
-System-specific paper figure scripts are located in [`analysis/paper_figures/`](analysis/paper_figures/):
+Paper figure plotting scripts are located in [`analysis/paper_figures/`](analysis/paper_figures/):
 ```bash
-python analysis/paper_figures/evolution_FF.py
-python analysis/paper_figures/evolution_RF.py
-python analysis/paper_figures/evolution_WI.py
+# Analyze evolution timelines for a system (e.g., FF, RF, WI)
+python analysis/paper_figures/plot_evolution.py --system FF
+
+# Analyze dominant shape distributions for a system
+python analysis/paper_figures/plot_dominant.py --system FF
 ```
+
 
 ---
 
